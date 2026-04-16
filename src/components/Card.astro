@@ -1,6 +1,5 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import { slugifyStr } from "@/utils/slugify";
 import { getPath } from "@/utils/getPath";
 import Datetime from "./Datetime.astro";
 
@@ -19,6 +18,7 @@ const HeadingTag = isHome ? "h2" : Heading;
   <a
     href={getPath(id, filePath)}
     class:list={[
+      "card-link-press",
       isHome
         ? "inline-block text-[1.45rem] leading-tight font-semibold tracking-tight text-foreground transition group-hover:text-accent"
         : "inline-block text-lg font-medium text-accent",
@@ -28,11 +28,7 @@ const HeadingTag = isHome ? "h2" : Heading;
       "focus-visible:no-underline focus-visible:underline-offset-0",
     ]}
   >
-    <HeadingTag
-      style={{ viewTransitionName: slugifyStr(title.replaceAll(".", "-")) }}
-    >
-      {title}
-    </HeadingTag>
+    <HeadingTag>{title}</HeadingTag>
   </a>
   <Datetime
     {...props}

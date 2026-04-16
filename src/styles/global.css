@@ -69,6 +69,18 @@ html[data-theme="dark"] {
   @apply underline decoration-wavy decoration-2 underline-offset-8;
 }
 
+.card-link-press {
+  transform-origin: left center;
+  transition:
+    color 180ms ease,
+    opacity 180ms ease,
+    transform 180ms ease;
+}
+
+.card-link-press:active {
+  opacity: 0.82;
+}
+
 /* Source: https://piccalil.li/blog/a-more-modern-css-reset/ */
 /* Anything that has been anchored to should have extra scroll margin */
 :target {
@@ -77,12 +89,35 @@ html[data-theme="dark"] {
 
 ::view-transition-old(root),
 ::view-transition-new(root) {
-  animation: none;
   mix-blend-mode: normal;
+  animation: none;
+}
+
+::view-transition-group(page-body) {
+  animation: none;
+}
+
+::view-transition-old(page-body),
+::view-transition-new(page-body) {
+  animation-duration: 320ms;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  animation-fill-mode: both;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(page-body) {
+  z-index: 1;
+  animation-name: page-body-out;
+}
+
+::view-transition-new(page-body) {
+  z-index: 2;
+  animation-name: page-body-in;
 }
 
 html.theme-transition-dark::view-transition-old(root) {
   z-index: 1;
+  animation: none;
 }
 
 html.theme-transition-dark::view-transition-new(root) {
@@ -92,6 +127,7 @@ html.theme-transition-dark::view-transition-new(root) {
 
 html.theme-transition-light::view-transition-old(root) {
   z-index: 1;
+  animation: none;
 }
 
 html.theme-transition-light::view-transition-new(root) {
@@ -108,5 +144,29 @@ html.theme-transition-light::view-transition-new(root) {
   to {
     clip-path: circle(var(--theme-transition-radius) at var(--theme-transition-x) var(--theme-transition-y));
     opacity: 1;
+  }
+}
+
+@keyframes page-body-out {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(26px);
+  }
+}
+
+@keyframes page-body-in {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
