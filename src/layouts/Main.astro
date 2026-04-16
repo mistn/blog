@@ -1,5 +1,4 @@
 ---
-import Breadcrumb from "@/components/Breadcrumb.astro";
 import SiteTopbar from "@/components/SiteTopbar.astro";
 import { SITE } from "@/config";
 
@@ -15,7 +14,6 @@ const backUrl = SITE.showBackButton ? Astro.url.pathname : "/";
 
 <SiteTopbar />
 <div transition:name="page-body">
-  <Breadcrumb />
   <main
     data-backUrl={backUrl}
     id="main-content"

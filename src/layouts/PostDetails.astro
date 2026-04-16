@@ -91,28 +91,22 @@ const nextPost =
 <Layout {...layoutProps}>
   <SiteTopbar />
   <main id="main-content" class="app-layout pb-6 lg:max-w-7xl lg:pb-8">
-    <section class="relative overflow-hidden bg-[#f7f3eb] dark:bg-[#262b3a]">
-      <div
-        aria-hidden="true"
-        class="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(123,167,214,0.18),transparent_38%),linear-gradient(180deg,rgba(255,255,255,0.84),rgba(255,255,255,0.92))] dark:bg-[radial-gradient(circle_at_top,rgba(88,122,170,0.12),transparent_34%),linear-gradient(180deg,rgba(38,43,58,0.88),rgba(38,43,58,0.94))]"
-      >
-      </div>
-
-      <div class="relative p-5 sm:p-6 lg:p-8">
+    <section class="overflow-hidden bg-background dark:bg-[#262b3a]">
+      <div class="p-5 sm:p-6 lg:p-8">
         <div class="grid gap-5 lg:grid-cols-[minmax(0,1.65fr)_300px]">
           <div class="min-w-0">
             <BackButton inline />
 
             <article
               transition:name="page-body"
-              class="relative overflow-hidden rounded-[1.6rem] border border-black/6 bg-[#dce8f8]/88 px-6 py-6 shadow-[0_12px_32px_rgba(15,23,42,0.05)] dark:border-white/8 dark:bg-[#31415d]/58 sm:px-7"
+              class="relative overflow-visible rounded-[1rem] border border-black/8 bg-[#fffdfa] px-6 py-6 dark:border-[#39465f] dark:bg-[#252c3d] sm:px-7"
               data-pagefind-body
             >
-              <div class="absolute top-5 left-5 h-11 w-11 overflow-hidden rounded-full border border-white/70 shadow-[0_4px_12px_rgba(15,23,42,0.10)]">
+              <div class="absolute -top-4 -left-4 z-10 h-12 w-12 overflow-hidden rounded-full border border-black/8 bg-background dark:border-[#4a5975] dark:bg-[#252c3d]">
                 <img src="/avatar.avif" alt="avatar" class="h-full w-full object-cover" loading="eager" />
               </div>
 
-              <div class="pl-16">
+              <div class="pt-1">
                 <h1 class="inline-block text-[2rem] leading-tight font-semibold tracking-tight text-foreground sm:text-[2.45rem]">
                   {title}
                 </h1>

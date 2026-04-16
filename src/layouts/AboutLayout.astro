@@ -1,7 +1,6 @@
 ---
 import type { MarkdownLayoutProps } from "astro";
 import Footer from "@/components/Footer.astro";
-import Breadcrumb from "@/components/Breadcrumb.astro";
 import SiteTopbar from "@/components/SiteTopbar.astro";
 import Layout from "./Layout.astro";
 import { SITE } from "@/config";
@@ -14,7 +13,6 @@ const { frontmatter } = Astro.props;
 <Layout title={`${frontmatter.title} | ${SITE.title}`}>
   <SiteTopbar />
   <div transition:name="page-body">
-    <Breadcrumb />
     <main id="main-content" class="app-layout">
       <section id="about" class="app-prose mb-28 max-w-app prose-img:border-0">
         <h1 class="text-2xl tracking-wider sm:text-3xl">{frontmatter.title}</h1>

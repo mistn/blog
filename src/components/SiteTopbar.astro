@@ -1,23 +1,21 @@
 ---
 import LinkButton from "@/components/LinkButton.astro";
-import IconArchive from "@/assets/icons/IconArchive.svg";
 import IconSearch from "@/assets/icons/IconSearch.svg";
 import IconMoon from "@/assets/icons/IconMoon.svg";
 import IconSunHigh from "@/assets/icons/IconSunHigh.svg";
 import { SITE } from "@/config";
+
+const { pathname } = Astro.url;
+const currentPath =
+  pathname.endsWith("/") && pathname !== "/" ? pathname.slice(0, -1) : pathname;
+const isActive = (path: string) => currentPath === path;
 ---
 
 <section transition:persist class="app-layout py-6 lg:max-w-7xl lg:py-8">
   <div class="relative border-b border-border/70 px-1 pb-6 sm:px-2">
-    <div
-      aria-hidden="true"
-      class="pointer-events-none absolute inset-x-0 top-0 h-full bg-[radial-gradient(circle_at_top,rgba(123,167,214,0.14),transparent_44%)] dark:bg-[radial-gradient(circle_at_top,rgba(88,122,170,0.12),transparent_40%)]"
-    >
-    </div>
-
     <div class="relative flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
       <div class="flex items-start gap-4">
-        <div class="h-18 w-18 overflow-hidden rounded-full border border-border/80 shadow-[0_6px_18px_rgba(15,23,42,0.04)] sm:h-20 sm:w-20">
+        <div class="h-18 w-18 overflow-hidden rounded-full border border-border/80 sm:h-20 sm:w-20">
           <img
             src="/avatar.avif"
             alt={`${SITE.author} avatar`}
@@ -28,30 +26,50 @@ import { SITE } from "@/config";
         <div>
           <p class="text-[11px] uppercase tracking-[0.28em] text-foreground/45">{SITE.title}</p>
           <a
-            href="/about"
+            href="/"
             class="mt-2 inline-block text-[2rem] leading-none font-semibold tracking-tight transition hover:text-accent"
           >
             {SITE.author}
           </a>
           <p class="mt-3 max-w-xl text-sm leading-7 text-foreground/70">{SITE.desc}</p>
+          <nav class="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-foreground/68">
+            <a
+              href="/"
+              class:list={[
+                "transition hover:text-accent",
+                { "text-accent": isActive("/") },
+              ]}
+            >
+              首页
+            </a>
+            {SITE.showArchives && (
+              <a
+                href="/archives"
+                class:list={[
+                  "transition hover:text-accent",
+                  { "text-accent": isActive("/archives") },
+                ]}
+              >
+                归档
+              </a>
+            )}
+            <a
+              href="/about"
+              class:list={[
+                "transition hover:text-accent",
+                { "text-accent": isActive("/about") },
+              ]}
+            >
+              关于
+            </a>
+          </nav>
         </div>
       </div>
 
-      <div class="flex items-center gap-2 self-end lg:self-start">
-        {SITE.showArchives && (
-          <LinkButton
-            href="/archives"
-            class="focus-outline flex p-3 hover:[&>svg]:stroke-accent"
-            title="Archives"
-            aria-label="archives"
-          >
-            <IconArchive />
-            <span class="sr-only">Archives</span>
-          </LinkButton>
-        )}
+      <div class="flex items-center gap-1 self-end lg:gap-2 lg:self-start">
         <LinkButton
           href="/search"
-          class="focus-outline flex p-3 hover:[&>svg]:stroke-accent"
+          class="focus-outline flex p-2.5 hover:[&>svg]:stroke-accent sm:p-3"
           title="Search"
           aria-label="search"
         >
@@ -61,7 +79,7 @@ import { SITE } from "@/config";
         {SITE.lightAndDarkMode && (
           <button
             id="theme-btn"
-            class="focus-outline relative size-12 p-3 hover:[&>svg]:stroke-accent"
+            class="focus-outline relative size-10 p-2.5 hover:[&>svg]:stroke-accent sm:size-12 sm:p-3"
             title="Toggles light & dark"
             aria-label="auto"
             aria-live="polite"
