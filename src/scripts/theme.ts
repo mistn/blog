@@ -23,6 +23,7 @@ function getPreferTheme(): string {
 
 // Use existing theme value from inline script if available, otherwise detect
 let themeValue = window.theme?.themeValue ?? getPreferTheme();
+let isThemeTransitionRunning = false;
 
 function setPreference(): void {
   localStorage.setItem(THEME, themeValue);
@@ -36,6 +37,8 @@ function applyThemePreference(nextTheme: string): void {
 }
 
 async function toggleThemeWithTransition(event?: Event): Promise<void> {
+  if (isThemeTransitionRunning) return;
+
   const nextTheme = themeValue === LIGHT ? DARK : LIGHT;
   const transitionEvent = event as MouseEvent | undefined;
   const supportsViewTransition =
@@ -50,28 +53,43 @@ async function toggleThemeWithTransition(event?: Event): Promise<void> {
     return;
   }
 
+  isThemeTransitionRunning = true;
+
   const endRadius = Math.hypot(
     Math.max(transitionEvent.clientX, window.innerWidth - transitionEvent.clientX),
     Math.max(transitionEvent.clientY, window.innerHeight - transitionEvent.clientY)
   );
 
-  document.documentElement.style.setProperty("--theme-transition-x", `${transitionEvent.clientX}px`);
-  document.documentElement.style.setProperty("--theme-transition-y", `${transitionEvent.clientY}px`);
-  document.documentElement.style.setProperty("--theme-transition-radius", `${endRadius}px`);
+  const root = document.documentElement;
+  const transitionClass =
+    nextTheme === DARK ? "theme-transition-dark" : "theme-transition-light";
 
-  const transition = (document as Document & {
-    startViewTransition: (callback: () => void | Promise<void>) => {
-      ready: Promise<void>;
-    };
-  }).startViewTransition(() => {
+  root.style.setProperty("--theme-transition-x", `${transitionEvent.clientX}px`);
+  root.style.setProperty("--theme-transition-y", `${transitionEvent.clientY}px`);
+  root.style.setProperty("--theme-transition-radius", `${endRadius}px`);
+  root.classList.remove("theme-transition-dark", "theme-transition-light");
+  root.classList.add(transitionClass);
+  root.setAttribute("data-theme-switching", "true");
+
+  try {
+    const transition = (document as Document & {
+      startViewTransition: (callback: () => void | Promise<void>) => {
+        ready: Promise<void>;
+        finished: Promise<void>;
+      };
+    }).startViewTransition(() => {
+      applyThemePreference(nextTheme);
+    });
+
+    await transition.ready;
+    await transition.finished;
+  } catch {
     applyThemePreference(nextTheme);
-  });
-
-  await transition.ready;
-
-  const isDarkTheme = nextTheme === DARK;
-  document.documentElement.classList.toggle("theme-transition-dark", isDarkTheme);
-  document.documentElement.classList.toggle("theme-transition-light", !isDarkTheme);
+  } finally {
+    root.classList.remove("theme-transition-dark", "theme-transition-light");
+    root.removeAttribute("data-theme-switching");
+    isThemeTransitionRunning = false;
+  }
 }
 
 function reflectPreference(): void {

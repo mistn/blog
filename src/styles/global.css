@@ -17,7 +17,7 @@ html[data-theme="dark"] {
   --foreground: #eaedf3;
   --accent: #ff6b01;
   --muted: #343f60;
-  --border: #ab4b08;
+  --border: #435270;
 }
 
 :root {
@@ -87,22 +87,31 @@ html[data-theme="dark"] {
   scroll-margin-block: 1rem;
 }
 
+::view-transition-group(root),
 ::view-transition-old(root),
 ::view-transition-new(root) {
+  pointer-events: none;
   mix-blend-mode: normal;
   animation: none;
 }
 
 ::view-transition-group(page-body) {
+  pointer-events: none;
   animation: none;
 }
 
 ::view-transition-old(page-body),
 ::view-transition-new(page-body) {
+  pointer-events: none;
   animation-duration: 320ms;
   animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
   animation-fill-mode: both;
   mix-blend-mode: normal;
+}
+
+html[data-theme-switching="true"]::view-transition-old(page-body),
+html[data-theme-switching="true"]::view-transition-new(page-body) {
+  animation: none;
 }
 
 ::view-transition-old(page-body) {
