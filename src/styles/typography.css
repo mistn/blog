@@ -74,6 +74,18 @@
     blockquote {
       @apply border-s-accent/80 wrap-break-word opacity-80;
       font-style: normal;
+      quotes: none;
+    }
+
+    blockquote p {
+      font-style: normal;
+    }
+
+    blockquote p:first-of-type::before,
+    blockquote p:first-of-type::after,
+    blockquote p:last-of-type::before,
+    blockquote p:last-of-type::after {
+      content: none;
     }
 
     details {
