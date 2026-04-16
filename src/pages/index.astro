@@ -1,111 +1,197 @@
----
+﻿---
 import { getCollection } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
-import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
-import Socials from "@/components/Socials.astro";
 import LinkButton from "@/components/LinkButton.astro";
-import Card from "@/components/Card.astro";
+import Socials from "@/components/Socials.astro";
+import Datetime from "@/components/Datetime.astro";
+import IconArchive from "@/assets/icons/IconArchive.svg";
+import IconSearch from "@/assets/icons/IconSearch.svg";
+import IconMoon from "@/assets/icons/IconMoon.svg";
+import IconSunHigh from "@/assets/icons/IconSunHigh.svg";
 import getSortedPosts from "@/utils/getSortedPosts";
-import IconRss from "@/assets/icons/IconRss.svg";
-import IconArrowRight from "@/assets/icons/IconArrowRight.svg";
+import { getPath } from "@/utils/getPath";
 import { SITE } from "@/config";
-import { SOCIALS } from "@/constants";
 
 const posts = await getCollection("blog");
-
 const sortedPosts = getSortedPosts(posts);
-const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
 const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
+const leadPost = recentPosts[0];
+const listPosts = recentPosts.slice(1, SITE.postPerIndex + 2);
+const sidebarPosts = recentPosts.slice(0, 5);
 ---
 
 <Layout>
-  <Header />
-  <main id="main-content" data-layout="index" class="app-layout">
-    <section id="hero" class:list={["pt-8 pb-6", "border-b border-border"]}>
-      <h1 class="my-4 inline-block text-4xl font-bold sm:my-8 sm:text-5xl">
-        Mingalaba
-      </h1>
-      <a
-        target="_blank"
-        href="/rss.xml"
-        class="inline-block"
-        aria-label="rss feed"
-        title="RSS Feed"
+  <main id="main-content" data-layout="index" class="app-layout py-6 lg:max-w-7xl lg:py-8">
+    <section class="relative overflow-hidden rounded-[2rem] border border-border bg-[#f7f3eb] dark:bg-[#262b3a]">
+      <div
+        aria-hidden="true"
+        class="absolute inset-0 bg-[url('/astropaper-og.jpg')] bg-cover bg-center opacity-14 dark:opacity-10"
       >
-        <IconRss
-          width={20}
-          height={20}
-          class="scale-125 stroke-accent stroke-3 rtl:-rotate-90"
-        />
-        <span class="sr-only">RSS Feed</span>
-      </a>
+      </div>
+      <div
+        aria-hidden="true"
+        class="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.84),rgba(255,255,255,0.9))] dark:bg-[linear-gradient(180deg,rgba(38,43,58,0.88),rgba(38,43,58,0.94))]"
+      >
+      </div>
 
-      <p>
-        AstroPaper is a minimal, responsive, accessible and SEO-friendly Astro
-        blog theme. This theme follows best practices and provides accessibility
-        out of the box. Light and dark mode are supported by default. Moreover,
-        additional color schemes can also be configured.
-      </p>
-      <p class="mt-2">
-        Read the blog posts or check
-        <LinkButton
-          class="underline decoration-dashed underline-offset-4 hover:text-accent"
-          href="https://github.com/satnaing/astro-paper#readme"
-        >
-          README
-        </LinkButton> for more info.
-      </p>
-      {
-        // only display if at least one social link is enabled
-        SOCIALS.length > 0 && (
-          <div class="mt-4 flex max-sm:flex-col sm:items-center">
-            <div class="me-2 mb-1 whitespace-nowrap sm:mb-0">Social Links:</div>
-            <Socials />
+      <div class="relative p-5 sm:p-6 lg:p-8">
+        <section class="mb-5 flex flex-col gap-5 rounded-[1.5rem] border border-black/6 bg-background/82 px-5 py-5 dark:border-white/8 sm:px-6 lg:flex-row lg:items-start lg:justify-between">
+          <div class="flex items-start gap-4">
+            <div class="h-18 w-18 overflow-hidden rounded-full border border-border shadow-[0_6px_18px_rgba(15,23,42,0.06)] sm:h-20 sm:w-20">
+              <img
+                src="/avatar.avif"
+                alt={`${SITE.author} avatar`}
+                class="h-full w-full object-cover"
+                loading="eager"
+              />
+            </div>
+            <div>
+              <p class="text-[11px] uppercase tracking-[0.28em] text-foreground/45">{SITE.title}</p>
+              <a
+                href="/about"
+                class="mt-2 inline-block text-[2rem] leading-none font-semibold tracking-tight transition hover:text-accent"
+              >
+                {SITE.author}
+              </a>
+              <p class="mt-3 max-w-xl text-sm leading-7 text-foreground/70">{SITE.desc}</p>
+            </div>
           </div>
-        )
-      }
-    </section>
 
-    {
-      featuredPosts.length > 0 && (
-        <section
-          id="featured"
-          class:list={[
-            "pt-12 pb-6",
-            { "border-b border-border": recentPosts.length > 0 },
-          ]}
-        >
-          <h2 class="text-2xl font-semibold tracking-wide">Featured</h2>
-          <ul>
-            {featuredPosts.map(data => (
-              <Card variant="h3" {...data} />
-            ))}
-          </ul>
-        </section>
-      )
-    }
-
-    {
-      recentPosts.length > 0 && (
-        <section id="recent-posts" class="pt-12 pb-6">
-          <h2 class="text-2xl font-semibold tracking-wide">Recent Posts</h2>
-          <ul>
-            {recentPosts.map(
-              (data, index) =>
-                index < SITE.postPerIndex && <Card variant="h3" {...data} />
+          <div class="flex items-center gap-2 self-end lg:self-start">
+            {SITE.showArchives && (
+              <LinkButton
+                href="/archives"
+                class="focus-outline flex p-3 hover:[&>svg]:stroke-accent"
+                title="Archives"
+                aria-label="archives"
+              >
+                <IconArchive />
+                <span class="sr-only">Archives</span>
+              </LinkButton>
             )}
-          </ul>
+            <LinkButton
+              href="/search"
+              class="focus-outline flex p-3 hover:[&>svg]:stroke-accent"
+              title="Search"
+              aria-label="search"
+            >
+              <IconSearch />
+              <span class="sr-only">Search</span>
+            </LinkButton>
+            {SITE.lightAndDarkMode && (
+              <button
+                id="theme-btn"
+                class="focus-outline relative size-12 p-3 hover:[&>svg]:stroke-accent"
+                title="Toggles light & dark"
+                aria-label="auto"
+                aria-live="polite"
+              >
+                <IconMoon class="absolute top-[50%] left-[50%] -translate-[50%] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
+                <IconSunHigh class="absolute top-[50%] left-[50%] -translate-[50%] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
+              </button>
+            )}
+          </div>
         </section>
-      )
-    }
 
-    <div class="my-8 text-center">
-      <LinkButton href="/posts/">
-        All Posts
-        <IconArrowRight class="inline-block rtl:-rotate-180" />
-      </LinkButton>
-    </div>
+        <div class="grid gap-5 lg:grid-cols-[minmax(0,1.65fr)_300px]">
+          <div class="space-y-5">
+            {
+              leadPost && (
+                <article class="relative overflow-hidden rounded-[1.6rem] border border-black/6 bg-[#dce8f8]/88 px-6 py-6 shadow-[0_12px_32px_rgba(15,23,42,0.05)] dark:border-white/8 dark:bg-[#31415d]/58 sm:px-7">
+                  <div class="absolute top-5 left-5 h-11 w-11 overflow-hidden rounded-full border border-white/70 shadow-[0_4px_12px_rgba(15,23,42,0.10)]">
+                    <img src="/avatar.avif" alt="avatar" class="h-full w-full object-cover" loading="eager" />
+                  </div>
+                  <div class="pl-16">
+                    <a
+                      href={getPath(leadPost.id, leadPost.filePath)}
+                      class="block text-[2rem] leading-tight font-semibold tracking-tight transition hover:text-accent sm:text-[2.45rem]"
+                    >
+                      {leadPost.data.title}
+                    </a>
+                    <Datetime {...leadPost.data} class="mt-4 text-foreground/60 [&_svg]:scale-75 [&_svg]:opacity-70" />
+                    <p class="mt-5 max-w-3xl text-[1.05rem] leading-9 text-foreground/82">
+                      {leadPost.data.description}
+                    </p>
+                    <div class="mt-7">
+                      <a
+                        href={getPath(leadPost.id, leadPost.filePath)}
+                        class="inline-flex items-center border-b border-current pb-1 text-base text-accent transition hover:opacity-70"
+                      >
+                        阅读剩余部分
+                      </a>
+                    </div>
+                  </div>
+                </article>
+              )
+            }
+
+            {
+              listPosts.map(post => (
+                <article class="relative overflow-hidden rounded-[1.55rem] border border-black/6 bg-background/86 px-6 py-6 shadow-[0_10px_28px_rgba(15,23,42,0.04)] dark:border-white/8 sm:px-7">
+                  <div class="absolute top-5 left-5 h-10 w-10 overflow-hidden rounded-full border border-border shadow-[0_4px_12px_rgba(15,23,42,0.08)]">
+                    <img src="/avatar.avif" alt="avatar" class="h-full w-full object-cover" loading="eager" />
+                  </div>
+                  <div class="pl-15">
+                    <a
+                      href={getPath(post.id, post.filePath)}
+                      class="block text-[1.75rem] leading-tight font-semibold tracking-tight transition hover:text-accent sm:text-[1.95rem]"
+                    >
+                      {post.data.title}
+                    </a>
+                    <Datetime {...post.data} class="mt-3 text-foreground/58 [&_svg]:scale-75 [&_svg]:opacity-70" />
+                    <p class="mt-4 max-w-3xl text-[1rem] leading-8 text-foreground/76">
+                      {post.data.description}
+                    </p>
+                  </div>
+                </article>
+              ))
+            }
+          </div>
+
+          <aside class="space-y-5">
+            <section class="rounded-[1.55rem] border border-black/6 bg-background/84 p-6 shadow-[0_10px_28px_rgba(15,23,42,0.04)] dark:border-white/8">
+              <div class="text-[11px] uppercase tracking-[0.28em] text-foreground/45">Contact</div>
+              <div class="mt-5">
+                <Socials />
+              </div>
+            </section>
+
+            <section class="rounded-[1.55rem] border border-black/6 bg-background/84 p-6 shadow-[0_10px_28px_rgba(15,23,42,0.04)] dark:border-white/8">
+              <div class="text-[11px] uppercase tracking-[0.28em] text-foreground/45">Site Status</div>
+              <div class="mt-5 space-y-3 text-[1rem] leading-7">
+                <div class="flex items-center justify-between gap-4 border-b border-border/70 pb-3">
+                  <span class="text-foreground/62">Posts</span>
+                  <span class="font-semibold">{sortedPosts.length}</span>
+                </div>
+                <div class="flex items-center justify-between gap-4">
+                  <span class="text-foreground/62">Recent</span>
+                  <span class="font-semibold">{SITE.postPerIndex}</span>
+                </div>
+              </div>
+            </section>
+
+            <section class="rounded-[1.55rem] border border-black/6 bg-[#f2c8d7]/78 p-6 shadow-[0_10px_28px_rgba(15,23,42,0.04)] dark:border-white/8 dark:bg-[#5b4150]/60">
+              <div class="text-[11px] uppercase tracking-[0.28em] text-foreground/50">Latest Titles</div>
+              <ul class="mt-5 space-y-4">
+                {
+                  sidebarPosts.map(post => (
+                    <li class="border-b border-black/8 pb-4 last:border-b-0 last:pb-0 dark:border-white/10">
+                      <a
+                        href={getPath(post.id, post.filePath)}
+                        class="block text-[1rem] leading-7 font-medium transition hover:text-accent"
+                      >
+                        {post.data.title}
+                      </a>
+                    </li>
+                  ))
+                }
+              </ul>
+            </section>
+          </aside>
+        </div>
+      </div>
+    </section>
   </main>
   <Footer />
 </Layout>

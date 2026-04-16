@@ -29,6 +29,51 @@ function setPreference(): void {
   reflectPreference();
 }
 
+function applyThemePreference(nextTheme: string): void {
+  themeValue = nextTheme;
+  window.theme?.setTheme(themeValue);
+  setPreference();
+}
+
+async function toggleThemeWithTransition(event?: Event): Promise<void> {
+  const nextTheme = themeValue === LIGHT ? DARK : LIGHT;
+  const transitionEvent = event as MouseEvent | undefined;
+  const supportsViewTransition =
+    typeof document !== "undefined" &&
+    "startViewTransition" in document &&
+    typeof transitionEvent?.clientX === "number" &&
+    typeof transitionEvent?.clientY === "number" &&
+    !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (!supportsViewTransition) {
+    applyThemePreference(nextTheme);
+    return;
+  }
+
+  const endRadius = Math.hypot(
+    Math.max(transitionEvent.clientX, window.innerWidth - transitionEvent.clientX),
+    Math.max(transitionEvent.clientY, window.innerHeight - transitionEvent.clientY)
+  );
+
+  document.documentElement.style.setProperty("--theme-transition-x", `${transitionEvent.clientX}px`);
+  document.documentElement.style.setProperty("--theme-transition-y", `${transitionEvent.clientY}px`);
+  document.documentElement.style.setProperty("--theme-transition-radius", `${endRadius}px`);
+
+  const transition = (document as Document & {
+    startViewTransition: (callback: () => void | Promise<void>) => {
+      ready: Promise<void>;
+    };
+  }).startViewTransition(() => {
+    applyThemePreference(nextTheme);
+  });
+
+  await transition.ready;
+
+  const isDarkTheme = nextTheme === DARK;
+  document.documentElement.classList.toggle("theme-transition-dark", isDarkTheme);
+  document.documentElement.classList.toggle("theme-transition-light", !isDarkTheme);
+}
+
 function reflectPreference(): void {
   document.firstElementChild?.setAttribute("data-theme", themeValue);
 
@@ -76,11 +121,12 @@ function setThemeFeature(): void {
   reflectPreference();
 
   // now this script can find and listen for clicks on the control
-  document.querySelector("#theme-btn")?.addEventListener("click", () => {
-    themeValue = themeValue === LIGHT ? DARK : LIGHT;
-    window.theme?.setTheme(themeValue);
-    setPreference();
-  });
+  const themeButton = document.querySelector("#theme-btn") as HTMLButtonElement | null;
+  if (!themeButton) return;
+
+  themeButton.onclick = event => {
+    void toggleThemeWithTransition(event);
+  };
 }
 
 // Set up theme features after page load
