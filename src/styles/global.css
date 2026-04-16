@@ -24,10 +24,30 @@ html[data-theme="dark"] {
   --theme-transition-x: 50vw;
   --theme-transition-y: 50vh;
   --theme-transition-radius: 0px;
+  --font-ui-sans:
+    "PingFang SC",
+    "Hiragino Sans GB",
+    "Noto Sans CJK SC",
+    "Source Han Sans SC",
+    "Microsoft YaHei",
+    "Segoe UI",
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+  --font-ui-mono:
+    var(--font-google-sans-code),
+    "Maple Mono CN",
+    "Sarasa Mono SC",
+    "SFMono-Regular",
+    Consolas,
+    "Liberation Mono",
+    Menlo,
+    monospace;
 }
 
 @theme inline {
-  --font-app: var(--font-google-sans-code);
+  --font-app: var(--font-ui-sans);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-accent: var(--accent);
