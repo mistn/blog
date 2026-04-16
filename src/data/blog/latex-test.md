@@ -1,6 +1,6 @@
 ---
 author: miuo
-pubDatetime: 2026-04-16T17:35:00Z
+pubDatetime: 2026-04-16T17:35:00+08:00
 title: LaTeX 公式测试
 featured: false
 draft: false
