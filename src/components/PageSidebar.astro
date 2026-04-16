@@ -10,6 +10,7 @@ type Props = {
 
 const { posts } = Astro.props;
 const latestPosts = posts.slice(0, 5);
+const recentCount = Math.min(posts.length, SITE.postPerIndex);
 ---
 
 <aside transition:persist class="space-y-5">
@@ -29,7 +30,7 @@ const latestPosts = posts.slice(0, 5);
       </div>
       <div class="flex items-center justify-between gap-4">
         <span class="text-foreground/62">Recent</span>
-        <span class="font-semibold">{SITE.postPerIndex}</span>
+        <span class="font-semibold">{recentCount}</span>
       </div>
     </div>
   </section>

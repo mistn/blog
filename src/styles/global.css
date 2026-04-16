@@ -147,13 +147,19 @@ html.theme-transition-light::view-transition-new(root) {
 @keyframes theme-reveal-in {
   from {
     clip-path: circle(14px at var(--theme-transition-x) var(--theme-transition-y));
-    opacity: 0.9;
   }
 
   to {
     clip-path: circle(var(--theme-transition-radius) at var(--theme-transition-x) var(--theme-transition-y));
-    opacity: 1;
   }
+}
+
+html[data-theme="dark"][data-theme-switching="true"] #main-content article {
+  background-color: #31415d !important;
+}
+
+html[data-theme="dark"][data-theme-switching="true"] #main-content aside > section {
+  background-color: #262f42 !important;
 }
 
 @keyframes page-body-out {
