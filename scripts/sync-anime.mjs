@@ -3,6 +3,7 @@ import { dirname, resolve } from "node:path";
 
 const ANILIST_API_URL = "https://graphql.anilist.co";
 const OUTPUT_PATH = resolve("src/data/anime.generated.json");
+const DEFAULT_ANILIST_USER_NAME = "uoooouuur";
 const COMPLETED_STATUS = "COMPLETED";
 const REQUIRED_CUSTOM_LIST = "normal";
 const SEASON_ORDER = {
@@ -147,15 +148,10 @@ function formatYearLabel(year) {
 }
 
 async function fetchAnimeCollection() {
-  const userName = process.env.ANILIST_USER_NAME?.trim() || null;
+  const userName =
+    process.env.ANILIST_USER_NAME?.trim() || DEFAULT_ANILIST_USER_NAME;
   const rawUserId = process.env.ANILIST_USER_ID?.trim() || null;
   const userId = rawUserId ? Number(rawUserId) : null;
-
-  if (!userName && !userId) {
-    throw new Error(
-      "Missing AniList identity. Set ANILIST_USER_NAME or ANILIST_USER_ID before running the sync."
-    );
-  }
 
   if (userId !== null && Number.isNaN(userId)) {
     throw new Error("ANILIST_USER_ID must be a valid integer.");
@@ -265,7 +261,7 @@ async function main() {
     source: {
       name: "AniList",
       url: "https://anilist.co",
-      userName: collection?.user?.name ?? process.env.ANILIST_USER_NAME ?? null,
+      userName: collection?.user?.name ?? DEFAULT_ANILIST_USER_NAME,
       userId:
         collection?.user?.id ??
         (process.env.ANILIST_USER_ID

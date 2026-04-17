@@ -3,7 +3,8 @@ name: Anime Sync
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 0 * * *"
+    # Every Monday 02:00 Asia/Shanghai
+    - cron: "0 18 * * 0"
 
 permissions:
   contents: write
@@ -38,9 +39,6 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Sync AniList data
-        env:
-          ANILIST_USER_NAME: ${{ vars.ANILIST_USER_NAME }}
-          ANILIST_USER_ID: ${{ vars.ANILIST_USER_ID }}
         run: pnpm run anime:sync
 
       - name: Detect changes
