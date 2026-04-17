@@ -157,9 +157,17 @@ document.addEventListener("astro:after-swap", setThemeFeature);
 // to avoid navigation bar color flickering in Android dark mode
 document.addEventListener("astro:before-swap", event => {
   const astroEvent = event;
+  const currentTheme = document.documentElement.getAttribute("data-theme");
   const bgColor = document
     .querySelector("meta[name='theme-color']")
     ?.getAttribute("content");
+
+  if (currentTheme) {
+    astroEvent.newDocument.documentElement.setAttribute(
+      "data-theme",
+      currentTheme
+    );
+  }
 
   if (bgColor) {
     astroEvent.newDocument
