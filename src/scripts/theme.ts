@@ -95,7 +95,9 @@ async function toggleThemeWithTransition(event?: Event): Promise<void> {
 function reflectPreference(): void {
   document.firstElementChild?.setAttribute("data-theme", themeValue);
 
-  document.querySelector("#theme-btn")?.setAttribute("aria-label", themeValue);
+  document
+    .querySelectorAll("#theme-btn, #theme-btn-desktop")
+    .forEach(button => button.setAttribute("aria-label", themeValue));
 
   // Get a reference to the body element
   const body = document.body;
@@ -139,12 +141,17 @@ function setThemeFeature(): void {
   reflectPreference();
 
   // now this script can find and listen for clicks on the control
-  const themeButton = document.querySelector("#theme-btn") as HTMLButtonElement | null;
-  if (!themeButton) return;
+  const themeButtons = Array.from(
+    document.querySelectorAll("#theme-btn, #theme-btn-desktop")
+  ) as HTMLButtonElement[];
 
-  themeButton.onclick = event => {
-    void toggleThemeWithTransition(event);
-  };
+  if (!themeButtons.length) return;
+
+  for (const themeButton of themeButtons) {
+    themeButton.onclick = event => {
+      void toggleThemeWithTransition(event);
+    };
+  }
 }
 
 // Set up theme features after page load

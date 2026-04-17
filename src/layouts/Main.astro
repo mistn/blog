@@ -16,6 +16,7 @@ const backUrl = SITE.showBackButton ? Astro.url.pathname : "/";
 <div transition:name="page-body">
   <main
     data-backUrl={backUrl}
+    data-post-memory-scope="list"
     id="main-content"
     class="app-layout pb-12 lg:max-w-5xl"
   >

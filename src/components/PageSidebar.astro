@@ -1,9 +1,7 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import IconMail from "@/assets/icons/IconMail.svg";
-import { SOCIALS } from "@/constants";
 import { getPath } from "@/utils/getPath";
-import { SITE } from "@/config";
+import PageSidebarIntro from "@/components/PageSidebarIntro.astro";
 
 type Props = {
   posts: CollectionEntry<"blog">[];
@@ -11,60 +9,28 @@ type Props = {
 
 const { posts } = Astro.props;
 const latestPosts = posts.slice(0, 5);
-const emailLink = SOCIALS.find(social => social.href.startsWith("mailto:"));
-const emailAddress = emailLink?.href.replace("mailto:", "");
 ---
 
 <aside
   transition:persist
-  class="border-border/65 text-foreground/72 lg:border-s lg:ps-8"
+  class="hidden border-border/65 text-foreground/72 lg:block lg:border-s lg:ps-8"
 >
-  <div class="space-y-10 pt-2 lg:sticky lg:top-8">
-    <section class="space-y-3">
-      <div class="h-14 w-14 overflow-hidden rounded-full border border-border/60">
-        <img
-          src="/avatar.avif"
-          alt={`${SITE.author} avatar`}
-          class="h-full w-full object-cover"
-          loading="eager"
-        />
-      </div>
-      <p class="text-[0.74rem] tracking-[0.28em] text-foreground/42 uppercase">
-        Notebook
-      </p>
-      <h2
-        class="[font-family:var(--font-ui-serif)] text-[1.45rem] leading-tight font-semibold"
-      >
-        {SITE.author}
-      </h2>
-      <p class="max-w-[18rem] text-[0.97rem] leading-7 text-foreground/62">
-        {SITE.desc}
-      </p>
-      {
-        emailLink && emailAddress && (
-          <a
-            href={emailLink.href}
-            class="inline-flex items-center gap-2 text-[0.98rem] leading-7 text-foreground/76 underline decoration-border decoration-1 underline-offset-4 transition hover:text-accent"
-            title={emailLink.linkTitle}
-          >
-            <IconMail class="size-4.5 flex-none" />
-            <span>{emailAddress}</span>
-          </a>
-        )
-      }
-    </section>
+  <div class="space-y-8 pt-2 lg:sticky lg:top-8 lg:space-y-10">
+    <div class="hidden lg:block">
+      <PageSidebarIntro />
+    </div>
 
-    <section>
+    <section class="border-border/60 pt-2 max-lg:border-t max-lg:pt-6">
       <p class="text-[0.74rem] tracking-[0.28em] text-foreground/42 uppercase">
         Recent
       </p>
-      <ul class="mt-4 space-y-4">
+      <ul class="mt-4 space-y-3.5 lg:space-y-4">
         {
           latestPosts.map(post => (
             <li>
               <a
                 href={getPath(post.id, post.filePath)}
-                class="block text-[0.98rem] leading-7 text-foreground/74 transition hover:text-accent"
+                class="block text-[1rem] leading-7 text-foreground/74 transition hover:text-accent"
               >
                 {post.data.title}
               </a>

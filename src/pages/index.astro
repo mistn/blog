@@ -21,6 +21,7 @@ const listPosts = recentPosts.slice(1, SITE.postPerIndex + 2);
   <main
     id="main-content"
     data-layout="index"
+    data-post-memory-scope="list"
     class="app-layout pb-10 lg:max-w-7xl lg:pb-14"
   >
     <section class="overflow-hidden">
@@ -32,6 +33,7 @@ const listPosts = recentPosts.slice(1, SITE.postPerIndex + 2);
                 <article class="border-b border-border/70 pb-10">
                   <a
                     href={getPath(leadPost.id, leadPost.filePath)}
+                    data-post-link
                     class="card-link-press inline-block [font-family:var(--font-ui-serif)] text-[2.2rem] leading-[1.14] font-semibold tracking-tight transition hover:text-accent sm:text-[2.65rem]"
                   >
                     {leadPost.data.title}
@@ -53,6 +55,7 @@ const listPosts = recentPosts.slice(1, SITE.postPerIndex + 2);
                   <article class="py-10">
                     <a
                       href={getPath(post.id, post.filePath)}
+                      data-post-link
                       class="card-link-press inline-block [font-family:var(--font-ui-serif)] text-[1.7rem] leading-[1.22] font-semibold tracking-tight transition hover:text-accent sm:text-[1.95rem]"
                     >
                       {post.data.title}

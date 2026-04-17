@@ -1,33 +1,134 @@
 ---
+import IconMail from "@/assets/icons/IconMail.svg";
 import IconMoon from "@/assets/icons/IconMoon.svg";
 import IconSearch from "@/assets/icons/IconSearch.svg";
 import IconSunHigh from "@/assets/icons/IconSunHigh.svg";
 import HomeTabs from "@/components/HomeTabs.astro";
 import LinkButton from "@/components/LinkButton.astro";
+import { SOCIALS } from "@/constants";
 import { SITE } from "@/config";
+
+type Props = {
+  compactMobile?: boolean;
+};
+
+const { compactMobile = false } = Astro.props;
+
+const emailLink = SOCIALS.find(social => social.href.startsWith("mailto:"));
+const emailAddress = emailLink?.href.replace("mailto:", "");
 ---
 
-<section transition:persist class="app-layout py-6 lg:max-w-7xl lg:py-8">
-  <div class="border-b border-border/70 px-1 pb-4 sm:px-2">
+<section
+  class:list={[
+    "app-layout lg:max-w-7xl lg:py-8",
+    compactMobile ? "py-4" : "py-6",
+  ]}
+>
+  <div
+    class:list={[
+      "border-b border-border/70 px-1 sm:px-2",
+      compactMobile ? "pb-3" : "pb-4",
+    ]}
+  >
     <div
-      class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between"
+      class:list={[
+        "flex flex-col lg:flex-row lg:items-center lg:justify-between",
+        compactMobile ? "gap-3" : "gap-4",
+      ]}
     >
-      <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:gap-10">
-        <div class="min-w-0">
-          <p
-            class="[font-family:var(--font-ui-serif)] text-[1.85rem] leading-none font-semibold tracking-tight"
+      <div
+        class:list={[
+          "flex flex-col lg:flex-row lg:items-center lg:gap-10",
+          compactMobile ? "gap-3" : "gap-5",
+        ]}
+      >
+        <div class:list={["min-w-0", compactMobile && "max-lg:flex max-lg:items-center max-lg:gap-3"]}>
+          <div
+            class:list={[
+              "overflow-hidden rounded-full border border-border/60 lg:hidden",
+              compactMobile ? "h-10 w-10" : "mb-4 h-14 w-14",
+            ]}
           >
-            {SITE.author}
-          </p>
-          <p class="mt-2 text-[0.92rem] leading-6 text-foreground/56 lg:hidden">
-            {SITE.desc}
-          </p>
+            <img
+              src="/avatar.avif"
+              alt={`${SITE.author} avatar`}
+              class="h-full w-full object-cover"
+              loading="eager"
+            />
+          </div>
+          <div class="min-w-0">
+            <p
+              class:list={[
+                "[font-family:var(--font-ui-serif)] leading-none font-semibold tracking-tight",
+                compactMobile ? "text-[1.6rem]" : "text-[1.85rem]",
+              ]}
+            >
+              {SITE.author}
+            </p>
+            <p
+              class:list={[
+                "mt-2 text-[0.92rem] leading-6 text-foreground/56 lg:hidden",
+                compactMobile && "hidden",
+              ]}
+            >
+              {SITE.desc}
+            </p>
+            {
+              emailLink && emailAddress && (
+                <a
+                  href={emailLink.href}
+                  class:list={[
+                    "inline-flex items-center gap-2 text-[0.94rem] leading-6 text-foreground/72 underline decoration-border decoration-1 underline-offset-4 transition hover:text-accent lg:hidden",
+                    compactMobile ? "hidden" : "mt-3",
+                  ]}
+                  title={emailLink.linkTitle}
+                >
+                  <IconMail class="size-4 flex-none" />
+                  <span>{emailAddress}</span>
+                </a>
+              )
+            }
+          </div>
         </div>
 
-        <HomeTabs />
+        <div
+          class:list={[
+            "flex items-center justify-between gap-4 lg:block",
+            compactMobile && "max-lg:pt-1",
+          ]}
+        >
+          <HomeTabs />
+
+          <div class="flex items-center gap-1 lg:hidden">
+            <LinkButton
+              href="/search"
+              class="focus-outline flex size-10 items-center justify-center rounded-full text-foreground/68 transition hover:text-accent"
+              title="Search"
+              aria-label="search"
+            >
+              <IconSearch class="size-5" />
+              <span class="sr-only">Search</span>
+            </LinkButton>
+
+            {
+              SITE.lightAndDarkMode && (
+                <button
+                  id="theme-btn"
+                  class="focus-outline relative size-10 rounded-full text-foreground/68 transition hover:text-accent"
+                  title="Toggles light & dark"
+                  aria-label="auto"
+                  aria-live="polite"
+                >
+                  <IconMoon class="absolute top-[50%] left-[50%] size-5 -translate-[50%] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
+                  <IconSunHigh class="absolute top-[50%] left-[50%] size-5 -translate-[50%] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
+                </button>
+              )
+            }
+          </div>
+        </div>
       </div>
 
-      <div class="flex items-center gap-1 self-end lg:self-auto">
+      <div class="hidden items-center gap-1 lg:flex lg:self-auto">
         <LinkButton
           href="/search"
           class="focus-outline flex size-10 items-center justify-center rounded-full text-foreground/68 transition hover:text-accent"
@@ -41,7 +142,7 @@ import { SITE } from "@/config";
         {
           SITE.lightAndDarkMode && (
             <button
-              id="theme-btn"
+              id="theme-btn-desktop"
               class="focus-outline relative size-10 rounded-full text-foreground/68 transition hover:text-accent"
               title="Toggles light & dark"
               aria-label="auto"

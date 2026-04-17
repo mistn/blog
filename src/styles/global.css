@@ -227,18 +227,54 @@ html.theme-transition-light::view-transition-new(root) {
 
   to {
     opacity: 0;
-    transform: translateY(26px);
+    transform: translateY(10px);
   }
 }
 
 @keyframes page-body-in {
   from {
     opacity: 0;
-    transform: translateY(-30px);
+    transform: translateY(8px);
   }
 
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+[data-article-enter] {
+  will-change: transform, opacity;
+}
+
+.article-enter {
+  animation: article-enter 240ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--article-enter-delay, 0ms);
+}
+
+[data-article-enter-type="title"].article-enter {
+  animation-duration: 260ms;
+}
+
+[data-article-enter-type="content"].article-enter {
+  animation-duration: 280ms;
+}
+
+@keyframes article-enter {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .article-enter {
+    animation-duration: 1ms;
+    animation-delay: 0ms;
   }
 }

@@ -190,5 +190,98 @@ const structuredData = {
 
     <!-- Load full theme logic -->
     <script src="../scripts/theme.ts"></script>
+    <script is:inline>
+      const POST_MEMORY_KEY = "postLinkMemory";
+      const POST_MEMORY_INIT_KEY = "__postLinkMemoryInit";
+
+      function getCurrentPath() {
+        return `${window.location.pathname}${window.location.search}`;
+      }
+
+      function getListMemoryScope() {
+        return document.querySelector("[data-post-memory-scope]");
+      }
+
+      function rememberPostLinkPosition(event) {
+        if (
+          event.defaultPrevented ||
+          event.button !== 0 ||
+          event.metaKey ||
+          event.ctrlKey ||
+          event.shiftKey ||
+          event.altKey
+        ) {
+          return;
+        }
+
+        if (!getListMemoryScope()) return;
+
+        const target =
+          event.target instanceof Element ? event.target : event.target?.parentElement;
+        const link = target?.closest("a[data-post-link]");
+        if (!(link instanceof HTMLAnchorElement)) return;
+
+        const url = new URL(link.href, window.location.href);
+        if (url.origin !== window.location.origin) return;
+
+        sessionStorage.setItem(
+          POST_MEMORY_KEY,
+          JSON.stringify({
+            listPath: getCurrentPath(),
+            postPath: `${url.pathname}${url.search}`,
+            viewportTop: link.getBoundingClientRect().top,
+            scrollY: window.scrollY,
+          })
+        );
+      }
+
+      function restorePostLinkPosition() {
+        if (!getListMemoryScope()) return;
+
+        const raw = sessionStorage.getItem(POST_MEMORY_KEY);
+        if (!raw) return;
+
+        try {
+          const memory = JSON.parse(raw);
+          if (memory?.listPath !== getCurrentPath()) return;
+
+          const links = Array.from(document.querySelectorAll("a[data-post-link]"));
+          const matchingLink = links.find(link => {
+            if (!(link instanceof HTMLAnchorElement)) return false;
+            const url = new URL(link.href, window.location.href);
+            return `${url.pathname}${url.search}` === memory.postPath;
+          });
+
+          const targetTop =
+            matchingLink instanceof HTMLElement
+              ? window.scrollY +
+                matchingLink.getBoundingClientRect().top -
+                Number(memory.viewportTop ?? 0)
+              : Number(memory.scrollY ?? 0);
+
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              window.scrollTo({
+                top: Math.max(0, targetTop),
+                left: 0,
+                behavior: "instant",
+              });
+            });
+          });
+
+          sessionStorage.removeItem(POST_MEMORY_KEY);
+        } catch {
+          sessionStorage.removeItem(POST_MEMORY_KEY);
+        }
+      }
+
+      if (!window[POST_MEMORY_INIT_KEY]) {
+        document.addEventListener("click", rememberPostLinkPosition);
+        document.addEventListener("astro:page-load", restorePostLinkPosition);
+        window[POST_MEMORY_INIT_KEY] = true;
+      }
+
+      restorePostLinkPosition();
+    </script>
   </body>
 </html>

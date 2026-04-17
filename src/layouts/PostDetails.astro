@@ -83,7 +83,7 @@ const nextPost =
 ---
 
 <Layout {...layoutProps}>
-  <SiteTopbar />
+  <SiteTopbar compactMobile />
   <main id="main-content" class="app-layout pb-10 lg:max-w-7xl lg:pb-14">
     <section class="overflow-hidden">
       <div class="px-1 py-4 sm:px-2 sm:py-5">
@@ -92,17 +92,21 @@ const nextPost =
             <BackButton inline />
 
             <article
-              transition:name="page-body"
               class="pt-2"
               data-pagefind-body
             >
               <h1
+                data-article-enter
+                style="--article-enter-delay: 0ms;"
+                data-article-enter-type="title"
                 class="max-w-4xl [font-family:var(--font-ui-serif)] text-[2.25rem] leading-[1.14] font-semibold tracking-tight sm:text-[2.7rem]"
               >
                 {title}
               </h1>
 
               <div
+                data-article-enter
+                style="--article-enter-delay: 26ms;"
                 class="mt-5 flex flex-wrap items-center gap-2 text-foreground/60"
               >
                 <Datetime {pubDatetime} {modDatetime} {timezone} size="lg" />
@@ -118,6 +122,9 @@ const nextPost =
 
               <div
                 id="article"
+                data-article-enter
+                style="--article-enter-delay: 54ms;"
+                data-article-enter-type="content"
                 class="app-prose mt-10 w-full max-w-3xl lg:mx-auto prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)"
               >
                 <Content />
@@ -127,7 +134,11 @@ const nextPost =
 
               <EditPost class="sm:hidden" {hideEditPost} {post} />
 
-              <ul class="mt-4 mb-10 flex flex-wrap gap-4 sm:my-8">
+              <ul
+                data-article-enter
+                style="--article-enter-delay: 88ms;"
+                class="mt-4 mb-10 flex flex-wrap gap-4 sm:my-8"
+              >
                 {
                   tags.map(tag => (
                     <Tag tag={slugifyStr(tag)} tagName={tag} size="sm" />
@@ -139,6 +150,8 @@ const nextPost =
 
               <div
                 data-pagefind-ignore
+                data-article-enter
+                style="--article-enter-delay: 112ms;"
                 class="grid grid-cols-1 gap-6 sm:grid-cols-2"
               >
                 {
@@ -188,6 +201,17 @@ const nextPost =
 </Layout>
 
 <script is:inline data-astro-rerun>
+  function runArticleEnterAnimation() {
+    const nodes = Array.from(document.querySelectorAll("[data-article-enter]"));
+
+    for (const node of nodes) {
+      node.classList.remove("article-enter");
+      // Force a reflow so the animation reliably restarts after client-side swaps.
+      void node.offsetWidth;
+      node.classList.add("article-enter");
+    }
+  }
+
   function addHeadingLinks() {
     const headings = Array.from(
       document.querySelectorAll("h2, h3, h4, h5, h6")
@@ -252,8 +276,10 @@ const nextPost =
     }
   }
   attachCopyButtons();
+  runArticleEnterAnimation();
 
-  document.addEventListener("astro:after-swap", () =>
-    window.scrollTo({ left: 0, top: 0, behavior: "instant" })
-  );
+  document.addEventListener("astro:after-swap", () => {
+    window.scrollTo({ left: 0, top: 0, behavior: "instant" });
+    runArticleEnterAnimation();
+  });
 </script>
