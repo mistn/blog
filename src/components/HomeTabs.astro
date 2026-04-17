@@ -2,39 +2,68 @@
 import { SITE } from "@/config";
 
 const { pathname } = Astro.url;
-const currentPath =
-  pathname.endsWith("/") && pathname !== "/" ? pathname.slice(0, -1) : pathname;
-const isActive = (path: string) => currentPath === path;
+const normalizePath = (path: string) =>
+  path.endsWith("/") && path !== "/" ? path.slice(0, -1) : path;
+const currentPath = normalizePath(pathname);
+const isActive = (path: string) => currentPath === normalizePath(path);
+
+const tabClass =
+  "home-tab rounded-md border border-border/80 bg-[#fcfaf5] px-3 py-1.5 transition hover:border-accent/40 hover:text-accent dark:bg-[#2a3347]";
+const activeTabClass = "border-accent/45 text-accent";
 ---
 
-<nav class="flex flex-wrap items-center gap-2 text-sm text-foreground/72">
+<nav
+  data-home-tabs
+  class="flex flex-wrap items-center gap-2 text-sm text-foreground/72"
+>
   <a
     href="/"
-    class:list={[
-      "rounded-md border border-border/80 bg-[#fcfaf5] px-3 py-1.5 transition hover:border-accent/40 hover:text-accent dark:bg-[#2a3347]",
-      { "border-accent/45 text-accent": isActive("/") },
-    ]}
+    data-path="/"
+    class:list={[tabClass, { [activeTabClass]: isActive("/") }]}
   >
     首页
   </a>
-  {SITE.showArchives && (
-    <a
-      href="/archives"
-      class:list={[
-        "rounded-md border border-border/80 bg-[#fcfaf5] px-3 py-1.5 transition hover:border-accent/40 hover:text-accent dark:bg-[#2a3347]",
-        { "border-accent/45 text-accent": isActive("/archives") },
-      ]}
-    >
-      归档
-    </a>
-  )}
+  {
+    SITE.showArchives && (
+      <a
+        href="/archives"
+        data-path="/archives"
+        class:list={[tabClass, { [activeTabClass]: isActive("/archives") }]}
+      >
+        归档
+      </a>
+    )
+  }
   <a
     href="/about"
-    class:list={[
-      "rounded-md border border-border/80 bg-[#fcfaf5] px-3 py-1.5 transition hover:border-accent/40 hover:text-accent dark:bg-[#2a3347]",
-      { "border-accent/45 text-accent": isActive("/about") },
-    ]}
+    data-path="/about"
+    class:list={[tabClass, { [activeTabClass]: isActive("/about") }]}
   >
     关于
   </a>
 </nav>
+
+<script is:inline>
+  const ACTIVE_HOME_TAB_CLASSES = ["border-accent/45", "text-accent"];
+
+  function normalizeHomeTabPath(path) {
+    if (!path) return "/";
+    return path.endsWith("/") && path !== "/" ? path.slice(0, -1) : path;
+  }
+
+  function syncHomeTabs() {
+    const currentPath = normalizeHomeTabPath(window.location.pathname);
+
+    document.querySelectorAll("[data-home-tabs] [data-path]").forEach(tab => {
+      const targetPath = normalizeHomeTabPath(tab.getAttribute("data-path"));
+      const isActive = targetPath === currentPath;
+
+      ACTIVE_HOME_TAB_CLASSES.forEach(className => {
+        tab.classList.toggle(className, isActive);
+      });
+    });
+  }
+
+  document.addEventListener("astro:page-load", syncHomeTabs);
+  syncHomeTabs();
+</script>
