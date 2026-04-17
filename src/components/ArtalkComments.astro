@@ -30,6 +30,10 @@ const containerId = `artalk-comments-${pageKey.replace(/[^a-zA-Z0-9_-]/g, "-")}`
     "https://cdnjs.cloudflare.com/ajax/libs/artalk/2.9.1/Artalk.css";
   const ARTALK_JS_URL = "https://esm.sh/artalk@2.9.1";
 
+  function isDarkTheme() {
+    return document.documentElement.getAttribute("data-theme") === "dark";
+  }
+
   function ensureArtalkStyle() {
     if (document.querySelector('link[data-artalk-style="true"]')) return;
 
@@ -60,10 +64,24 @@ const containerId = `artalk-comments-${pageKey.replace(/[^a-zA-Z0-9_-]/g, "-")}`
       site: siteName,
       pageKey,
       pageTitle,
+      darkMode: isDarkTheme(),
       preferRemoteConf: true,
     });
   }
 
+  function syncArtalkTheme() {
+    if (window.__artalk?.setDarkMode) {
+      window.__artalk.setDarkMode(isDarkTheme());
+    }
+  }
+
+  if (window.__artalkThemeHandler) {
+    document.removeEventListener("theme-change", window.__artalkThemeHandler);
+  }
+
+  window.__artalkThemeHandler = syncArtalkTheme;
+  document.addEventListener("theme-change", window.__artalkThemeHandler);
+
   document.addEventListener("astro:page-load", mountArtalk);
-  mountArtalk();
+  mountArtalk().then(syncArtalkTheme);
 </script>
