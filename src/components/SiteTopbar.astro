@@ -73,21 +73,6 @@ const emailAddress = emailLink?.href.replace("mailto:", "");
             >
               {SITE.desc}
             </p>
-            {
-              emailLink && emailAddress && (
-                <a
-                  href={emailLink.href}
-                  class:list={[
-                    "inline-flex items-center gap-2 text-[0.94rem] leading-6 text-foreground/72 underline decoration-border decoration-1 underline-offset-4 transition hover:text-accent lg:hidden",
-                    compactMobile ? "hidden" : "mt-3",
-                  ]}
-                  title={emailLink.linkTitle}
-                >
-                  <IconMail class="size-4 flex-none" />
-                  <span>{emailAddress}</span>
-                </a>
-              )
-            }
           </div>
         </div>
 
@@ -100,6 +85,20 @@ const emailAddress = emailLink?.href.replace("mailto:", "");
           <HomeTabs />
 
           <div class="flex items-center gap-1 lg:hidden">
+            {
+              emailLink && emailAddress && (
+                <LinkButton
+                  href={emailLink.href}
+                  class="focus-outline flex size-10 items-center justify-center rounded-full text-foreground/68 transition hover:text-accent"
+                  title={emailLink.linkTitle}
+                  aria-label={emailLink.linkTitle}
+                >
+                  <IconMail class="size-5" />
+                  <span class="sr-only">Email</span>
+                </LinkButton>
+              )
+            }
+
             <LinkButton
               href="/search"
               class="focus-outline flex size-10 items-center justify-center rounded-full text-foreground/68 transition hover:text-accent"
