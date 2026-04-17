@@ -85,7 +85,11 @@ const nextPost =
 
 <Layout {...layoutProps}>
   <SiteTopbar />
-  <main id="main-content" class="app-layout pb-10 lg:max-w-7xl lg:pb-14">
+  <main
+    id="main-content"
+    data-post-memory-scope="post"
+    class="app-layout pb-10 lg:max-w-7xl lg:pb-14"
+  >
     <section class="overflow-hidden">
       <div class="px-1 py-4 sm:px-2 sm:py-5">
         <div class="grid gap-10 lg:grid-cols-[minmax(0,1.78fr)_260px]">

@@ -231,6 +231,25 @@ const resolvedStructuredData = structuredData
         return document.querySelector("[data-post-memory-scope]");
       }
 
+      function isRememberablePostLink(link) {
+        if (!(link instanceof HTMLAnchorElement)) return false;
+
+        const url = new URL(link.href, window.location.href);
+        if (url.origin !== window.location.origin) return false;
+
+        const currentUrl = new URL(window.location.href);
+        const isSameDocumentLink =
+          url.pathname === currentUrl.pathname &&
+          url.search === currentUrl.search &&
+          url.hash;
+
+        if (isSameDocumentLink) return false;
+
+        return (
+          link.hasAttribute("data-post-link") || url.pathname.startsWith("/posts/")
+        );
+      }
+
       function rememberPostLinkPosition(event) {
         if (
           event.defaultPrevented ||
@@ -249,11 +268,11 @@ const resolvedStructuredData = structuredData
           event.target instanceof Element
             ? event.target
             : event.target?.parentElement;
-        const link = target?.closest("a[data-post-link]");
+        const link = target?.closest("a[href]");
         if (!(link instanceof HTMLAnchorElement)) return;
+        if (!isRememberablePostLink(link)) return;
 
         const url = new URL(link.href, window.location.href);
-        if (url.origin !== window.location.origin) return;
 
         sessionStorage.setItem(
           POST_MEMORY_KEY,
@@ -276,8 +295,8 @@ const resolvedStructuredData = structuredData
           const memory = JSON.parse(raw);
           if (memory?.listPath !== getCurrentPath()) return;
 
-          const links = Array.from(
-            document.querySelectorAll("a[data-post-link]")
+          const links = Array.from(document.querySelectorAll("a[href]")).filter(
+            link => isRememberablePostLink(link)
           );
           const matchingLink = links.find(link => {
             if (!(link instanceof HTMLAnchorElement)) return false;
