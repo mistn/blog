@@ -32,6 +32,13 @@ const activeTabClass = "border-accent/60 text-foreground dark:text-foreground";
     )
   }
   <a
+    href="/anime"
+    data-path="/anime"
+    class:list={[tabClass, { [activeTabClass]: isActive("/anime") }]}
+  >
+    追番
+  </a>
+  <a
     href="/about"
     data-path="/about"
     class:list={[tabClass, { [activeTabClass]: isActive("/about") }]}

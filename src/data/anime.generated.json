@@ -1,0 +1,14 @@
+{
+  "generatedAt": null,
+  "source": {
+    "name": "AniList",
+    "url": "https://anilist.co",
+    "userName": null,
+    "userId": null,
+    "userUrl": null,
+    "statuses": ["COMPLETED"],
+    "customListName": "normal"
+  },
+  "total": 0,
+  "groups": []
+}

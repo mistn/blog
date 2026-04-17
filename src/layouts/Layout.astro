@@ -4,6 +4,8 @@ import { PUBLIC_GOOGLE_SITE_VERIFICATION } from "astro:env/client";
 import { SITE } from "@/config";
 import "@/styles/global.css";
 
+type StructuredDataType = "BlogPosting" | "CollectionPage" | "WebPage";
+
 type Props = {
   title?: string;
   author?: string;
@@ -14,6 +16,8 @@ type Props = {
   pubDatetime?: Date;
   modDatetime?: Date | null;
   scrollSmooth?: boolean;
+  structuredDataType?: StructuredDataType;
+  structuredData?: Record<string, unknown> | null;
 };
 
 const {
@@ -26,25 +30,51 @@ const {
   pubDatetime,
   modDatetime,
   scrollSmooth = false,
+  structuredDataType = pubDatetime ? "BlogPosting" : "WebPage",
+  structuredData,
 } = Astro.props;
 
 const socialImageURL = new URL(ogImage, Astro.url);
-
-const structuredData = {
-  "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  headline: `${title}`,
-  image: `${socialImageURL}`,
-  datePublished: `${pubDatetime?.toISOString()}`,
-  ...(modDatetime && { dateModified: modDatetime.toISOString() }),
-  author: [
-    {
-      "@type": "Person",
-      name: `${author}`,
-      ...(profile && { url: profile }),
-    },
-  ],
+const canonicalHref = canonicalURL.toString();
+const ogType = structuredDataType === "BlogPosting" ? "article" : "website";
+const person = {
+  "@type": "Person",
+  name: `${author}`,
+  ...(profile && { url: profile }),
 };
+
+const baseStructuredData =
+  structuredDataType === "BlogPosting"
+    ? {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        headline: `${title}`,
+        description: `${description}`,
+        image: `${socialImageURL}`,
+        url: canonicalHref,
+        datePublished: pubDatetime?.toISOString(),
+        ...(modDatetime && { dateModified: modDatetime.toISOString() }),
+        author: [person],
+      }
+    : {
+        "@context": "https://schema.org",
+        "@type": structuredDataType,
+        name: `${title}`,
+        description: `${description}`,
+        url: canonicalHref,
+        image: `${socialImageURL}`,
+        inLanguage: SITE.lang ?? "en",
+        isPartOf: {
+          "@type": "WebSite",
+          name: SITE.title,
+          url: SITE.website,
+        },
+        author: [person],
+      };
+
+const resolvedStructuredData = structuredData
+  ? { ...baseStructuredData, ...structuredData }
+  : baseStructuredData;
 ---
 
 <!doctype html>
@@ -93,6 +123,7 @@ const structuredData = {
     <link rel="sitemap" href="/sitemap-index.xml" />
 
     <!-- Open Graph / Facebook -->
+    <meta property="og:type" content={ogType} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalURL} />
@@ -100,7 +131,7 @@ const structuredData = {
 
     <!-- Article Published/Modified time -->
     {
-      pubDatetime && (
+      structuredDataType === "BlogPosting" && pubDatetime && (
         <meta
           property="article:published_time"
           content={pubDatetime.toISOString()}
@@ -108,7 +139,7 @@ const structuredData = {
       )
     }
     {
-      modDatetime && (
+      structuredDataType === "BlogPosting" && modDatetime && (
         <meta
           property="article:modified_time"
           content={modDatetime.toISOString()}
@@ -127,7 +158,7 @@ const structuredData = {
     <script
       type="application/ld+json"
       is:inline
-      set:html={JSON.stringify(structuredData)}
+      set:html={JSON.stringify(resolvedStructuredData)}
     />
 
     <!-- Enable RSS feed auto-discovery  -->
@@ -142,9 +173,6 @@ const structuredData = {
     <meta name="theme-color" content="" />
 
     {
-      // If PUBLIC_GOOGLE_SITE_VERIFICATION is set in the environment variable,
-      // include google-site-verification tag in the heading
-      // Learn more: https://support.google.com/webmasters/answer/9008080#meta_tag_verification&zippy=%2Chtml-tag
       PUBLIC_GOOGLE_SITE_VERIFICATION && (
         <meta
           name="google-site-verification"
@@ -155,10 +183,9 @@ const structuredData = {
 
     <ClientRouter />
 
-    <!-- Minimal inline script to prevent FOUC - sets theme immediately -->
     <script is:inline>
       (function () {
-        const initialColorScheme = ""; // "light" | "dark"
+        const initialColorScheme = "";
         const currentTheme = localStorage.getItem("theme");
 
         function getPreferTheme() {
@@ -170,11 +197,8 @@ const structuredData = {
         }
 
         const themeValue = getPreferTheme();
-
-        // Set theme immediately to prevent flash
         document.firstElementChild?.setAttribute("data-theme", themeValue);
 
-        // Export minimal API for external script
         window.theme = {
           themeValue: themeValue,
           getTheme: () => window.theme.themeValue,
@@ -188,7 +212,6 @@ const structuredData = {
   <body>
     <slot />
 
-    <!-- Load full theme logic -->
     <script src="../scripts/theme.ts"></script>
     <script is:inline>
       const POST_MEMORY_KEY = "postLinkMemory";
@@ -217,7 +240,9 @@ const structuredData = {
         if (!getListMemoryScope()) return;
 
         const target =
-          event.target instanceof Element ? event.target : event.target?.parentElement;
+          event.target instanceof Element
+            ? event.target
+            : event.target?.parentElement;
         const link = target?.closest("a[data-post-link]");
         if (!(link instanceof HTMLAnchorElement)) return;
 
@@ -245,7 +270,9 @@ const structuredData = {
           const memory = JSON.parse(raw);
           if (memory?.listPath !== getCurrentPath()) return;
 
-          const links = Array.from(document.querySelectorAll("a[data-post-link]"));
+          const links = Array.from(
+            document.querySelectorAll("a[data-post-link]")
+          );
           const matchingLink = links.find(link => {
             if (!(link instanceof HTMLAnchorElement)) return false;
             const url = new URL(link.href, window.location.href);

@@ -1,0 +1,75 @@
+name: Anime Sync
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: anime-sync
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.11.1
+
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Sync AniList data
+        env:
+          ANILIST_USER_NAME: ${{ vars.ANILIST_USER_NAME }}
+          ANILIST_USER_ID: ${{ vars.ANILIST_USER_ID }}
+        run: pnpm run anime:sync
+
+      - name: Detect changes
+        id: changes
+        shell: bash
+        run: |
+          if git diff --quiet -- src/data/anime.generated.json; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Summarize data snapshot
+        shell: bash
+        run: |
+          node -e "const fs=require('node:fs'); const data=JSON.parse(fs.readFileSync('src/data/anime.generated.json','utf8')); const years=[...(data.groups||[])].map(group=>group.year).filter(Boolean); const latest=years.length?Math.max(...years):'n/a'; const lines=['## Anime Sync Summary', '', '- Username: '+(data.source?.userName||'unknown'), '- Updated at: '+(data.generatedAt||'unknown'), '- Total titles: '+Number(data.total||0), '- Custom list: '+(data.source?.customListName||'unknown'), '- Latest season year: '+latest, '- Changed in this run: ${{ steps.changes.outputs.changed }}']; fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, lines.join('\n') + '\n');"
+
+      - name: No changes detected
+        if: steps.changes.outputs.changed != 'true'
+        run: echo "anime.generated.json is already up to date."
+
+      - name: Commit updated anime data
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/data/anime.generated.json
+          git commit -m "chore(data): sync anime data"
+
+      - name: Push changes
+        if: steps.changes.outputs.changed == 'true'
+        run: git push
