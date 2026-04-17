@@ -1,9 +1,9 @@
 export const SITE = {
-  website: "https://astro-paper.pages.dev/", // replace this with your deployed domain
+  website: "https://miuo.me/",
   author: "miuo",
   startYear: 2025,
   profile: "",
-  desc: "Personal notes, drafts, and things worth keeping.",
+  desc: "记录文章、笔记、实验和暂时不想丢掉的内容。",
   title: "miuo",
   ogImage: "favicon.png",
   lightAndDarkMode: true,
@@ -15,10 +15,10 @@ export const SITE = {
   editPost: {
     enabled: false,
     text: "Edit page",
-    url: "https://github.com/satnaing/astro-paper/edit/main/",
+    url: "https://github.com/mistn/blog11/edit/main/",
   },
   dynamicOgImage: true,
   dir: "ltr", // "rtl" | "auto"
-  lang: "en", // html lang code. Set this empty and default will be "en"
+  lang: "zh-CN", // html lang code. Set this empty and default will be "en"
   timezone: "Asia/Shanghai", // Default global timezone (IANA format) https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 } as const;

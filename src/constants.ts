@@ -17,7 +17,7 @@ interface Social {
 export const SOCIALS: Social[] = [
   {
     name: "Mail",
-    href: "mailto:yue@austici.org",
+    href: "mailto:hi@miuo.me",
     linkTitle: `Send an email to ${SITE.title}`,
     icon: IconMail,
   },
