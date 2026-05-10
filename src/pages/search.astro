@@ -19,27 +19,62 @@ const backUrl = SITE.showBackButton ? `${Astro.url.pathname}` : "/";
 </Layout>
 
 <script is:inline define:vars={{ searchWarning: copy.dev.searchWarning }}>
+  function loadPagefindUI() {
+    if (window.PagefindUI) return Promise.resolve(window.PagefindUI);
+
+    return new Promise((resolve, reject) => {
+      const existingScript = document.querySelector("[data-pagefind-ui-script]");
+
+      if (existingScript) {
+        existingScript.addEventListener("load", () => resolve(window.PagefindUI), {
+          once: true,
+        });
+        existingScript.addEventListener("error", reject, { once: true });
+        return;
+      }
+
+      const script = document.createElement("script");
+      script.src = "/pagefind/pagefind-ui.js";
+      script.async = true;
+      script.dataset.pagefindUiScript = "";
+      script.addEventListener("load", () => {
+        if (window.PagefindUI) {
+          resolve(window.PagefindUI);
+        } else {
+          reject(new Error("Pagefind UI loaded without exposing PagefindUI."));
+        }
+      });
+      script.addEventListener("error", reject);
+      document.head.append(script);
+    });
+  }
+
   function initSearch() {
     const pageFindSearch = document.querySelector("#pagefind-search");
 
     if (!pageFindSearch) return;
+    if (pageFindSearch.dataset.initializing === "true") return;
+    pageFindSearch.dataset.initializing = "true";
 
     const params = new URLSearchParams(window.location.search);
 
     const onIdle = window.requestIdleCallback || (cb => setTimeout(cb, 1));
 
     onIdle(async () => {
-      // @ts-expect-error — Missing types for @pagefind/default-ui package.
-      const { PagefindUI } = await import("@pagefind/default-ui");
+      let PagefindUI;
 
-      // Display warning inn dev mode
-      if (import.meta.env.DEV) {
+      try {
+        PagefindUI = await loadPagefindUI();
+      } catch (error) {
+        console.error(error);
         pageFindSearch.innerHTML = `
             <div class="bg-muted/75 rounded p-4 space-y-4 mb-4">
               <p>${searchWarning}</p>
               <code class="block bg-black text-white px-2 py-1 rounded">pnpm run build</code>
             </div>
           `;
+        pageFindSearch.dataset.initializing = "false";
+        return;
       }
 
       // Init pagefind ui
@@ -75,6 +110,8 @@ const backUrl = SITE.showBackButton ? `${Astro.url.pathname}` : "/";
           history.replaceState(history.state, "", window.location.pathname);
         }
       }
+
+      pageFindSearch.dataset.initializing = "false";
     });
   }
 

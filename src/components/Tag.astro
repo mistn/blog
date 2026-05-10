@@ -21,17 +21,17 @@ const {
   <a
     href={localizePath(`/tags/${tag}/`, locale)}
     class:list={[
-      "inline-flex items-center gap-1 rounded-full border border-border/80 bg-muted/28 text-foreground/78 no-underline shadow-[0_4px_12px_rgba(15,23,42,0.04)] transition-all",
-      "hover:-translate-y-0.5 hover:border-accent/45 hover:bg-accent/10 hover:text-accent",
-      "focus-visible:border-accent/45 focus-visible:bg-accent/10 focus-visible:text-accent",
-      { "px-2.5 py-1 text-sm": size === "sm" },
-      { "px-3.5 py-1.5 text-base": size === "lg" },
+      "group inline-flex items-center gap-1 border-b border-transparent text-foreground/64 no-underline transition-colors",
+      "hover:border-accent/45 hover:text-accent",
+      "focus-visible:border-accent/55 focus-visible:text-accent",
+      { "px-0.5 py-0.5 text-sm": size === "sm" },
+      { "px-0.5 py-1 text-base": size === "lg" },
     ]}
   >
     <IconHash
       class:list={[
-        "opacity-70",
-        { "size-5": size === "lg" },
+        "text-foreground/36 transition-colors group-hover:text-accent/70 group-focus-visible:text-accent/70",
+        { "size-4": size === "lg" },
         { "size-3.5": size === "sm" },
       ]}
     />
