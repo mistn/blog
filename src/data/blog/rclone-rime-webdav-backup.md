@@ -2,7 +2,7 @@
 author: miuo
 pubDatetime: 2026-05-10T00:00:00+08:00
 modDatetime: 2026-05-10T00:00:00+08:00
-title: Windows 下使用 Rclone 备份 Rime 配置到 WebDAV
+title: 用 Rclone 自动备份小狼毫配置到 WebDAV
 featured: false
 draft: false
 tags:
