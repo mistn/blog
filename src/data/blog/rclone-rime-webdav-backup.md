@@ -31,7 +31,7 @@ rclone config
 
 我用的是 openlist 自建的 webdav，其他 webdav 参考官方规范填写
 
-```yaml
+```text
 name: list
 type: webdav
 url: https://list.miuo.me/dav/

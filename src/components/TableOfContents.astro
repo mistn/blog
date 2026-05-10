@@ -57,7 +57,11 @@ const closeLabel = locale === "en" ? "Close table of contents" : "关闭文章�
           </button>
         </div>
 
-        <nav class="mt-4 min-h-0 overflow-y-auto pe-1" aria-label={title}>
+        <nav
+          data-toc-nav
+          class="mt-4 min-h-0 overflow-y-auto pe-1"
+          aria-label={title}
+        >
           <ol class="space-y-1">
             {tocHeadings.map(heading => (
               <li>
@@ -105,6 +109,7 @@ const closeLabel = locale === "en" ? "Close table of contents" : "关闭文章�
     const toggle = root.querySelector("[data-toc-toggle]");
     const close = root.querySelector("[data-toc-close]");
     const panel = root.querySelector("[data-toc-panel]");
+    const nav = root.querySelector("[data-toc-nav]");
     const links = Array.from(root.querySelectorAll("[data-toc-link]"));
     const targets = links
       .map(link => {
@@ -113,7 +118,23 @@ const closeLabel = locale === "en" ? "Close table of contents" : "关闭文章�
       })
       .filter(Boolean);
 
-    if (!toggle || !close || !panel) return;
+    if (!toggle || !close || !panel || !nav) return;
+
+    let activeId = null;
+
+    function scrollLinkIntoView(link) {
+      const navRect = nav.getBoundingClientRect();
+      const linkRect = link.getBoundingClientRect();
+      const isAbove = linkRect.top < navRect.top;
+      const isBelow = linkRect.bottom > navRect.bottom;
+
+      if (!isAbove && !isBelow) return;
+
+      link.scrollIntoView({
+        block: "nearest",
+        behavior: "smooth",
+      });
+    }
 
     function setOpen(isOpen) {
       root.dataset.open = String(isOpen);
@@ -127,23 +148,40 @@ const closeLabel = locale === "en" ? "Close table of contents" : "关闭文章�
       panel.classList.toggle("sm:translate-y-2", !isOpen);
       panel.classList.toggle("opacity-100", isOpen);
       panel.classList.toggle("opacity-0", !isOpen);
+
+      if (isOpen) {
+        window.requestAnimationFrame(() => updateActiveLink({ scroll: true }));
+      }
     }
 
-    function updateActiveLink() {
-      let activeId = targets[0]?.id;
+    function updateActiveLink(options = {}) {
+      let nextActiveId = targets[0]?.id;
       for (const target of targets) {
         if (target.getBoundingClientRect().top <= 120) {
-          activeId = target.id;
+          nextActiveId = target.id;
         } else {
           break;
         }
       }
 
+      let activeLink = null;
       for (const link of links) {
-        const isActive = link.getAttribute("data-toc-link") === activeId;
+        const isActive = link.getAttribute("data-toc-link") === nextActiveId;
         link.classList.toggle("bg-muted", isActive);
         link.classList.toggle("text-accent", isActive);
         link.classList.toggle("font-medium", isActive);
+        if (isActive) activeLink = link;
+      }
+
+      const shouldScroll =
+        activeLink &&
+        root.dataset.open === "true" &&
+        (options.scroll || nextActiveId !== activeId);
+
+      activeId = nextActiveId;
+
+      if (shouldScroll) {
+        scrollLinkIntoView(activeLink);
       }
     }
 

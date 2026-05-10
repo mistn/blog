@@ -99,7 +99,7 @@ const nextPost =
     data-post-memory-scope="post"
     class="app-layout pb-10 lg:max-w-7xl lg:pb-14"
   >
-    <section class="overflow-hidden">
+    <section>
       <div class="px-1 py-4 sm:px-2 sm:py-5">
         <div class="grid gap-10 lg:grid-cols-[minmax(0,1.78fr)_260px]">
           <div class="min-w-0">
@@ -147,7 +147,7 @@ const nextPost =
                 data-article-enter
                 style="--article-enter-delay: 54ms;"
                 data-article-enter-type="content"
-                class="app-prose mt-10 w-full max-w-4xl prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)"
+                class="app-prose mt-10 w-full max-w-4xl"
               >
                 <Content />
               </div>
@@ -281,31 +281,129 @@ const nextPost =
   function attachCopyButtons() {
     const copyButtonLabel = copyCodeLabel;
     const codeBlocks = Array.from(document.querySelectorAll("pre"));
+    const languageLabels = new Map([
+      ["bash", "Bash"],
+      ["bat", "Batch"],
+      ["cmd", "Command Prompt"],
+      ["css", "CSS"],
+      ["dockerfile", "Dockerfile"],
+      ["gitignore", "Git Ignore"],
+      ["html", "HTML"],
+      ["js", "JavaScript"],
+      ["javascript", "JavaScript"],
+      ["json", "JSON"],
+      ["md", "Markdown"],
+      ["markdown", "Markdown"],
+      ["powershell", "PowerShell"],
+      ["ps1", "PowerShell"],
+      ["shell", "Shell"],
+      ["sh", "Shell"],
+      ["toml", "TOML"],
+      ["ts", "TypeScript"],
+      ["typescript", "TypeScript"],
+      ["xml", "XML"],
+      ["yaml", "YAML"],
+      ["yml", "YAML"],
+    ]);
 
     for (const codeBlock of codeBlocks) {
+      if (codeBlock.closest(".code-block-frame")) continue;
+
       const wrapper = document.createElement("div");
-      wrapper.style.position = "relative";
+      wrapper.className = "code-block-frame";
 
-      const computedStyle = getComputedStyle(codeBlock);
-      const hasFileNameOffset =
-        computedStyle.getPropertyValue("--file-name-offset").trim() !== "";
-
-      const topClass = hasFileNameOffset
-        ? "top-(--file-name-offset)"
-        : "-top-3";
-
+      const header = createCodeHeader(codeBlock);
       const copyButton = document.createElement("button");
-      copyButton.className = `copy-code absolute end-3 ${topClass} rounded bg-muted border border-muted px-2 py-1 text-xs leading-4 text-foreground font-medium`;
-      copyButton.innerHTML = copyButtonLabel;
+      copyButton.className = "copy-code";
+      copyButton.type = "button";
+      copyButton.ariaLabel = copyButtonLabel;
+      copyButton.title = copyButtonLabel;
+      copyButton.innerHTML = getCopyButtonContent(copyButtonLabel);
+      header.appendChild(copyButton);
+
       codeBlock.setAttribute("tabindex", "0");
-      codeBlock.appendChild(copyButton);
 
       codeBlock?.parentNode?.insertBefore(wrapper, codeBlock);
+      wrapper.appendChild(header);
       wrapper.appendChild(codeBlock);
 
       copyButton.addEventListener("click", async () => {
         await copyCode(codeBlock, copyButton);
       });
+    }
+
+    function getLanguageLabel(language) {
+      if (
+        !language ||
+        language === "text" ||
+        language === "txt" ||
+        language === "plain"
+      ) {
+        return null;
+      }
+
+      return languageLabels.get(language.toLowerCase()) ?? language.toUpperCase();
+    }
+
+    function createLanguageBadge(languageLabel, compact = false) {
+      const badge = document.createElement("span");
+      badge.className = compact ? "code-language-badge" : "code-meta-primary";
+      badge.innerText = languageLabel;
+      return badge;
+    }
+
+    function createCodeHeader(codeBlock) {
+      const header = document.createElement("div");
+      header.className = "code-block-header";
+
+      const meta = document.createElement("div");
+      meta.className = "code-block-meta";
+      meta.innerHTML = getCodeIcon();
+
+      const languageLabel = getLanguageLabel(codeBlock.dataset.language);
+      const fileName = codeBlock.dataset.codeFile;
+
+      if (fileName) {
+        const file = document.createElement("span");
+        file.className = "code-meta-primary";
+        file.innerText = fileName;
+        meta.appendChild(file);
+
+        if (languageLabel) {
+          meta.appendChild(createLanguageBadge(languageLabel, true));
+        }
+      } else if (languageLabel) {
+        meta.appendChild(createLanguageBadge(languageLabel));
+      } else {
+        meta.appendChild(createLanguageBadge("Code"));
+      }
+
+      header.appendChild(meta);
+      return header;
+    }
+
+    function getCodeIcon() {
+      return `
+        <svg aria-hidden="true" class="code-block-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m8 9-3 3 3 3"></path>
+          <path d="m16 9 3 3-3 3"></path>
+          <path d="m14 5-4 14"></path>
+        </svg>
+      `;
+    }
+
+    function getCopyButtonContent(label, copied = false) {
+      const icon = copied
+        ? `<path d="m5 12 4 4L19 6"></path>`
+        : `<rect x="9" y="9" width="11" height="11" rx="2"></rect>
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>`;
+
+      return `
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          ${icon}
+        </svg>
+        <span class="sr-only">${label}</span>
+      `;
     }
 
     async function copyCode(block, button) {
@@ -314,10 +412,14 @@ const nextPost =
 
       await navigator.clipboard.writeText(text ?? "");
 
-      button.innerText = copiedCodeLabel;
+      button.innerHTML = getCopyButtonContent(copiedCodeLabel, true);
+      button.ariaLabel = copiedCodeLabel;
+      button.title = copiedCodeLabel;
 
       setTimeout(() => {
-        button.innerText = copyButtonLabel;
+        button.innerHTML = getCopyButtonContent(copyButtonLabel);
+        button.ariaLabel = copyButtonLabel;
+        button.title = copyButtonLabel;
       }, 700);
     }
   }
