@@ -9,7 +9,28 @@ type Props = {
 const { pageKey, pageTitle } = Astro.props;
 const locale = getLocaleFromPath(Astro.url.pathname);
 const copy = ui[locale];
-const artalkLocale = locale === "en" ? "en-US" : "zh-CN";
+const artalkText =
+  locale === "en"
+    ? {
+        counter: "{count} comments",
+        email: "Email",
+        link: "Website",
+        nick: "Name",
+        noComment: "No comments yet",
+        placeholder: "Type something...",
+        send: "Post Comment",
+        sendBtn: "Post Comment",
+      }
+    : {
+        counter: "{count} 条评论",
+        email: "邮箱",
+        link: "网址",
+        nick: "昵称",
+        noComment: "「此时无声胜有声」",
+        placeholder: "键入内容...",
+        send: "发送",
+        sendBtn: "发送",
+      };
 
 const server = "https://artalkk.miuo.me";
 const siteName = "blogs";
@@ -31,7 +52,14 @@ const containerId = `artalk-comments-${pageKey.replace(/[^a-zA-Z0-9_-]/g, "-")}`
 
 <script
   is:inline
-  define:vars={{ artalkLocale, containerId, pageKey, pageTitle, server, siteName }}
+  define:vars={{
+    artalkText,
+    containerId,
+    pageKey,
+    pageTitle,
+    server,
+    siteName,
+  }}
 >
   const ARTALK_CSS_URL =
     "https://cdnjs.cloudflare.com/ajax/libs/artalk/2.9.1/Artalk.css";
@@ -73,8 +101,19 @@ const containerId = `artalk-comments-${pageKey.replace(/[^a-zA-Z0-9_-]/g, "-")}`
       pageKey,
       pageTitle,
       darkMode: isDarkTheme(),
-      locale: artalkLocale,
+      locale: {
+        counter: artalkText.counter,
+        email: artalkText.email,
+        link: artalkText.link,
+        nick: artalkText.nick,
+        noComment: artalkText.noComment,
+        placeholder: artalkText.placeholder,
+        send: artalkText.send,
+      },
+      noComment: artalkText.noComment,
+      placeholder: artalkText.placeholder,
       preferRemoteConf: false,
+      sendBtn: artalkText.sendBtn,
     });
   }
 
