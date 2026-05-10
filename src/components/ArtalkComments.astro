@@ -9,7 +9,7 @@ type Props = {
 const { pageKey, pageTitle } = Astro.props;
 const locale = getLocaleFromPath(Astro.url.pathname);
 const copy = ui[locale];
-const artalkLocale = locale === "en" ? "en" : "zh-CN";
+const artalkLocale = locale === "en" ? "en-US" : "zh-CN";
 
 const server = "https://artalkk.miuo.me";
 const siteName = "blogs";
