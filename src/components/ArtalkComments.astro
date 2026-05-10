@@ -9,6 +9,7 @@ type Props = {
 const { pageKey, pageTitle } = Astro.props;
 const locale = getLocaleFromPath(Astro.url.pathname);
 const copy = ui[locale];
+const artalkLocale = locale === "en" ? "en" : "zh-CN";
 
 const server = "https://artalkk.miuo.me";
 const siteName = "blogs";
@@ -30,7 +31,7 @@ const containerId = `artalk-comments-${pageKey.replace(/[^a-zA-Z0-9_-]/g, "-")}`
 
 <script
   is:inline
-  define:vars={{ containerId, pageKey, pageTitle, server, siteName }}
+  define:vars={{ artalkLocale, containerId, pageKey, pageTitle, server, siteName }}
 >
   const ARTALK_CSS_URL =
     "https://cdnjs.cloudflare.com/ajax/libs/artalk/2.9.1/Artalk.css";
@@ -72,6 +73,7 @@ const containerId = `artalk-comments-${pageKey.replace(/[^a-zA-Z0-9_-]/g, "-")}`
       pageKey,
       pageTitle,
       darkMode: isDarkTheme(),
+      locale: artalkLocale,
       preferRemoteConf: false,
     });
   }
