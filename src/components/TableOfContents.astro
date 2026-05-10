@@ -37,7 +37,7 @@ const closeLabel = locale === "en" ? "Close table of contents" : "关闭文章�
       <aside
         aria-labelledby="toc-drawer-title"
         data-toc-panel
-        class="pointer-events-none fixed end-5 bottom-36 flex max-h-[min(30rem,62vh)] w-[min(20rem,calc(100vw-2.5rem))] translate-y-2 flex-col rounded-md border border-border/70 bg-background/96 px-4 py-4 opacity-0 shadow-[0_18px_48px_rgba(15,23,42,0.16)] backdrop-blur-xl transition duration-200 ease-out"
+        class="pointer-events-none fixed inset-x-3 bottom-24 flex max-h-[min(28rem,72svh)] translate-y-3 flex-col rounded-md border border-border/70 bg-background/96 px-4 pt-4 pb-[calc(1rem+env(safe-area-inset-bottom))] opacity-0 shadow-[0_18px_48px_rgba(15,23,42,0.16)] backdrop-blur-xl transition duration-200 ease-out sm:inset-x-auto sm:end-5 sm:bottom-36 sm:max-h-[min(30rem,62vh)] sm:w-[min(20rem,calc(100vw-2.5rem))] sm:translate-y-2 sm:pb-4"
       >
         <div class="flex items-center justify-between gap-3">
           <h2
@@ -57,7 +57,7 @@ const closeLabel = locale === "en" ? "Close table of contents" : "关闭文章�
           </button>
         </div>
 
-        <nav class="mt-4 overflow-y-auto pe-1" aria-label={title}>
+        <nav class="mt-4 min-h-0 overflow-y-auto pe-1" aria-label={title}>
           <ol class="space-y-1">
             {tocHeadings.map(heading => (
               <li>
@@ -65,7 +65,7 @@ const closeLabel = locale === "en" ? "Close table of contents" : "关闭文章�
                   href={`#${heading.slug}`}
                   data-toc-link={heading.slug}
                   class:list={[
-                    "block rounded px-2 py-1.5 text-sm leading-6 text-foreground/70 transition hover:bg-muted/70 hover:text-accent",
+                    "block rounded px-2 py-2 text-sm leading-6 text-foreground/70 transition hover:bg-muted/70 hover:text-accent sm:py-1.5",
                     {
                       "ms-3": heading.depth === 3,
                       "ms-6 text-xs": heading.depth === 4,
@@ -123,7 +123,8 @@ const closeLabel = locale === "en" ? "Close table of contents" : "关闭文章�
       panel.classList.toggle("pointer-events-auto", isOpen);
       panel.classList.toggle("pointer-events-none", !isOpen);
       panel.classList.toggle("translate-y-0", isOpen);
-      panel.classList.toggle("translate-y-2", !isOpen);
+      panel.classList.toggle("translate-y-3", !isOpen);
+      panel.classList.toggle("sm:translate-y-2", !isOpen);
       panel.classList.toggle("opacity-100", isOpen);
       panel.classList.toggle("opacity-0", !isOpen);
     }
