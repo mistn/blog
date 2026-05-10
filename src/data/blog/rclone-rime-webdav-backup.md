@@ -81,7 +81,7 @@ PS C:\Users\Sakura>
 
 ## 2. 创建 Rime 备份脚本
 
-按需自行修改
+ps1脚本，按需自行修改
 
 ```powershell
 $ErrorActionPreference = "Stop"
