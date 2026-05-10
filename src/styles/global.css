@@ -29,8 +29,9 @@ html[data-theme="dark"] {
     "Iowan Old Style", "Palatino Linotype", "Noto Serif SC",
     "Source Han Serif SC", "Songti SC", "STSong", Georgia, serif;
   --font-ui-mono:
-    "Cascadia Mono", Consolas, "Sarasa Mono SC", "Maple Mono CN",
-    "SFMono-Regular", "Liberation Mono", Menlo, monospace;
+    "Maple Mono CN", "Sarasa Mono SC", "Microsoft YaHei Mono", "Cascadia Code",
+    "Cascadia Mono", Consolas, "SFMono-Regular", "Liberation Mono", Menlo,
+    monospace;
 }
 
 @theme inline {
