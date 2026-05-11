@@ -14,7 +14,10 @@ const tabClass =
 const activeTabClass = "border-accent/60 text-foreground dark:text-foreground";
 ---
 
-<nav data-home-tabs class="flex flex-wrap items-center gap-5 text-sm">
+<nav
+  data-home-tabs
+  class="flex min-w-0 flex-wrap items-center gap-x-6 gap-y-2 text-sm"
+>
   <a
     href={getHref("/")}
     data-path={getHref("/")}
