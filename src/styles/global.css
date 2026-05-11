@@ -5,7 +5,7 @@
 
 :root,
 html[data-theme="light"] {
-  --background: #fbfaf6;
+  --background: #fcfbf8;
   --foreground: #30394a;
   --accent: #2f628f;
   --muted: #f0ede7;
@@ -55,12 +55,12 @@ html[data-theme="dark"] {
   body {
     @apply flex min-h-svh max-w-full flex-col overflow-x-clip bg-background font-app text-foreground selection:bg-accent/75 selection:text-background;
     background-image:
-      linear-gradient(rgba(47, 98, 143, 0.022) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(47, 98, 143, 0.022) 1px, transparent 1px),
+      linear-gradient(rgba(47, 98, 143, 0.014) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(47, 98, 143, 0.014) 1px, transparent 1px),
       linear-gradient(
         180deg,
-        rgba(255, 253, 248, 0.995),
-        rgba(251, 250, 246, 0.995)
+        rgba(255, 254, 251, 0.995),
+        rgba(252, 251, 248, 0.995)
       );
     background-size:
       28px 28px,
@@ -74,12 +74,12 @@ html[data-theme="dark"] {
   }
   html[data-theme="light"] body {
     background-image:
-      linear-gradient(rgba(47, 98, 143, 0.022) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(47, 98, 143, 0.022) 1px, transparent 1px),
+      linear-gradient(rgba(47, 98, 143, 0.014) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(47, 98, 143, 0.014) 1px, transparent 1px),
       linear-gradient(
         180deg,
-        rgba(255, 253, 248, 0.995),
-        rgba(251, 250, 246, 0.995)
+        rgba(255, 254, 251, 0.995),
+        rgba(252, 251, 248, 0.995)
       );
   }
   html[data-theme="dark"] body {
