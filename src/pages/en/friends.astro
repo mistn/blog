@@ -3,7 +3,7 @@ import Footer from "@/components/Footer.astro";
 import SiteTopbar from "@/components/SiteTopbar.astro";
 import ArtalkComments from "@/components/ArtalkComments.astro";
 import Layout from "@/layouts/Layout.astro";
-import { friendLinks, siteProfile } from "@/data/friends";
+import { defaultFriendAvatar, friendLinks, siteProfile } from "@/data/friends";
 import { SITE } from "@/config";
 import { ui } from "@/i18n";
 
@@ -63,7 +63,7 @@ email: hi@miuo.me`;
                     style={{ "--friend-accent": friend.color ?? "var(--accent)" }}
                   >
                     <img
-                      src={friend.avatar}
+                      src={friend.avatar ?? defaultFriendAvatar}
                       alt={`${friend.name} avatar`}
                       class="friend-card__avatar"
                       loading="lazy"

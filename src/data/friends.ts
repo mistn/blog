@@ -2,11 +2,13 @@ export type FriendLink = {
   name: string;
   blog?: string;
   href: string;
-  avatar: string;
+  avatar?: string;
   description: string;
   color?: string;
   email?: string;
 };
+
+export const defaultFriendAvatar = "/friend-default-avatar.avif";
 
 export const siteProfile = {
   name: "miuo",
@@ -29,5 +31,12 @@ export const friendLinks: FriendLink[] = [
     href: "https://111654.xyz/",
     avatar: "https://static.ifdess.cn/img/avatar.jpg",
     description: "这是一本记录IFDESS的经历和感悟的书。",
+  },
+  {
+    name: "huizhi",
+    blog: "huizhi's Aside",
+    href: "https://blog.huizhi.ink/",
+    description: "Weekly notes, posts, and Minecraft tinkering.",
+    color: "#0b84c6",
   },
 ];
