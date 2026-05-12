@@ -80,7 +80,7 @@ const updatedLabel = data.updatedAt
   <main class="app-layout pb-14 lg:max-w-7xl lg:pb-18" data-pagefind-body>
     <section class="px-1 pt-5 sm:px-2 sm:pt-7">
       <div>
-        <header class="mb-10 max-w-4xl">
+        <header class="anime-header mb-10 max-w-4xl sm:mb-12">
           <p
             class="text-[0.76rem] font-medium tracking-[0.2em] text-foreground/36 uppercase"
           >
@@ -91,68 +91,70 @@ const updatedLabel = data.updatedAt
           >
             {copy.pages.animeTitle}
           </h1>
-          <div
-            class="mt-4 flex flex-wrap items-center gap-3 text-sm text-foreground/56"
-          >
-            <span>{total} {copy.anime.countUnit}</span>
-            <span>
-              {copy.anime.dataFrom}
-              <a
-                href={sourceHref}
-                target="_blank"
-                rel="noreferrer"
-                class="ml-1 text-accent underline decoration-accent/35 underline-offset-4"
-              >
-                AniList{data.username ? ` / ${data.username}` : ""}
-              </a>
-            </span>
-            <span>normal / completed</span>
+          <dl class="anime-meta">
+            <div>
+              <dt>Total</dt>
+              <dd>{total} {copy.anime.countUnit}</dd>
+            </div>
+            <div>
+              <dt>{copy.anime.dataFrom}</dt>
+              <dd>
+                <a
+                  href={sourceHref}
+                  target="_blank"
+                  rel="noreferrer"
+                  class="text-accent underline decoration-accent/35 underline-offset-4"
+                >
+                  AniList{data.username ? ` / ${data.username}` : ""}
+                </a>
+              </dd>
+            </div>
+            <div>
+              <dt>List</dt>
+              <dd>normal / completed</dd>
+            </div>
             {
               updatedLabel && (
-                <span>
-                  {copy.anime.updatedAt} {updatedLabel}
-                </span>
+                <div>
+                  <dt>{copy.anime.updatedAt}</dt>
+                  <dd>{updatedLabel}</dd>
+                </div>
               )
             }
-          </div>
+          </dl>
         </header>
 
         {
           groups.length > 0 ? (
-            <div>
+            <div class="anime-archive">
               {groups.map(group => (
-                <section class="not-last:mb-14">
-                  <div class="flex items-end justify-between gap-4 border-b border-border/65 pb-3">
-                    <h2 class="[font-family:var(--font-ui-serif)] text-[2.2rem] leading-none font-semibold tracking-tight sm:text-[2.7rem]">
+                <section class="anime-year-section">
+                  <div class="anime-year-heading">
+                    <h2>
                       {group.yearLabel}
                     </h2>
-                    <p class="pb-1 text-sm text-foreground/46">
+                    <p>
                       {group.entries.length} {copy.anime.countUnit}
                     </p>
                   </div>
 
-                  <div class="mt-6 grid grid-cols-2 gap-x-5 gap-y-8 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6">
+                  <div class="anime-grid">
                     {group.entries.map(entry => (
                       <a
                         href={entry.url}
                         target="_blank"
                         rel="noreferrer"
-                        class="group max-w-44 min-w-0 text-foreground"
+                        class="anime-card group"
                       >
-                        <div class="overflow-hidden rounded-[1.25rem] bg-muted">
+                        <div class="anime-poster">
                           <img
                             src={entry.cover}
                             alt={`${entry.title} cover`}
-                            class="aspect-2/3 w-full object-cover transition duration-300 group-hover:scale-[1.02] group-hover:opacity-92"
                             loading="lazy"
                           />
                         </div>
 
-                        <div class="mt-3">
-                          <h3 class="line-clamp-2 text-[0.98rem] leading-7 font-medium transition group-hover:text-accent">
-                            {entry.title}
-                          </h3>
-                        </div>
+                        <h3>{entry.title}</h3>
                       </a>
                     ))}
                   </div>
@@ -177,3 +179,205 @@ const updatedLabel = data.updatedAt
   <BackToTopButton {locale} />
   <Footer />
 </Layout>
+
+<style>
+  .anime-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem 1.25rem;
+    margin-top: 1.25rem;
+    color: color-mix(in srgb, var(--foreground) 58%, transparent);
+    font-size: 0.92rem;
+    line-height: 1.7;
+  }
+
+  .anime-meta div {
+    display: inline-flex;
+    gap: 0.45rem;
+    align-items: baseline;
+  }
+
+  .anime-meta dt {
+    color: color-mix(in srgb, var(--foreground) 36%, transparent);
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .anime-meta dd {
+    margin: 0;
+  }
+
+  .anime-archive {
+    display: grid;
+    gap: 3.2rem;
+  }
+
+  .anime-year-section {
+    display: grid;
+    grid-template-columns: 7.5rem minmax(0, 1fr);
+    gap: 1.5rem;
+    border-top: 1px solid color-mix(in srgb, var(--border) 68%, transparent);
+    padding-top: 1.5rem;
+  }
+
+  .anime-year-heading {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+
+  .anime-year-heading h2 {
+    font-family: var(--font-ui-serif);
+    font-size: 2.35rem;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0;
+  }
+
+  .anime-year-heading p {
+    color: color-mix(in srgb, var(--foreground) 44%, transparent);
+    font-size: 0.9rem;
+  }
+
+  .anime-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(8.4rem, 9.5rem));
+    gap: 1.35rem 1.1rem;
+    align-items: start;
+  }
+
+  .anime-card {
+    min-width: 0;
+    color: var(--foreground);
+  }
+
+  .anime-poster {
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--border) 58%, transparent);
+    border-radius: 0.7rem;
+    background: var(--muted);
+    aspect-ratio: 2 / 3;
+  }
+
+  .anime-poster img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition:
+      opacity 180ms ease,
+      transform 220ms ease;
+  }
+
+  .anime-card:hover .anime-poster img {
+    opacity: 0.92;
+    transform: scale(1.025);
+  }
+
+  .anime-card h3 {
+    display: -webkit-box;
+    margin-top: 0.65rem;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    color: color-mix(in srgb, var(--foreground) 82%, transparent);
+    font-size: 0.94rem;
+    font-weight: 500;
+    line-height: 1.6;
+    -webkit-line-clamp: 2;
+    transition: color 160ms ease;
+  }
+
+  .anime-card:hover h3 {
+    color: var(--accent);
+  }
+
+  @media (max-width: 639px) {
+    .anime-header {
+      margin-bottom: 2rem;
+    }
+
+    .anime-header h1 {
+      font-size: 2.15rem;
+      line-height: 1.08;
+    }
+
+    .anime-meta {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.7rem 0.9rem;
+      margin-top: 1rem;
+      font-size: 0.84rem;
+      line-height: 1.55;
+    }
+
+    .anime-meta div {
+      display: block;
+      min-width: 0;
+    }
+
+    .anime-meta div:nth-child(4) {
+      grid-column: 1 / -1;
+    }
+
+    .anime-meta dt {
+      margin-bottom: 0.1rem;
+      font-size: 0.66rem;
+      letter-spacing: 0.12em;
+    }
+
+    .anime-meta dd {
+      overflow-wrap: anywhere;
+    }
+
+    .anime-archive {
+      gap: 2.35rem;
+    }
+
+    .anime-year-section {
+      display: block;
+      padding-top: 1rem;
+    }
+
+    .anime-year-heading {
+      margin-bottom: 0.95rem;
+      flex-direction: row;
+      align-items: end;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .anime-year-heading h2 {
+      font-size: 1.9rem;
+    }
+
+    .anime-year-heading p {
+      padding-bottom: 0.12rem;
+      font-size: 0.82rem;
+    }
+
+    .anime-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.15rem 0.75rem;
+    }
+
+    .anime-poster {
+      border-radius: 0.55rem;
+    }
+
+    .anime-card h3 {
+      margin-top: 0.5rem;
+      font-size: 0.86rem;
+      line-height: 1.55;
+    }
+  }
+
+  @media (max-width: 374px) {
+    .anime-grid {
+      gap: 1rem 0.65rem;
+    }
+
+    .anime-card h3 {
+      font-size: 0.82rem;
+    }
+  }
+</style>

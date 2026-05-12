@@ -1,0 +1,330 @@
+---
+import Footer from "@/components/Footer.astro";
+import SiteTopbar from "@/components/SiteTopbar.astro";
+import ArtalkComments from "@/components/ArtalkComments.astro";
+import Layout from "@/layouts/Layout.astro";
+import { friendLinks, siteProfile } from "@/data/friends";
+import { SITE } from "@/config";
+import { ui } from "@/i18n";
+
+const locale = "en";
+const copy = ui[locale];
+const applicationText = `name: miuo's blog
+url: ${siteProfile.href}
+avatar: ${siteProfile.avatar}
+desc: ${siteProfile.description}
+email: hi@miuo.me`;
+---
+
+<Layout
+  title={`${copy.pages.friendsTitle} | ${SITE.title}`}
+  description={copy.pages.friendsDesc}
+  structuredDataType="CollectionPage"
+  structuredData={{
+    mainEntity: {
+      "@type": "ItemList",
+      name: copy.pages.friendsTitle,
+      numberOfItems: friendLinks.length,
+    },
+  }}
+  {locale}
+>
+  <SiteTopbar />
+
+  <main id="main-content" class="app-layout pb-14 lg:max-w-5xl">
+    <section class="px-1 py-4 sm:px-2 sm:py-5" data-pagefind-body>
+      <header class="mb-10 max-w-4xl">
+        <p
+          class="text-[0.76rem] font-medium tracking-[0.2em] text-foreground/36 uppercase"
+        >
+          {copy.pages.friendsEyebrow}
+        </p>
+        <h1
+          class="mt-2 [font-family:var(--font-ui-serif)] text-[2.2rem] leading-[1.12] font-semibold tracking-tight sm:text-[2.6rem]"
+        >
+          {copy.pages.friendsTitle}
+        </h1>
+        <p class="mt-4 max-w-3xl text-[1rem] leading-8 text-foreground/60">
+          {copy.pages.friendsDesc}
+        </p>
+      </header>
+
+      <div class="max-w-4xl">
+        <section>
+          {
+            friendLinks.length > 0 ? (
+              <div class="friend-grid">
+                {friendLinks.map(friend => (
+                  <a
+                    href={friend.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    class="friend-card group"
+                    style={{ "--friend-accent": friend.color ?? "var(--accent)" }}
+                  >
+                    <img
+                      src={friend.avatar}
+                      alt={`${friend.name} avatar`}
+                      class="friend-card__avatar"
+                      loading="lazy"
+                    />
+                    <div class="friend-card__body">
+                      <h2>{friend.blog ?? friend.name}</h2>
+                      <p>{friend.description}</p>
+                      <span>{friend.href}</span>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            ) : (
+              <div class="border-y border-border/65 py-8">
+                <p class="text-[1.05rem] leading-8 text-foreground/68">
+                  No friend links yet. Exchanged links will be listed here.
+                </p>
+              </div>
+            )
+          }
+        </section>
+
+        <section class="apply-section">
+          <div>
+            <p class="section-eyebrow">Apply</p>
+            <h2>Friend Link Format</h2>
+            <p>
+              Leave a comment below in this format to exchange links. Existing
+              friends can also comment if their information needs an update.
+            </p>
+          </div>
+
+          <div class="friend-application mt-6">
+            <pre><code>{applicationText}</code></pre>
+            <button type="button" data-copy-value={applicationText}>Copy</button>
+          </div>
+        </section>
+      </div>
+
+      <div class="max-w-4xl">
+        <ArtalkComments pageKey="/en/friends" pageTitle={copy.pages.friendsTitle} />
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>
+
+<script>
+  const COPIED_TEXT = "Copied";
+
+  document.addEventListener("click", async event => {
+    const target = event.target;
+    if (!(target instanceof HTMLElement)) return;
+
+    const button = target.closest("[data-copy-value]");
+    if (!(button instanceof HTMLButtonElement)) return;
+
+    const value = button.dataset.copyValue;
+    if (!value) return;
+
+    await navigator.clipboard.writeText(value);
+    const originalText = button.textContent ?? "Copy";
+    button.textContent = COPIED_TEXT;
+    window.setTimeout(() => {
+      button.textContent = originalText;
+    }, 1400);
+  });
+</script>
+
+<style>
+  .friend-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 17.5rem), 1fr));
+    gap: 0.85rem;
+  }
+
+  .friend-card {
+    display: flex;
+    min-width: 0;
+    min-height: 5.75rem;
+    align-items: center;
+    gap: 0.85rem;
+    border: 1px solid color-mix(in srgb, var(--border) 62%, transparent);
+    border-radius: 0.45rem;
+    background: color-mix(in srgb, var(--background) 72%, transparent);
+    padding: 0.85rem;
+    color: var(--foreground);
+    transition:
+      border-color 160ms ease,
+      color 160ms ease,
+      background-color 160ms ease;
+  }
+
+  .friend-card:hover {
+    border-color: color-mix(in srgb, var(--friend-accent) 42%, var(--border));
+    background: color-mix(in srgb, var(--muted) 24%, transparent);
+    color: var(--friend-accent);
+  }
+
+  .friend-card__avatar {
+    width: 3rem;
+    height: 3rem;
+    flex: none;
+    border: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
+    border-radius: 999px;
+    object-fit: cover;
+  }
+
+  .friend-card__body {
+    min-width: 0;
+  }
+
+  .friend-card__body h2 {
+    overflow: hidden;
+    font-family: var(--font-ui-serif);
+    font-size: 1.08rem;
+    font-weight: 600;
+    line-height: 1.25;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .friend-card__body p {
+    display: -webkit-box;
+    margin-top: 0.28rem;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    color: color-mix(in srgb, var(--foreground) 62%, transparent);
+    font-size: 0.86rem;
+    line-height: 1.55;
+    -webkit-line-clamp: 1;
+    transition: color 160ms ease;
+  }
+
+  .friend-card:hover .friend-card__body p {
+    color: color-mix(in srgb, var(--foreground) 76%, transparent);
+  }
+
+  .friend-card__body span {
+    display: block;
+    margin-top: 0.16rem;
+    overflow: hidden;
+    color: color-mix(in srgb, var(--foreground) 38%, transparent);
+    font-size: 0.75rem;
+    line-height: 1.45;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .apply-section {
+    margin-top: 2.6rem;
+    border-top: 1px solid color-mix(in srgb, var(--border) 68%, transparent);
+    padding-top: 2.6rem;
+  }
+
+  .section-eyebrow {
+    color: color-mix(in srgb, var(--foreground) 36%, transparent);
+    font-size: 0.76rem;
+    font-weight: 500;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+  }
+
+  .apply-section h2 {
+    margin-top: 0.75rem;
+    font-family: var(--font-ui-serif);
+    font-size: 1.85rem;
+    font-weight: 600;
+    line-height: 1.18;
+    letter-spacing: 0;
+  }
+
+  .apply-section p:not(.section-eyebrow) {
+    max-width: 42rem;
+    margin-top: 1rem;
+    color: color-mix(in srgb, var(--foreground) 66%, transparent);
+    font-size: 1rem;
+    line-height: 2;
+  }
+
+  .friend-application {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--border) 66%, transparent);
+    border-radius: 0.5rem;
+    background: color-mix(in srgb, var(--muted) 48%, transparent);
+  }
+
+  .friend-application pre {
+    margin: 0;
+    overflow-x: auto;
+    padding: 1.5rem 4.6rem 1.5rem 1.5rem;
+    font-family: var(--font-ui-mono);
+    font-size: 0.95rem;
+    line-height: 1.85;
+    white-space: pre-wrap;
+  }
+
+  .friend-application code {
+    font-family: var(--font-ui-mono);
+    color: color-mix(in srgb, var(--foreground) 72%, transparent);
+  }
+
+  .friend-application button {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    border: 1px solid color-mix(in srgb, var(--border) 82%, transparent);
+    border-radius: 0.45rem;
+    background: color-mix(in srgb, var(--background) 78%, transparent);
+    padding: 0.45rem 0.75rem;
+    color: color-mix(in srgb, var(--foreground) 62%, transparent);
+    font-size: 0.82rem;
+    transition:
+      border-color 160ms ease,
+      color 160ms ease;
+  }
+
+  .friend-application button:hover {
+    border-color: color-mix(in srgb, var(--accent) 50%, var(--border));
+    color: var(--accent);
+  }
+
+  @media (max-width: 639px) {
+    .friend-grid {
+      gap: 0.7rem;
+    }
+
+    .friend-card {
+      min-height: 5.25rem;
+      padding: 0.78rem;
+    }
+
+    .friend-card__avatar {
+      width: 2.75rem;
+      height: 2.75rem;
+    }
+
+    .friend-card__body h2 {
+      font-size: 1rem;
+    }
+
+    .apply-section {
+      margin-top: 2rem;
+      padding-top: 2rem;
+    }
+
+    .apply-section h2 {
+      font-size: 1.55rem;
+    }
+
+    .friend-application pre {
+      padding: 3.5rem 1rem 1rem;
+      font-size: 0.84rem;
+      line-height: 1.75;
+    }
+
+    .friend-application button {
+      top: 0.85rem;
+      right: 0.85rem;
+    }
+  }
+</style>

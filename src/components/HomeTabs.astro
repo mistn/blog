@@ -44,6 +44,13 @@ const activeTabClass = "border-accent/60 text-foreground dark:text-foreground";
     {copy.nav.anime}
   </a>
   <a
+    href={getHref("/friends")}
+    data-path={getHref("/friends")}
+    class:list={[tabClass, { [activeTabClass]: isActive("/friends") }]}
+  >
+    {copy.nav.friends}
+  </a>
+  <a
     href={getHref("/about")}
     data-path={getHref("/about")}
     class:list={[tabClass, { [activeTabClass]: isActive("/about") }]}
