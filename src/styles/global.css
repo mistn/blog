@@ -120,6 +120,52 @@ html[data-theme="dark"] {
   opacity: 0.82;
 }
 
+.page-number-nav {
+  @apply mt-10 flex justify-center border-t border-border/55 pt-8;
+}
+
+.page-number-group {
+  @apply inline-flex items-center gap-3 text-sm text-foreground/62;
+}
+
+.page-number-group::before,
+.page-number-group::after {
+  display: block;
+  width: 2.25rem;
+  height: 1px;
+  background: color-mix(in srgb, var(--border) 82%, transparent);
+  content: "";
+}
+
+.page-number-item {
+  @apply inline-flex min-h-9 items-center gap-2 px-1 text-foreground/64 transition duration-150 hover:text-accent;
+}
+
+.page-number-current {
+  @apply inline-flex min-h-9 items-center gap-2 px-1 font-medium text-accent;
+}
+
+.page-number-current::before {
+  width: 0.38rem;
+  height: 0.38rem;
+  border-radius: 999px;
+  background: currentColor;
+  content: "";
+}
+
+.post-continuation-link {
+  @apply inline-flex items-center gap-2 text-sm text-foreground/64 transition duration-150 hover:text-accent;
+}
+
+.post-continuation-link::before,
+.post-continuation-link::after {
+  display: block;
+  width: 2.25rem;
+  height: 1px;
+  background: color-mix(in srgb, var(--border) 82%, transparent);
+  content: "";
+}
+
 /* Source: https://piccalil.li/blog/a-more-modern-css-reset/ */
 /* Anything that has been anchored to should have extra scroll margin */
 :target {

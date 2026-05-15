@@ -17,7 +17,6 @@ const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
 const leadPost = recentPosts[0];
 const listPosts = recentPosts.slice(1, SITE.postPerPage);
 const totalPages = Math.ceil(recentPosts.length / SITE.postPerPage);
-const pageItems = Array.from({ length: totalPages }, (_, index) => index + 1);
 ---
 
 <Layout>
@@ -85,30 +84,16 @@ const pageItems = Array.from({ length: totalPages }, (_, index) => index + 1);
             </div>
             {totalPages > 1 && (
               <nav
-                class="mt-10 flex justify-center border-t border-border/55 pt-8"
+                class="page-number-nav"
                 aria-label="Pagination Navigation"
               >
-                <div class="inline-flex overflow-hidden rounded-md border border-border/65 text-sm">
-                  {pageItems.map(pageNumber => (
-                    pageNumber === 1 ? (
-                      <span class="grid size-10 place-items-center bg-accent text-background">
-                        1
-                      </span>
-                    ) : (
-                      <a
-                        href={localizePath(
-                          pageNumber === 2
-                            ? "/posts/2"
-                            : `/posts/${pageNumber}`,
-                          locale
-                        )}
-                        class="grid size-10 place-items-center border-l border-border/65 text-foreground/70 transition hover:bg-muted hover:text-accent"
-                      >
-                        {pageNumber}
-                      </a>
-                    )
-                  ))}
-                </div>
+                <a
+                  href={localizePath("/posts/2", locale)}
+                  class="post-continuation-link"
+                >
+                  继续阅读旧文
+                  <span aria-hidden="true">→</span>
+                </a>
               </nav>
             )}
           </div>

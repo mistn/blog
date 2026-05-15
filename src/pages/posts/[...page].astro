@@ -95,19 +95,19 @@ function getPageHref(pageNumber: number) {
             {
               page.lastPage > 1 && (
                 <nav
-                  class="mt-10 flex justify-center border-t border-border/55 pt-8"
+                  class="page-number-nav"
                   aria-label="Pagination Navigation"
                 >
-                  <div class="inline-flex overflow-hidden rounded-md border border-border/65 text-sm">
+                  <div class="page-number-group">
                     {pageItems.map(pageNumber =>
                       pageNumber === page.currentPage ? (
-                        <span class="grid size-10 place-items-center bg-accent text-background">
+                        <span class="page-number-current">
                           {pageNumber}
                         </span>
                       ) : (
                         <a
                           href={getPageHref(pageNumber)}
-                          class="grid size-10 place-items-center border-l border-border/65 text-foreground/70 transition first:border-l-0 hover:bg-muted hover:text-accent"
+                          class="page-number-item"
                         >
                           {pageNumber}
                         </a>
