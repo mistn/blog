@@ -3,7 +3,6 @@ import { render, type CollectionEntry } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
 import Footer from "@/components/Footer.astro";
 import SiteTopbar from "@/components/SiteTopbar.astro";
-import PageSidebar from "@/components/PageSidebar.astro";
 import Tag from "@/components/Tag.astro";
 import Datetime from "@/components/Datetime.astro";
 import EditPost from "@/components/EditPost.astro";
@@ -98,12 +97,12 @@ const nextPost =
   <main
     id="main-content"
     data-post-memory-scope="post"
-    class="app-layout pb-10 lg:max-w-7xl lg:pb-14"
+    class="app-layout pb-10 lg:max-w-5xl lg:pb-14"
   >
     <section>
       <div class="px-1 py-4 sm:px-2 sm:py-5">
-        <div class="grid gap-10 lg:grid-cols-[minmax(0,1.78fr)_260px]">
-          <div class="min-w-0">
+        <div class="mx-auto max-w-4xl">
+          <div>
             <BackButton inline {locale} />
 
             <article class="pt-2" data-pagefind-body>
@@ -231,8 +230,6 @@ const nextPost =
             <TableOfContents {headings} {locale} />
             <BackToTopButton {locale} />
           </div>
-
-          <PageSidebar posts={sortedPosts} {locale} />
         </div>
       </div>
     </section>
