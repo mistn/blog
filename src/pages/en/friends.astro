@@ -9,11 +9,16 @@ import { ui } from "@/i18n";
 
 const locale = "en";
 const copy = ui[locale];
-const applicationText = `name: miuo's blog
-url: ${siteProfile.href}
-avatar: ${siteProfile.avatar}
-desc: ${siteProfile.description}
-email: hi@miuo.me`;
+const applicationFields = [
+  { label: "name", value: "miuo's blog" },
+  { label: "url", value: siteProfile.href },
+  { label: "avatar", value: siteProfile.avatar },
+  { label: "desc", value: siteProfile.description },
+  { label: "email", value: "hi@miuo.me" },
+];
+const applicationText = applicationFields
+  .map(field => `${field.label}: ${field.value}`)
+  .join("\n");
 ---
 
 <Layout
@@ -69,9 +74,17 @@ email: hi@miuo.me`;
                       loading="lazy"
                     />
                     <div class="friend-card__body">
-                      <h2>{friend.blog ?? friend.name}</h2>
-                      <p>{friend.description}</p>
-                      <span>{friend.href}</span>
+                      <div class="friend-card__title-row">
+                        <h2>{friend.blog ?? friend.name}</h2>
+                        <span class="friend-card__arrow" aria-hidden="true">↗</span>
+                      </div>
+                      {
+                        friend.blog && friend.blog !== friend.name && (
+                          <p class="friend-card__name">{friend.name}</p>
+                        )
+                      }
+                      <p class="friend-card__desc">{friend.description}</p>
+                      <span class="friend-card__link">{friend.href}</span>
                     </div>
                   </a>
                 ))}
@@ -97,8 +110,20 @@ email: hi@miuo.me`;
           </div>
 
           <div class="friend-application mt-6">
-            <pre><code>{applicationText}</code></pre>
-            <button type="button" data-copy-value={applicationText}>Copy</button>
+            <div class="friend-application__head">
+              <p>Template</p>
+              <button type="button" data-copy-value={applicationText}>Copy</button>
+            </div>
+            <dl class="friend-application__list">
+              {
+                applicationFields.map(field => (
+                  <div class="friend-application__item">
+                    <dt>{field.label}</dt>
+                    <dd>{field.value}</dd>
+                  </div>
+                ))
+              }
+            </dl>
           </div>
         </section>
       </div>
@@ -137,36 +162,39 @@ email: hi@miuo.me`;
 <style>
   .friend-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 17.5rem), 1fr));
-    gap: 0.85rem;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr));
+    gap: 1rem;
   }
 
   .friend-card {
+    position: relative;
     display: flex;
     min-width: 0;
-    min-height: 5.75rem;
-    align-items: center;
-    gap: 0.85rem;
-    border: 1px solid color-mix(in srgb, var(--border) 62%, transparent);
-    border-radius: 0.45rem;
-    background: color-mix(in srgb, var(--background) 72%, transparent);
-    padding: 0.85rem;
+    min-height: 8rem;
+    align-items: flex-start;
+    gap: 1rem;
+    border: 1px solid color-mix(in srgb, var(--border) 82%, transparent);
+    border-radius: 0.8rem;
+    background: color-mix(in srgb, var(--background) 98%, transparent);
+    padding: 1rem;
     color: var(--foreground);
+    box-shadow: 0 6px 16px rgba(15, 23, 42, 0.04);
     transition:
       border-color 160ms ease,
       color 160ms ease,
-      background-color 160ms ease;
+      background-color 160ms ease,
+      box-shadow 160ms ease;
   }
 
   .friend-card:hover {
-    border-color: color-mix(in srgb, var(--friend-accent) 42%, var(--border));
-    background: color-mix(in srgb, var(--muted) 24%, transparent);
-    color: var(--friend-accent);
+    border-color: color-mix(in srgb, var(--friend-accent) 24%, var(--border));
+    background: color-mix(in srgb, var(--background) 96%, transparent);
+    box-shadow: 0 7px 18px rgba(15, 23, 42, 0.05);
   }
 
   .friend-card__avatar {
-    width: 3rem;
-    height: 3rem;
+    width: 3.2rem;
+    height: 3.2rem;
     flex: none;
     border: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
     border-radius: 999px;
@@ -174,44 +202,80 @@ email: hi@miuo.me`;
   }
 
   .friend-card__body {
+    display: flex;
+    min-height: 100%;
     min-width: 0;
+    flex: 1;
+    flex-direction: column;
+  }
+
+  .friend-card__title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.65rem;
   }
 
   .friend-card__body h2 {
     overflow: hidden;
     font-family: var(--font-ui-serif);
-    font-size: 1.08rem;
+    font-size: 1.06rem;
     font-weight: 600;
     line-height: 1.25;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
-  .friend-card__body p {
+  .friend-card__arrow {
+    flex: none;
+    color: color-mix(in srgb, var(--foreground) 46%, transparent);
+    font-size: 0.9rem;
+    transition:
+      color 160ms ease;
+  }
+
+  .friend-card:hover .friend-card__arrow {
+    color: color-mix(in srgb, var(--foreground) 58%, transparent);
+  }
+
+  .friend-card__name {
+    margin-top: 0.14rem;
+    color: color-mix(in srgb, var(--foreground) 46%, transparent);
+    font-size: 0.75rem;
+    line-height: 1.45;
+  }
+
+  .friend-card__desc {
     display: -webkit-box;
-    margin-top: 0.28rem;
+    margin-top: 0.4rem;
     overflow: hidden;
     -webkit-box-orient: vertical;
-    color: color-mix(in srgb, var(--foreground) 62%, transparent);
-    font-size: 0.86rem;
+    color: color-mix(in srgb, var(--foreground) 66%, transparent);
+    font-size: 0.84rem;
     line-height: 1.55;
-    -webkit-line-clamp: 1;
+    -webkit-line-clamp: 2;
     transition: color 160ms ease;
   }
 
-  .friend-card:hover .friend-card__body p {
+  .friend-card:hover .friend-card__desc {
     color: color-mix(in srgb, var(--foreground) 76%, transparent);
   }
 
-  .friend-card__body span {
+  .friend-card__link {
     display: block;
-    margin-top: 0.16rem;
+    margin-top: auto;
+    padding-top: 0.45rem;
     overflow: hidden;
-    color: color-mix(in srgb, var(--foreground) 38%, transparent);
+    color: color-mix(in srgb, var(--foreground) 44%, transparent);
     font-size: 0.75rem;
     line-height: 1.45;
     text-overflow: ellipsis;
     white-space: nowrap;
+    transition: color 160ms ease;
+  }
+
+  .friend-card:hover .friend-card__link {
+    color: color-mix(in srgb, var(--foreground) 62%, transparent);
   }
 
   .apply-section {
@@ -248,44 +312,83 @@ email: hi@miuo.me`;
   .friend-application {
     position: relative;
     overflow: hidden;
-    border: 1px solid color-mix(in srgb, var(--border) 66%, transparent);
-    border-radius: 0.5rem;
-    background: color-mix(in srgb, var(--muted) 48%, transparent);
+    border-radius: 0.9rem;
+    background: color-mix(in srgb, var(--muted) 18%, transparent);
   }
 
-  .friend-application pre {
+  .friend-application__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.8rem;
+    padding: 0.85rem 1rem;
+  }
+
+  .friend-application__head p {
     margin: 0;
-    overflow-x: auto;
-    padding: 1.5rem 4.6rem 1.5rem 1.5rem;
-    font-family: var(--font-ui-mono);
-    font-size: 0.95rem;
-    line-height: 1.85;
-    white-space: pre-wrap;
+    color: color-mix(in srgb, var(--foreground) 52%, transparent);
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
   }
 
-  .friend-application code {
+  .friend-application__list {
+    margin: 0;
+    margin: 0 1rem 1rem;
+    padding: 0.2rem 0 0.2rem;
+  }
+
+  .friend-application__item {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.3rem 0.5rem;
+    padding: 0.45rem 0;
+  }
+
+  .friend-application__item + .friend-application__item {
+    border-top: none;
+  }
+
+  .friend-application__item dt {
+    margin: 0;
+    color: color-mix(in srgb, var(--foreground) 52%, transparent);
     font-family: var(--font-ui-mono);
-    color: color-mix(in srgb, var(--foreground) 72%, transparent);
+    font-size: 0.8rem;
+    letter-spacing: 0.02em;
+  }
+
+  .friend-application__item dt::after {
+    content: ":";
+    margin-left: 0.2rem;
+  }
+
+  .friend-application__item dd {
+    margin: 0;
+    overflow-wrap: anywhere;
+    color: color-mix(in srgb, var(--foreground) 78%, transparent);
+    font-family: var(--font-ui-mono);
+    font-size: 0.9rem;
+    line-height: 1.65;
   }
 
   .friend-application button {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
     border: 1px solid color-mix(in srgb, var(--border) 82%, transparent);
-    border-radius: 0.45rem;
-    background: color-mix(in srgb, var(--background) 78%, transparent);
-    padding: 0.45rem 0.75rem;
+    border-radius: 0.62rem;
+    background: color-mix(in srgb, var(--background) 86%, transparent);
+    padding: 0.42rem 0.82rem;
     color: color-mix(in srgb, var(--foreground) 62%, transparent);
-    font-size: 0.82rem;
+    font-size: 0.78rem;
+    line-height: 1.2;
     transition:
       border-color 160ms ease,
-      color 160ms ease;
+      color 160ms ease,
+      background-color 160ms ease;
   }
 
   .friend-application button:hover {
-    border-color: color-mix(in srgb, var(--accent) 50%, var(--border));
-    color: var(--accent);
+    border-color: color-mix(in srgb, var(--accent) 36%, var(--border));
+    color: color-mix(in srgb, var(--accent) 90%, transparent);
+    background: color-mix(in srgb, var(--background) 92%, transparent);
   }
 
   @media (max-width: 639px) {
@@ -294,17 +397,23 @@ email: hi@miuo.me`;
     }
 
     .friend-card {
-      min-height: 5.25rem;
-      padding: 0.78rem;
+      min-height: 7.4rem;
+      gap: 0.78rem;
+      border-radius: 0.75rem;
+      padding: 0.86rem;
     }
 
     .friend-card__avatar {
-      width: 2.75rem;
-      height: 2.75rem;
+      width: 2.9rem;
+      height: 2.9rem;
     }
 
     .friend-card__body h2 {
       font-size: 1rem;
+    }
+
+    .friend-card__desc {
+      -webkit-line-clamp: 1;
     }
 
     .apply-section {
@@ -316,15 +425,22 @@ email: hi@miuo.me`;
       font-size: 1.55rem;
     }
 
-    .friend-application pre {
-      padding: 3.5rem 1rem 1rem;
-      font-size: 0.84rem;
-      line-height: 1.75;
+    .friend-application__head {
+      padding: 0.85rem;
     }
 
-    .friend-application button {
-      top: 0.85rem;
-      right: 0.85rem;
+    .friend-application__list {
+      margin: 0.8rem 0.85rem 0.85rem;
+      padding-left: 0.85rem;
+    }
+
+    .friend-application__item {
+      padding: 0.3rem 0;
+    }
+
+    .friend-application__item dd {
+      font-size: 0.82rem;
+      line-height: 1.65;
     }
   }
 </style>
