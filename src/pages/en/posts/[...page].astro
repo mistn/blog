@@ -21,9 +21,8 @@ const locale = "en";
 const copy = ui[locale];
 const posts = await getCollection("blog", ({ data }) => !data.draft);
 const sortedPosts = getSortedPosts(posts);
-const leadPost = page.data[0];
-const listPosts = page.data.slice(1);
-const pageItems = Array.from({ length: page.lastPage }, (_, index) => index + 1);
+const listPosts = page.data;
+const hasNextPage = page.currentPage < page.lastPage;
 
 function getPageHref(pageNumber: number) {
   if (pageNumber === 1) return localizePath("/", locale);
@@ -43,35 +42,10 @@ function getPageHref(pageNumber: number) {
       <div class="px-1 py-4 sm:px-2 sm:py-5">
         <div class="grid gap-10 lg:grid-cols-[minmax(0,1.78fr)_260px]">
           <div class="min-w-0">
-            {
-              leadPost && (
-                <article class="border-b border-border/70 pb-10">
-                  <a
-                    href={localizePath(
-                      getPath(leadPost.id, leadPost.filePath),
-                      locale
-                    )}
-                    data-post-link
-                    class="card-link-press inline-block [font-family:var(--font-ui-serif)] text-[1.9rem] leading-[1.16] font-semibold tracking-tight transition hover:text-accent sm:text-[2.2rem]"
-                  >
-                    {leadPost.data.title}
-                  </a>
-                  <Datetime
-                    {...leadPost.data}
-                    {locale}
-                    class="mt-4 text-foreground/55 [&_svg]:scale-75 [&_svg]:opacity-70"
-                  />
-                  <p class="mt-6 max-w-3xl text-[1.16rem] leading-[1.95] text-foreground/82 sm:text-[1.2rem]">
-                    {leadPost.data.description}
-                  </p>
-                </article>
-              )
-            }
-
-            <div class="divide-y divide-border/55">
+            <div class="divide-y divide-border/55" data-post-list>
               {
                 listPosts.map(post => (
-                  <article class="py-10">
+                  <article class="py-10" data-post-item>
                     <a
                       href={localizePath(getPath(post.id, post.filePath), locale)}
                       data-post-link
@@ -92,31 +66,20 @@ function getPageHref(pageNumber: number) {
               }
             </div>
 
-            {
-              page.lastPage > 1 && (
-                <nav
-                  class="page-number-nav"
-                  aria-label="Pagination Navigation"
+            {hasNextPage && (
+              <nav
+                class="page-number-nav"
+                aria-label="Pagination Navigation"
+              >
+                <a
+                  href={getPageHref(page.currentPage + 1)}
+                  class="post-continuation-link"
+                  data-load-more
                 >
-                  <div class="page-number-group">
-                    {pageItems.map(pageNumber =>
-                      pageNumber === page.currentPage ? (
-                        <span class="page-number-current">
-                          {pageNumber}
-                        </span>
-                      ) : (
-                        <a
-                          href={getPageHref(pageNumber)}
-                          class="page-number-item"
-                        >
-                          {pageNumber}
-                        </a>
-                      )
-                    )}
-                  </div>
-                </nav>
-              )
-            }
+                  Load more
+                </a>
+              </nav>
+            )}
           </div>
 
           <PageSidebar posts={sortedPosts} {locale} />
@@ -126,3 +89,63 @@ function getPageHref(pageNumber: number) {
   </main>
   <Footer />
 </Layout>
+
+<script>
+  document.addEventListener("astro:page-load", () => {
+    const loadMoreLink = document.querySelector(
+      "[data-load-more]"
+    ) as HTMLAnchorElement | null;
+    const postList = document.querySelector(
+      "[data-post-list]"
+    ) as HTMLElement | null;
+
+    if (!loadMoreLink || !postList) return;
+
+    let isLoading = false;
+    const onLoadMore = async () => {
+      if (isLoading) return;
+      const nextUrl = loadMoreLink.getAttribute("href");
+      if (!nextUrl) return;
+
+      isLoading = true;
+      loadMoreLink.setAttribute("aria-busy", "true");
+
+      try {
+        const response = await fetch(nextUrl);
+        if (!response.ok) throw new Error("Failed to load next page");
+        const html = await response.text();
+        const doc = new DOMParser().parseFromString(html, "text/html");
+        const nextList = doc.querySelector("[data-post-list]");
+        const nextLink = doc.querySelector(
+          "[data-load-more]"
+        ) as HTMLAnchorElement | null;
+
+        if (nextList) {
+          nextList
+            .querySelectorAll("[data-post-item]")
+            .forEach((item) => postList.appendChild(item));
+        }
+
+        if (nextLink?.getAttribute("href")) {
+          loadMoreLink.setAttribute("href", nextLink.getAttribute("href")!);
+        } else {
+          loadMoreLink.remove();
+        }
+      } catch (error) {
+        // noop
+      } finally {
+        loadMoreLink.removeAttribute("aria-busy");
+        isLoading = false;
+      }
+    };
+
+    loadMoreLink.addEventListener("click", (event) => {
+      const isModifier =
+        event.metaKey || event.ctrlKey || event.shiftKey || event.altKey;
+      if (isModifier || event.button !== 0) return;
+      event.preventDefault();
+      onLoadMore();
+    });
+
+  });
+</script>

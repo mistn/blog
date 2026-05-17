@@ -56,10 +56,10 @@ const totalPages = Math.ceil(recentPosts.length / SITE.postPerPage);
               )
             }
 
-            <div class="divide-y divide-border/55">
+            <div class="divide-y divide-border/55" data-post-list>
               {
                 listPosts.map(post => (
-                  <article class="py-10">
+                  <article class="py-10" data-post-item>
                     <a
                       href={localizePath(
                         getPath(post.id, post.filePath),
@@ -90,9 +90,9 @@ const totalPages = Math.ceil(recentPosts.length / SITE.postPerPage);
                 <a
                   href={localizePath("/posts/2", locale)}
                   class="post-continuation-link"
+                  data-load-more
                 >
-                  继续阅读旧文
-                  <span aria-hidden="true">→</span>
+                  加载更多
                 </a>
               </nav>
             )}
@@ -113,5 +113,61 @@ const totalPages = Math.ceil(recentPosts.length / SITE.postPerPage);
     if (indexLayout) {
       sessionStorage.setItem("backUrl", window.location.pathname);
     }
+
+    const loadMoreLink = document.querySelector(
+      "[data-load-more]"
+    ) as HTMLAnchorElement | null;
+    const postList = document.querySelector(
+      "[data-post-list]"
+    ) as HTMLElement | null;
+
+    if (!loadMoreLink || !postList) return;
+
+    let isLoading = false;
+    const onLoadMore = async () => {
+      if (isLoading) return;
+      const nextUrl = loadMoreLink.getAttribute("href");
+      if (!nextUrl) return;
+
+      isLoading = true;
+      loadMoreLink.setAttribute("aria-busy", "true");
+
+      try {
+        const response = await fetch(nextUrl);
+        if (!response.ok) throw new Error("Failed to load next page");
+        const html = await response.text();
+        const doc = new DOMParser().parseFromString(html, "text/html");
+        const nextList = doc.querySelector("[data-post-list]");
+        const nextLink = doc.querySelector(
+          "[data-load-more]"
+        ) as HTMLAnchorElement | null;
+
+        if (nextList) {
+          nextList
+            .querySelectorAll("[data-post-item]")
+            .forEach((item) => postList.appendChild(item));
+        }
+
+        if (nextLink?.getAttribute("href")) {
+          loadMoreLink.setAttribute("href", nextLink.getAttribute("href")!);
+        } else {
+          loadMoreLink.remove();
+        }
+      } catch (error) {
+        // noop
+      } finally {
+        loadMoreLink.removeAttribute("aria-busy");
+        isLoading = false;
+      }
+    };
+
+    loadMoreLink.addEventListener("click", (event) => {
+      const isModifier =
+        event.metaKey || event.ctrlKey || event.shiftKey || event.altKey;
+      if (isModifier || event.button !== 0) return;
+      event.preventDefault();
+      onLoadMore();
+    });
+
   });
 </script>
