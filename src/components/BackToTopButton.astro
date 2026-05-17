@@ -14,7 +14,7 @@ const copy = ui[locale];
   id="btt-btn-container"
   class:list={[
     "fixed end-5 bottom-20 z-50",
-    "translate-y-14 opacity-0 transition duration-300",
+    "translate-y-14 opacity-0 pointer-events-none transition duration-300",
   ]}
 >
   <button
@@ -85,6 +85,8 @@ const copy = ui[locale];
         btnContainer.classList.toggle("translate-y-0", isVisible);
         btnContainer.classList.toggle("opacity-0", !isVisible);
         btnContainer.classList.toggle("translate-y-14", !isVisible);
+        btnContainer.classList.toggle("pointer-events-auto", isVisible);
+        btnContainer.classList.toggle("pointer-events-none", !isVisible);
         lastVisible = isVisible;
       }
     }

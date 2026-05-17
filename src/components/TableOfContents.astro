@@ -185,11 +185,18 @@ const closeLabel = locale === "en" ? "Close table of contents" : "关闭文章�
       }
     }
 
-    toggle.addEventListener("click", () => {
+    toggle.addEventListener("click", event => {
+      event.stopPropagation();
       setOpen(root.dataset.open !== "true");
     });
-    close.addEventListener("click", () => setOpen(false));
-    links.forEach(link => link.addEventListener("click", () => setOpen(false)));
+    close.addEventListener("click", event => {
+      event.stopPropagation();
+      setOpen(false);
+    });
+    links.forEach(link => link.addEventListener("click", event => {
+      event.stopPropagation();
+      setOpen(false);
+    }));
     document.addEventListener("click", event => {
       if (root.dataset.open !== "true") return;
       if (event.target instanceof Node && root.contains(event.target)) return;
