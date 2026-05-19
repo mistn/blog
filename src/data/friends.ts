@@ -38,4 +38,11 @@ export const friendLinks: FriendLink[] = [
     description: "也许只是些碎碎念吧。",
     color: "#0b84c6",
   },
+  {
+    name: "Karlbaey",
+    blog: "卡尔白的纸箱📦",
+    href: "https://re.karlbaey.top",
+    avatar: "https://avatars.githubusercontent.com/u/191684279",
+    description: "这里存着卡尔白的过去、现在和未来",
+  },
 ];
