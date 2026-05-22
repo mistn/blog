@@ -90,10 +90,10 @@ rclone config
 - `Storage>` 填 `onedrive`
 - `client_id>` 回车
 - `client_secret` 回车
-- `region>` 选 1(global)
+- `region>` 选 `1(global)`
 - `tenant>` 回车
-- `Edit advanced config?` 按 n
-- `Use web browser to automatically authenticate rclone with remote?` 按 n
+- `Edit advanced config?` 按 `n`
+- `Use web browser to automatically authenticate rclone with remote?` 按 `n`
 
 本地终端运行
 ```
@@ -113,12 +113,12 @@ rclone config
 - `name>` 填 `tg_crypt`
 - `Storage>` 填 `crypt`
 - `remote>` 填 `onedrive:/tg`
-- `filename_encryption>` 填 1 (standard)
-- `directory_name_encryption>` 填 1 (ture)
+- `filename_encryption>` 填 `1 (standard)`
+- `directory_name_encryption>` 填 `1 (ture)`
 - `password>` 按 `y` 输两次
 - `password_salt>` 按 `y` 输两次
-- `Edit advanced config?` 按 n
-- `Keep this "tg_crypt" remote` 按 y
+- `Edit advanced config?` 按 `n`
+- `Keep this "tg_crypt" remote` 按 `y`
 
 
 创建测试文件看是否连通
@@ -140,6 +140,8 @@ echo "Hello, perfect match!" > /root/newtest.txt && rclone copy /root/newtest.tx
 - 输入 `/start`
 
 ### 5.3 后端接入参数配置
+
+路径 `/opt/1panel/docker/compose/saveany-bot`
 
 创建文件 `config.toml` 并填入以下内容:
 ```
@@ -204,6 +206,10 @@ services:
 ```
 rule add FILENAME-REGEX (?i)\.(txt|pdf|doc|docx|xls|xlsx|ppt|pptx)$ tg_crypt /tg/document
 ```
+- 命名规则
+``
+/fnametmpl {{.msgdate}}_{{.origname}}
+``
 
 ## 8. 参考文档
 

@@ -79,15 +79,15 @@ git push origin main
 
    - Obsidian 搜索 git
 
-   ![](https://s3.2731515.xyz/PicGo/20260131182014uxWIlX.webp)
+![](https://s3.2731515.xyz/PicGo/20260131182014uxWIlX.webp)
 
    - 停止编写一分钟后自动同步
 
-   ![](https://s3.2731515.xyz/PicGo/20260131181951UujZ8k.webp)
+![](https://s3.2731515.xyz/PicGo/20260131181951UujZ8k.webp)
 
    - 启动时自动拉取
 
-   ![](https://s3.2731515.xyz/PicGo/20260131181934QisGbf.webp)
+![](https://s3.2731515.xyz/PicGo/20260131181934QisGbf.webp)
 
 ### 2. Android 端
 
@@ -96,15 +96,16 @@ git push origin main
 3. 手机端 Obsidian 打开文件夹。
 4. Git 配置。
 
-   - 打开 Git 插件，填写用户名和邮箱。
-   - 配置 Personal Access Token。
-     - 打开 GitHub。
+  - 打开 Git 插件，填写用户名和邮箱。
+  - 配置 Personal Access Token。
+  - 打开 GitHub。
 
-     ![](https://s3.2731515.xyz/PicGo/20260131181906eNqtNU.webp)
+![](https://s3.2731515.xyz/PicGo/20260131181906eNqtNU.webp)
 
-     - 选择 No expiration。
-     - 勾选 repo。
-     - 填写 token。
+接下来的操作如下：
+  - 选择 No expiration。
+  - 勾选 repo。
+  - 填写 token。
 
 ## 03. Cloudflare R2 图床配置
 
@@ -148,7 +149,7 @@ git push origin main
 - 转换格式为 webp，压缩质量 85%。
 - PicList 同步配置到 GitHub 仓库。
 
-  ![](https://s3.2731515.xyz/PicGo/20260131180747fXkWsM.webp)
+![](https://s3.2731515.xyz/PicGo/20260131180747fXkWsM.webp)
 
 ### 4. image auto upload 插件
 

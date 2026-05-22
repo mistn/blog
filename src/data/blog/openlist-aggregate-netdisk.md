@@ -53,11 +53,11 @@ bash -c "$(curl -sSL https://resource.fit2cloud.com/1panel/package/v2/quick_star
 
 参考我的 [1panel 反向代理](/posts/1panel-reverse-proxy)
 
-## 3. openlist 设置
+## 3. Openlist 设置
 
-> 容器列表点击 `终端` 按钮，进入容器内执行命令设置密码。
-> **生成随机密码**: `./openlist admin random`
-> **手动设置密码**: `./openlist admin set NEW_PASSWORD`
+- 容器列表点击 `终端` 按钮，进入容器内执行命令设置密码。
+- **生成随机密码**: `./openlist admin random`
+- **手动设置密码**: `./openlist admin set NEW_PASSWORD`
 
 ### 3.1 内部设置
 
