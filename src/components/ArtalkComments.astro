@@ -232,27 +232,3 @@ const containerId = `artalk-comments-${pageKey.replace(/[^a-zA-Z0-9_-]/g, "-")}`
 
   scheduleArtalkMount();
 </script>
-
-<style is:global>
-  .artalk .atk-send-btn,
-  .artalk .atk-send-btn:focus-visible {
-    border-color: color-mix(in srgb, #8b6a4a 55%, var(--border));
-    background: color-mix(in srgb, #8b6a4a 18%, var(--background));
-    color: color-mix(in srgb, var(--foreground) 92%, transparent);
-    box-shadow: none;
-  }
-
-  .artalk .atk-send-btn:hover {
-    border-color: color-mix(in srgb, #8b6a4a 70%, var(--border));
-    background: color-mix(in srgb, #8b6a4a 28%, var(--background));
-    color: color-mix(in srgb, var(--foreground) 96%, transparent);
-  }
-
-  .artalk .atk-send-btn:active {
-    background: color-mix(in srgb, #8b6a4a 36%, var(--background));
-  }
-
-  .artalk .atk-send-btn:disabled {
-    opacity: 0.65;
-  }
-</style>
