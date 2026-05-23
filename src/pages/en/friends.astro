@@ -132,15 +132,16 @@ const applicationText = applicationFields
                 </div>
               </div>
               <dl class="friend-application__list">
-              {
-                applicationFields.map(field => (
-                  <div class="friend-application__item">
-                    <dt>{field.label}</dt>
-                    <dd>{field.value}</dd>
-                  </div>
-                ))
-              }
-            </dl>
+                {
+                  applicationFields.map(field => (
+                    <div class="friend-application__item">
+                      <dt>{field.label}</dt>
+                      <dd>{field.value}</dd>
+                    </div>
+                  ))
+                }
+              </dl>
+            </div>
           </div>
         </section>
       </div>
@@ -154,26 +155,64 @@ const applicationText = applicationFields
   <Footer />
 </Layout>
 
-<script>
+<script is:inline data-astro-rerun>
+  const COPY_TEXT = "Copy";
   const COPIED_TEXT = "Copied";
+  const COPY_FAILED_TEXT = "Copy failed";
 
-  document.addEventListener("click", async event => {
-    const target = event.target;
-    if (!(target instanceof HTMLElement)) return;
+  const getCopyButtonContent = (label, copied = false) => {
+    const icon = copied
+      ? `<path d="m5 12 4 4L19 6"></path>`
+      : `<rect x="9" y="9" width="11" height="11" rx="2"></rect>
+        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>`;
 
-    const button = target.closest("[data-copy-value]");
-    if (!(button instanceof HTMLButtonElement)) return;
+    return `
+      <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        ${icon}
+      </svg>
+      <span class="sr-only">${label}</span>
+    `;
+  };
 
-    const value = button.dataset.copyValue;
-    if (!value) return;
+  const setupCopyButtons = () => {
+    const buttons = document.querySelectorAll("[data-copy-value]");
+    buttons.forEach((button) => {
+      if (!(button instanceof HTMLButtonElement)) return;
+      if (button.dataset.copyBound === "true") return;
+      button.dataset.copyBound = "true";
+      button.innerHTML = getCopyButtonContent(COPY_TEXT);
+      button.ariaLabel = COPY_TEXT;
+      button.title = COPY_TEXT;
 
-    await navigator.clipboard.writeText(value);
-    const originalText = button.textContent ?? "Copy";
-    button.textContent = COPIED_TEXT;
-    window.setTimeout(() => {
-      button.textContent = originalText;
-    }, 1400);
-  });
+      button.addEventListener("click", async () => {
+        const value = button.dataset.copyValue;
+        if (!value) return;
+
+        try {
+          await navigator.clipboard.writeText(value);
+          button.innerHTML = getCopyButtonContent(COPIED_TEXT, true);
+          button.ariaLabel = COPIED_TEXT;
+          button.title = COPIED_TEXT;
+          window.setTimeout(() => {
+            button.innerHTML = getCopyButtonContent(COPY_TEXT);
+            button.ariaLabel = COPY_TEXT;
+            button.title = COPY_TEXT;
+          }, 900);
+        } catch (error) {
+          console.warn("Clipboard write failed", error);
+          const originalText = button.textContent ?? COPY_TEXT;
+          button.textContent = COPY_FAILED_TEXT;
+          window.setTimeout(() => {
+            button.textContent = originalText;
+          }, 1400);
+        }
+      });
+    });
+  };
+
+  document.addEventListener("astro:page-load", setupCopyButtons);
+  document.addEventListener("astro:after-swap", setupCopyButtons);
+  setupCopyButtons();
 </script>
 
 <style>
@@ -340,12 +379,10 @@ const applicationText = applicationFields
 
   .friend-application .code-block-frame {
     position: relative;
-    overflow: hidden;
-    border-radius: 0.9rem;
     border: 1px solid color-mix(in srgb, var(--border) 65%, transparent);
+    border-radius: 0.75rem;
     background: color-mix(in srgb, var(--background) 85%, transparent);
     box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
-    margin: 0;
   }
 
   .friend-application .code-block-header {
@@ -354,7 +391,7 @@ const applicationText = applicationFields
     justify-content: space-between;
     gap: 0.75rem;
     height: 2.5rem;
-    padding: 0 0.9rem;
+    padding: 0 0.75rem;
     border-bottom: 1px solid color-mix(in srgb, var(--border) 60%, transparent);
     background: color-mix(in srgb, var(--background) 85%, transparent);
   }
@@ -363,7 +400,7 @@ const applicationText = applicationFields
     display: flex;
     min-width: 0;
     align-items: center;
-    gap: 0.4rem;
+    gap: 0.5rem;
   }
 
   .friend-application .code-block-icon {
@@ -377,7 +414,7 @@ const applicationText = applicationFields
     border-radius: 0.25rem;
     border: 1px solid color-mix(in srgb, var(--border) 80%, transparent);
     background: color-mix(in srgb, var(--muted) 55%, transparent);
-    padding: 0.18rem 0.45rem;
+    padding: 0.18rem 0.5rem;
     font-size: 0.7rem;
     line-height: 1;
     color: color-mix(in srgb, var(--foreground) 76%, transparent);
@@ -391,11 +428,11 @@ const applicationText = applicationFields
 
   .friend-application .code-block-action {
     display: inline-flex;
-    width: 2rem;
-    height: 2rem;
+    width: 1.75rem;
+    height: 1.75rem;
     align-items: center;
     justify-content: center;
-    border-radius: 0.45rem;
+    border-radius: 0.5rem;
     color: color-mix(in srgb, var(--foreground) 70%, transparent);
     transition: background-color 160ms ease, color 160ms ease;
   }
@@ -406,20 +443,21 @@ const applicationText = applicationFields
   }
 
   .friend-application .code-block-action svg {
-    width: 1rem;
-    height: 1rem;
+    width: 0.9rem;
+    height: 0.9rem;
   }
 
   .friend-application__list {
     margin: 0 1rem 1rem;
     padding: 0.3rem 0 0.2rem;
+    overflow-x: auto;
+    overflow-y: hidden;
   }
 
   .friend-application__item {
     display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 0.3rem 0.5rem;
+    align-items: flex-start;
+    gap: 0.25rem 0.5rem;
     padding: 0.45rem 0;
   }
 
@@ -447,6 +485,17 @@ const applicationText = applicationFields
     font-family: var(--font-ui-mono);
     font-size: 0.9rem;
     line-height: 1.65;
+    white-space: nowrap;
+  }
+
+  .friend-application__item dt {
+    flex: 0 0 4.4rem;
+    min-width: 4.4rem;
+  }
+
+  .friend-application__item dd {
+    flex: 1 1 auto;
+    min-width: 0;
   }
 
 
