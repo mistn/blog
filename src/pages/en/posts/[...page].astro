@@ -23,6 +23,10 @@ const posts = await getCollection("blog", ({ data }) => !data.draft);
 const sortedPosts = getSortedPosts(posts);
 const listPosts = page.data;
 const hasNextPage = page.currentPage < page.lastPage;
+const pageNumbers = Array.from(
+  { length: page.lastPage },
+  (_, index) => index + 1
+);
 
 function getPageHref(pageNumber: number) {
   if (pageNumber === 1) return localizePath("/", locale);
@@ -66,18 +70,28 @@ function getPageHref(pageNumber: number) {
               }
             </div>
 
-            {hasNextPage && (
+            {page.lastPage > 1 && (
               <nav
                 class="page-number-nav"
                 aria-label="Pagination Navigation"
               >
-                <a
-                  href={getPageHref(page.currentPage + 1)}
-                  class="post-continuation-link"
-                  data-load-more
-                >
-                  Load more
-                </a>
+                <div class="page-number-group">
+                  {pageNumbers.map(pageNumber => (
+                    <a
+                      href={getPageHref(pageNumber)}
+                      class={
+                        pageNumber === page.currentPage
+                          ? "page-number-current"
+                          : "page-number-item"
+                      }
+                      aria-current={
+                        pageNumber === page.currentPage ? "page" : undefined
+                      }
+                    >
+                      {pageNumber}
+                    </a>
+                  ))}
+                </div>
               </nav>
             )}
           </div>
@@ -92,60 +106,6 @@ function getPageHref(pageNumber: number) {
 
 <script>
   document.addEventListener("astro:page-load", () => {
-    const loadMoreLink = document.querySelector(
-      "[data-load-more]"
-    ) as HTMLAnchorElement | null;
-    const postList = document.querySelector(
-      "[data-post-list]"
-    ) as HTMLElement | null;
-
-    if (!loadMoreLink || !postList) return;
-
-    let isLoading = false;
-    const onLoadMore = async () => {
-      if (isLoading) return;
-      const nextUrl = loadMoreLink.getAttribute("href");
-      if (!nextUrl) return;
-
-      isLoading = true;
-      loadMoreLink.setAttribute("aria-busy", "true");
-
-      try {
-        const response = await fetch(nextUrl);
-        if (!response.ok) throw new Error("Failed to load next page");
-        const html = await response.text();
-        const doc = new DOMParser().parseFromString(html, "text/html");
-        const nextList = doc.querySelector("[data-post-list]");
-        const nextLink = doc.querySelector(
-          "[data-load-more]"
-        ) as HTMLAnchorElement | null;
-
-        if (nextList) {
-          nextList
-            .querySelectorAll("[data-post-item]")
-            .forEach((item) => postList.appendChild(item));
-        }
-
-        if (nextLink?.getAttribute("href")) {
-          loadMoreLink.setAttribute("href", nextLink.getAttribute("href")!);
-        } else {
-          loadMoreLink.remove();
-        }
-      } catch (error) {
-        // noop
-      } finally {
-        loadMoreLink.removeAttribute("aria-busy");
-        isLoading = false;
-      }
-    };
-
-    loadMoreLink.addEventListener("click", (event) => {
-      const isModifier =
-        event.metaKey || event.ctrlKey || event.shiftKey || event.altKey;
-      if (isModifier || event.button !== 0) return;
-      event.preventDefault();
-      onLoadMore();
-    });
-
+    sessionStorage.setItem("backUrl", window.location.pathname);
   });
 </script>

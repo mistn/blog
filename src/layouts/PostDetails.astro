@@ -574,6 +574,10 @@ const nextPost =
   attachImageLightbox();
 
   document.addEventListener("astro:after-swap", () => {
+    const isPostScope = document.querySelector(
+      '[data-post-memory-scope="post"]'
+    );
+    if (!isPostScope) return;
     window.scrollTo({ left: 0, top: 0, behavior: "instant" });
   });
 </script>

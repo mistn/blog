@@ -17,6 +17,7 @@ const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
 const leadPost = recentPosts[0];
 const listPosts = recentPosts.slice(1, SITE.postPerPage);
 const totalPages = Math.ceil(recentPosts.length / SITE.postPerPage);
+const pageNumbers = Array.from({ length: totalPages }, (_, index) => index + 1);
 ---
 
 <Layout>
@@ -87,13 +88,25 @@ const totalPages = Math.ceil(recentPosts.length / SITE.postPerPage);
                 class="page-number-nav"
                 aria-label="Pagination Navigation"
               >
-                <a
-                  href={localizePath("/posts/2", locale)}
-                  class="post-continuation-link"
-                  data-load-more
-                >
-                  加载更多
-                </a>
+                <div class="page-number-group">
+                  {pageNumbers.map(pageNumber => (
+                    <a
+                      href={
+                        pageNumber === 1
+                          ? localizePath("/", locale)
+                          : localizePath(`/posts/${pageNumber}`, locale)
+                      }
+                      class={
+                        pageNumber === 1
+                          ? "page-number-current"
+                          : "page-number-item"
+                      }
+                      aria-current={pageNumber === 1 ? "page" : undefined}
+                    >
+                      {pageNumber}
+                    </a>
+                  ))}
+                </div>
               </nav>
             )}
           </div>
@@ -113,61 +126,5 @@ const totalPages = Math.ceil(recentPosts.length / SITE.postPerPage);
     if (indexLayout) {
       sessionStorage.setItem("backUrl", window.location.pathname);
     }
-
-    const loadMoreLink = document.querySelector(
-      "[data-load-more]"
-    ) as HTMLAnchorElement | null;
-    const postList = document.querySelector(
-      "[data-post-list]"
-    ) as HTMLElement | null;
-
-    if (!loadMoreLink || !postList) return;
-
-    let isLoading = false;
-    const onLoadMore = async () => {
-      if (isLoading) return;
-      const nextUrl = loadMoreLink.getAttribute("href");
-      if (!nextUrl) return;
-
-      isLoading = true;
-      loadMoreLink.setAttribute("aria-busy", "true");
-
-      try {
-        const response = await fetch(nextUrl);
-        if (!response.ok) throw new Error("Failed to load next page");
-        const html = await response.text();
-        const doc = new DOMParser().parseFromString(html, "text/html");
-        const nextList = doc.querySelector("[data-post-list]");
-        const nextLink = doc.querySelector(
-          "[data-load-more]"
-        ) as HTMLAnchorElement | null;
-
-        if (nextList) {
-          nextList
-            .querySelectorAll("[data-post-item]")
-            .forEach((item) => postList.appendChild(item));
-        }
-
-        if (nextLink?.getAttribute("href")) {
-          loadMoreLink.setAttribute("href", nextLink.getAttribute("href")!);
-        } else {
-          loadMoreLink.remove();
-        }
-      } catch (error) {
-        // noop
-      } finally {
-        loadMoreLink.removeAttribute("aria-busy");
-        isLoading = false;
-      }
-    };
-
-    loadMoreLink.addEventListener("click", (event) => {
-      const isModifier =
-        event.metaKey || event.ctrlKey || event.shiftKey || event.altKey;
-      if (isModifier || event.button !== 0) return;
-      event.preventDefault();
-      onLoadMore();
-    });
-
   });
 </script>
