@@ -243,8 +243,7 @@ const resolvedStructuredData = structuredData
           setStoredLocale("en");
         } else {
           const storedLocale = getStoredLocale();
-          const shouldUseEnglish =
-            storedLocale === "en" || (!storedLocale && prefersEnglish());
+          const shouldUseEnglish = storedLocale === "en";
 
           if (shouldUseEnglish) {
             window.location.replace(
