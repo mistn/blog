@@ -29,8 +29,11 @@ const languageHref = localizePath(Astro.url.pathname, alternateLocale);
 const emailLink = SOCIALS.find(social => social.href.startsWith("mailto:"));
 const emailAddress = emailLink?.href.replace("mailto:", "");
 const emailLabel = `${copy.nav.email} ${SITE.title}`;
+
+const getHref = (path: string) => localizePath(path, locale);
 ---
 
+<!-- ===== Topbar ===== -->
 <section
   class:list={[
     "app-layout lg:max-w-7xl lg:py-8",
@@ -43,190 +46,258 @@ const emailLabel = `${copy.nav.email} ${SITE.title}`;
       compactMobile ? "pb-3" : "pb-4",
     ]}
   >
-    <div
-      class:list={[
-        "flex flex-col lg:flex-row lg:items-center lg:justify-between",
-        compactMobile ? "gap-3" : "gap-4",
-      ]}
-    >
-      <div
-        class:list={[
-          "flex flex-col lg:flex-row lg:items-baseline lg:gap-10",
-          compactMobile ? "gap-3" : "gap-5",
-        ]}
-      >
-        <div
-          class:list={[
-            "min-w-0 max-lg:flex max-lg:items-center",
-            compactMobile ? "max-lg:gap-3" : "max-lg:gap-4",
-          ]}
-        >
-          <div
-            class:list={[
-              "flex-none overflow-hidden rounded-full border border-border/60 lg:hidden",
-              compactMobile ? "h-10 w-10" : "h-14 w-14",
-            ]}
+    <div class="flex items-center justify-between">
+      <!-- Left: Logo -->
+      <div class="min-w-0">
+        <p class="text-[1.85rem] leading-none font-medium tracking-tight">
+          {SITE.author}
+        </p>
+      </div>
+
+      <!-- Desktop: HomeTabs + icons -->
+      <div class="hidden lg:flex lg:items-center lg:gap-10">
+        <HomeTabs />
+
+        <div class="flex items-center gap-1">
+          <LinkButton
+            href={localizePath("/search", locale)}
+            class="focus-outline flex size-10 items-center justify-center rounded-full text-foreground/68 transition hover:text-accent"
+            title={copy.nav.search}
+            aria-label={copy.nav.search}
           >
-            <img
-              src="/avatar.avif"
-              alt={`${SITE.author} avatar`}
-              class="h-full w-full object-cover"
-              loading="eager"
-            />
-          </div>
-          <div class="min-w-0 flex-1">
-            <p
-              class:list={[
-                "leading-none font-medium tracking-tight",
-                compactMobile ? "text-[1.6rem]" : "text-[1.85rem]",
-              ]}
-            >
-              {SITE.author}
-            </p>
-            <p
-              class:list={[
-                "mt-1.5 text-[0.92rem] leading-6 text-foreground/56 lg:hidden",
-                compactMobile && "hidden",
-              ]}
-            >
-              {copy.site.desc}
-            </p>
-          </div>
-        </div>
+            <IconSearch class="size-5" />
+            <span class="sr-only">{copy.nav.search}</span>
+          </LinkButton>
 
-        <div
-          class:list={[
-            "flex min-w-0 flex-col gap-3 lg:block",
-            compactMobile && "max-lg:pt-1",
-          ]}
-        >
-          <HomeTabs />
+          <a
+            href="/rss.xml"
+            class="focus-outline flex size-10 items-center justify-center rounded-full text-foreground/68 transition hover:text-accent"
+            title="RSS"
+            aria-label="RSS"
+          >
+            <IconRss class="size-5" />
+            <span class="sr-only">RSS</span>
+          </a>
 
-          <div class="flex items-center justify-end gap-1 lg:hidden">
-            {
-              emailLink && emailAddress && (
-                <LinkButton
-                  href={emailLink.href}
-                  class="focus-outline flex size-10 items-center justify-center rounded-full text-foreground/68 transition hover:text-accent"
-                  title={emailLabel}
-                  aria-label={emailLabel}
-                >
-                  <IconMail class="size-5" />
-                  <span class="sr-only">{copy.nav.email}</span>
-                </LinkButton>
-              )
-            }
+          <a
+            href={languageHref}
+            data-locale-target={alternateLocale}
+            data-astro-reload
+            class="group inline-flex size-10 items-center justify-center gap-1 rounded-full text-foreground/68 transition focus-outline hover:text-accent"
+            title={copy.nav.languageLabel}
+            aria-label={copy.nav.languageLabel}
+          >
+            <IconLanguage class="size-5" />
+            <span class="sr-only">{copy.nav.languageLabel}</span>
+          </a>
 
-            <LinkButton
-              href={localizePath("/search", locale)}
-              class="focus-outline flex size-10 items-center justify-center rounded-full text-foreground/68 transition hover:text-accent"
-              title={copy.nav.search}
-              aria-label={copy.nav.search}
-            >
-              <IconSearch class="size-5" />
-              <span class="sr-only">{copy.nav.search}</span>
-            </LinkButton>
-
-            <a
-              href="/rss.xml"
-              class="focus-outline flex size-10 items-center justify-center rounded-full text-foreground/68 transition hover:text-accent"
-              title="RSS"
-              aria-label="RSS"
-            >
-              <IconRss class="size-5" />
-              <span class="sr-only">RSS</span>
-            </a>
-
-            <a
-              href={languageHref}
-              data-locale-target={alternateLocale}
-              data-astro-reload
-              class="group inline-flex size-10 items-center justify-center gap-1 rounded-full text-foreground/68 transition focus-outline hover:text-accent"
-              title={copy.nav.languageLabel}
-              aria-label={copy.nav.languageLabel}
-            >
-              <IconLanguage class="size-5" />
-              <span class="sr-only">{copy.nav.languageLabel}</span>
-            </a>
-
-            {
-              SITE.lightAndDarkMode && (
-                <button
-                  id="theme-btn"
-                  class="focus-outline relative size-10 rounded-full text-foreground/68 transition hover:text-accent"
-                  title={copy.nav.theme}
-                  aria-label={copy.nav.theme}
-                  aria-live="polite"
-                >
-                  <span
-                    data-theme-icon-anchor
-                    class="pointer-events-none absolute top-[50%] left-[50%] size-5 -translate-[50%]"
-                    aria-hidden="true"
-                  >
-                    <IconMoon class="absolute inset-0 h-full w-full scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
-                    <IconSunHigh class="absolute inset-0 h-full w-full scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
-                  </span>
-                </button>
-              )
-            }
-          </div>
-        </div>
-      </div>
-
-      <div class="hidden items-center gap-1 lg:flex lg:self-auto">
-        <LinkButton
-          href={localizePath("/search", locale)}
-          class="focus-outline flex size-10 items-center justify-center rounded-full text-foreground/68 transition hover:text-accent"
-          title={copy.nav.search}
-          aria-label={copy.nav.search}
-        >
-          <IconSearch class="size-5" />
-          <span class="sr-only">{copy.nav.search}</span>
-        </LinkButton>
-
-        <a
-          href="/rss.xml"
-          class="focus-outline flex size-10 items-center justify-center rounded-full text-foreground/68 transition hover:text-accent"
-          title="RSS"
-          aria-label="RSS"
-        >
-          <IconRss class="size-5" />
-          <span class="sr-only">RSS</span>
-        </a>
-
-        <a
-          href={languageHref}
-          data-locale-target={alternateLocale}
-          data-astro-reload
-          class="group inline-flex size-10 items-center justify-center gap-1 rounded-full text-foreground/68 transition focus-outline hover:text-accent"
-          title={copy.nav.languageLabel}
-          aria-label={copy.nav.languageLabel}
-        >
-          <IconLanguage class="size-5" />
-          <span class="sr-only">{copy.nav.languageLabel}</span>
-        </a>
-
-        {
-          SITE.lightAndDarkMode && (
-                <button
-                  id="theme-btn-desktop"
-                  class="focus-outline relative size-10 rounded-full text-foreground/68 transition hover:text-accent"
-                  title={copy.nav.theme}
-                  aria-label={copy.nav.theme}
-                  aria-live="polite"
-                >
-              <span
-                data-theme-icon-anchor
-                class="pointer-events-none absolute top-[50%] left-[50%] size-5 -translate-[50%]"
-                aria-hidden="true"
+          {
+            SITE.lightAndDarkMode && (
+              <button
+                id="theme-btn-desktop"
+                class="focus-outline relative size-10 rounded-full text-foreground/68 transition hover:text-accent"
+                title={copy.nav.theme}
+                aria-label={copy.nav.theme}
+                aria-live="polite"
               >
-                <IconMoon class="absolute inset-0 h-full w-full scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
-                <IconSunHigh class="absolute inset-0 h-full w-full scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
-              </span>
-            </button>
-          )
-        }
+                <span
+                  data-theme-icon-anchor
+                  class="pointer-events-none absolute top-[50%] left-[50%] size-5 -translate-[50%]"
+                  aria-hidden="true"
+                >
+                  <IconMoon class="absolute inset-0 h-full w-full scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
+                  <IconSunHigh class="absolute inset-0 h-full w-full scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
+                </span>
+              </button>
+            )
+          }
+        </div>
       </div>
+
+      <!-- Mobile: Hamburger -->
+      <button
+        id="menu-toggle"
+        class="lg:hidden p-2 -mr-2 text-foreground/68 hover:text-foreground transition-colors"
+        aria-label="Menu"
+        aria-expanded="false"
+      >
+        <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="4" y1="6" x2="20" y2="6" />
+          <line x1="4" y1="12" x2="20" y2="12" />
+          <line x1="4" y1="18" x2="20" y2="18" />
+        </svg>
+      </button>
     </div>
   </div>
 </section>
+
+<!-- ===== Mobile Full-screen Overlay ===== -->
+<div
+  id="mobile-overlay"
+  class="fixed inset-0 bg-white dark:bg-background z-50 hidden flex-col justify-center items-center"
+  aria-hidden="true"
+>
+  <!-- Close button -->
+  <button
+    id="menu-close"
+    class="absolute top-6 right-6 p-2 text-gray-400 hover:text-gray-900 dark:text-gray-500 dark:hover:text-gray-100 transition-colors"
+    aria-label="Close menu"
+  >
+    <svg class="size-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <line x1="6" y1="6" x2="18" y2="18" />
+      <line x1="18" y1="6" x2="6" y2="18" />
+    </svg>
+  </button>
+
+  <!-- Nav links -->
+  <nav class="flex flex-col items-center gap-1">
+    <a
+      href={getHref("/")}
+      class="text-2xl font-semibold text-gray-900 dark:text-gray-100 py-3 px-8 hover:text-gray-500 dark:hover:text-gray-400 transition-colors"
+      data-overlay-link
+    >
+      {copy.nav.home}
+    </a>
+    {
+      SITE.showArchives && (
+        <a
+          href={getHref("/archives")}
+          class="text-2xl font-semibold text-gray-900 dark:text-gray-100 py-3 px-8 hover:text-gray-500 dark:hover:text-gray-400 transition-colors"
+          data-overlay-link
+        >
+          {copy.nav.archives}
+        </a>
+      )
+    }
+    <a
+      href={getHref("/anime")}
+      class="text-2xl font-semibold text-gray-900 dark:text-gray-100 py-3 px-8 hover:text-gray-500 dark:hover:text-gray-400 transition-colors"
+      data-overlay-link
+    >
+      {copy.nav.anime}
+    </a>
+    <a
+      href={getHref("/friends")}
+      class="text-2xl font-semibold text-gray-900 dark:text-gray-100 py-3 px-8 hover:text-gray-500 dark:hover:text-gray-400 transition-colors"
+      data-overlay-link
+    >
+      {copy.nav.friends}
+    </a>
+    <a
+      href={getHref("/about")}
+      class="text-2xl font-semibold text-gray-900 dark:text-gray-100 py-3 px-8 hover:text-gray-500 dark:hover:text-gray-400 transition-colors"
+      data-overlay-link
+    >
+      {copy.nav.about}
+    </a>
+  </nav>
+
+  <!-- Bottom icons -->
+  <div class="absolute bottom-10 flex items-center gap-6">
+    <a
+      href={localizePath("/search", locale)}
+      class="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
+      title={copy.nav.search}
+      aria-label={copy.nav.search}
+      data-overlay-link
+    >
+      <IconSearch class="size-6" />
+    </a>
+
+    {
+      emailLink && emailAddress && (
+        <a
+          href={emailLink.href}
+          class="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
+          title={emailLabel}
+          aria-label={emailLabel}
+        >
+          <IconMail class="size-6" />
+        </a>
+      )
+    }
+
+    <a
+      href="/rss.xml"
+      class="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
+      title="RSS"
+      aria-label="RSS"
+    >
+      <IconRss class="size-6" />
+    </a>
+
+    <a
+      href={languageHref}
+      data-locale-target={alternateLocale}
+      data-astro-reload
+      class="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
+      title={copy.nav.languageLabel}
+      aria-label={copy.nav.languageLabel}
+    >
+      <IconLanguage class="size-6" />
+    </a>
+
+    {
+      SITE.lightAndDarkMode && (
+        <button
+          id="theme-btn"
+          class="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
+          title={copy.nav.theme}
+          aria-label={copy.nav.theme}
+          aria-live="polite"
+        >
+          <span data-theme-icon-anchor aria-hidden="true" class="inline-block size-6">
+            <IconMoon class="hidden dark:block size-6" />
+            <IconSunHigh class="block dark:hidden size-6" />
+          </span>
+        </button>
+      )
+    }
+  </div>
+</div>
+
+<script is:inline>
+  (function () {
+    var overlay = document.getElementById("mobile-overlay");
+    var toggle = document.getElementById("menu-toggle");
+    var closeBtn = document.getElementById("menu-close");
+
+    if (!overlay || !toggle || !closeBtn) return;
+
+    function openMenu() {
+      overlay.classList.remove("hidden");
+      overlay.classList.add("flex");
+      overlay.setAttribute("aria-hidden", "false");
+      toggle.setAttribute("aria-expanded", "true");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeMenu() {
+      overlay.classList.add("hidden");
+      overlay.classList.remove("flex");
+      overlay.setAttribute("aria-hidden", "true");
+      toggle.setAttribute("aria-expanded", "false");
+      document.body.style.overflow = "";
+      toggle.focus();
+    }
+
+    toggle.addEventListener("click", openMenu);
+    closeBtn.addEventListener("click", closeMenu);
+
+    overlay.addEventListener("click", function (e) {
+      if (e.target === overlay) closeMenu();
+    });
+
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && overlay.getAttribute("aria-hidden") === "false") {
+        closeMenu();
+      }
+    });
+
+    document.querySelectorAll("[data-overlay-link]").forEach(function (el) {
+      el.addEventListener("click", function () {
+        closeMenu();
+      });
+    });
+  })();
+</script>
