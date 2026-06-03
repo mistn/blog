@@ -13,6 +13,7 @@ import {
   getAlternateLocale,
   getLocaleFromPath,
   localizePath,
+  normalizePath,
   ui,
 } from "@/i18n";
 
@@ -31,6 +32,8 @@ const emailAddress = emailLink?.href.replace("mailto:", "");
 const emailLabel = `${copy.nav.email} ${SITE.title}`;
 
 const getHref = (path: string) => localizePath(path, locale);
+const currentPath = normalizePath(Astro.url.pathname);
+const isActive = (path: string) => currentPath === normalizePath(getHref(path));
 ---
 
 <!-- ===== Topbar ===== -->
@@ -150,10 +153,15 @@ const getHref = (path: string) => localizePath(path, locale);
   </button>
 
   <!-- Nav links -->
-  <nav class="flex flex-col items-center gap-1">
+  <nav class="flex flex-col items-center space-y-6">
     <a
       href={getHref("/")}
-      class="text-2xl font-semibold text-gray-900 dark:text-gray-100 py-3 px-8 hover:text-gray-500 dark:hover:text-gray-400 transition-colors"
+      class:list={[
+        "text-xl font-medium py-2 px-8 transition-colors",
+        isActive("/")
+          ? "text-gray-900 dark:text-gray-100 font-semibold"
+          : "text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100",
+      ]}
       data-overlay-link
     >
       {copy.nav.home}
@@ -162,7 +170,12 @@ const getHref = (path: string) => localizePath(path, locale);
       SITE.showArchives && (
         <a
           href={getHref("/archives")}
-          class="text-2xl font-semibold text-gray-900 dark:text-gray-100 py-3 px-8 hover:text-gray-500 dark:hover:text-gray-400 transition-colors"
+          class:list={[
+            "text-xl font-medium py-2 px-8 transition-colors",
+            isActive("/archives")
+              ? "text-gray-900 dark:text-gray-100 font-semibold"
+              : "text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100",
+          ]}
           data-overlay-link
         >
           {copy.nav.archives}
@@ -171,21 +184,36 @@ const getHref = (path: string) => localizePath(path, locale);
     }
     <a
       href={getHref("/anime")}
-      class="text-2xl font-semibold text-gray-900 dark:text-gray-100 py-3 px-8 hover:text-gray-500 dark:hover:text-gray-400 transition-colors"
+      class:list={[
+        "text-xl font-medium py-2 px-8 transition-colors",
+        isActive("/anime")
+          ? "text-gray-900 dark:text-gray-100 font-semibold"
+          : "text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100",
+      ]}
       data-overlay-link
     >
       {copy.nav.anime}
     </a>
     <a
       href={getHref("/friends")}
-      class="text-2xl font-semibold text-gray-900 dark:text-gray-100 py-3 px-8 hover:text-gray-500 dark:hover:text-gray-400 transition-colors"
+      class:list={[
+        "text-xl font-medium py-2 px-8 transition-colors",
+        isActive("/friends")
+          ? "text-gray-900 dark:text-gray-100 font-semibold"
+          : "text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100",
+      ]}
       data-overlay-link
     >
       {copy.nav.friends}
     </a>
     <a
       href={getHref("/about")}
-      class="text-2xl font-semibold text-gray-900 dark:text-gray-100 py-3 px-8 hover:text-gray-500 dark:hover:text-gray-400 transition-colors"
+      class:list={[
+        "text-xl font-medium py-2 px-8 transition-colors",
+        isActive("/about")
+          ? "text-gray-900 dark:text-gray-100 font-semibold"
+          : "text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100",
+      ]}
       data-overlay-link
     >
       {copy.nav.about}
@@ -196,7 +224,7 @@ const getHref = (path: string) => localizePath(path, locale);
   <div class="absolute bottom-10 flex items-center gap-6">
     <a
       href={localizePath("/search", locale)}
-      class="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
+      class="text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
       title={copy.nav.search}
       aria-label={copy.nav.search}
       data-overlay-link
@@ -208,7 +236,7 @@ const getHref = (path: string) => localizePath(path, locale);
       emailLink && emailAddress && (
         <a
           href={emailLink.href}
-          class="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
+          class="text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
           title={emailLabel}
           aria-label={emailLabel}
         >
@@ -219,7 +247,7 @@ const getHref = (path: string) => localizePath(path, locale);
 
     <a
       href="/rss.xml"
-      class="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
+      class="text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
       title="RSS"
       aria-label="RSS"
     >
@@ -230,7 +258,7 @@ const getHref = (path: string) => localizePath(path, locale);
       href={languageHref}
       data-locale-target={alternateLocale}
       data-astro-reload
-      class="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
+      class="text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
       title={copy.nav.languageLabel}
       aria-label={copy.nav.languageLabel}
     >
@@ -241,7 +269,7 @@ const getHref = (path: string) => localizePath(path, locale);
       SITE.lightAndDarkMode && (
         <button
           id="theme-btn"
-          class="text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
+          class="text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
           title={copy.nav.theme}
           aria-label={copy.nav.theme}
           aria-live="polite"
@@ -257,47 +285,72 @@ const getHref = (path: string) => localizePath(path, locale);
 </div>
 
 <script is:inline>
-  (function () {
-    var overlay = document.getElementById("mobile-overlay");
-    var toggle = document.getElementById("menu-toggle");
-    var closeBtn = document.getElementById("menu-close");
+  function getOverlay() { return document.getElementById("mobile-overlay"); }
+  function getToggle() { return document.getElementById("menu-toggle"); }
 
-    if (!overlay || !toggle || !closeBtn) return;
+  function openMenu() {
+    var overlay = getOverlay();
+    var toggle = getToggle();
+    if (!overlay || !toggle) return;
+    overlay.classList.remove("hidden");
+    overlay.classList.add("flex");
+    overlay.setAttribute("aria-hidden", "false");
+    toggle.setAttribute("aria-expanded", "true");
+    document.body.style.overflow = "hidden";
+  }
 
-    function openMenu() {
-      overlay.classList.remove("hidden");
-      overlay.classList.add("flex");
-      overlay.setAttribute("aria-hidden", "false");
-      toggle.setAttribute("aria-expanded", "true");
-      document.body.style.overflow = "hidden";
+  function closeMenu() {
+    var overlay = getOverlay();
+    var toggle = getToggle();
+    if (!overlay || !toggle) return;
+    overlay.classList.add("hidden");
+    overlay.classList.remove("flex");
+    overlay.setAttribute("aria-hidden", "true");
+    toggle.setAttribute("aria-expanded", "false");
+    document.body.style.overflow = "";
+    toggle.focus();
+  }
+
+  function closeMenuSilent() {
+    var overlay = getOverlay();
+    var toggle = getToggle();
+    if (!overlay) return;
+    overlay.classList.add("hidden");
+    overlay.classList.remove("flex");
+    overlay.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+    if (toggle) toggle.setAttribute("aria-expanded", "false");
+  }
+
+  document.addEventListener("click", function (e) {
+    var target = /** @type {HTMLElement} */ (e.target);
+
+    if (target.closest("#menu-toggle")) {
+      openMenu();
+      return;
     }
 
-    function closeMenu() {
-      overlay.classList.add("hidden");
-      overlay.classList.remove("flex");
-      overlay.setAttribute("aria-hidden", "true");
-      toggle.setAttribute("aria-expanded", "false");
-      document.body.style.overflow = "";
-      toggle.focus();
+    if (target.closest("#menu-close") || target.closest("[data-overlay-link]")) {
+      closeMenu();
+      return;
     }
 
-    toggle.addEventListener("click", openMenu);
-    closeBtn.addEventListener("click", closeMenu);
+    var overlay = getOverlay();
+    if (overlay && e.target === overlay && overlay.getAttribute("aria-hidden") === "false") {
+      closeMenu();
+    }
+  });
 
-    overlay.addEventListener("click", function (e) {
-      if (e.target === overlay) closeMenu();
-    });
-
-    document.addEventListener("keydown", function (e) {
-      if (e.key === "Escape" && overlay.getAttribute("aria-hidden") === "false") {
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") {
+      var overlay = getOverlay();
+      if (overlay && overlay.getAttribute("aria-hidden") === "false") {
         closeMenu();
       }
-    });
+    }
+  });
 
-    document.querySelectorAll("[data-overlay-link]").forEach(function (el) {
-      el.addEventListener("click", function () {
-        closeMenu();
-      });
-    });
-  })();
+  document.addEventListener("astro:before-swap", function () {
+    closeMenuSilent();
+  });
 </script>
