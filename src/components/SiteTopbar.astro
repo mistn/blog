@@ -4,6 +4,7 @@ import IconMoon from "@/assets/icons/IconMoon.svg";
 import IconSearch from "@/assets/icons/IconSearch.svg";
 import IconSunHigh from "@/assets/icons/IconSunHigh.svg";
 import IconLanguage from "@/assets/icons/IconLanguage.svg";
+import IconRss from "@/assets/icons/IconRss.svg";
 import HomeTabs from "@/components/HomeTabs.astro";
 import LinkButton from "@/components/LinkButton.astro";
 import { SOCIALS } from "@/constants";
@@ -127,6 +128,16 @@ const emailLabel = `${copy.nav.email} ${SITE.title}`;
             </LinkButton>
 
             <a
+              href="/rss.xml"
+              class="focus-outline flex size-10 items-center justify-center rounded-full text-foreground/68 transition hover:text-accent"
+              title="RSS"
+              aria-label="RSS"
+            >
+              <IconRss class="size-5" />
+              <span class="sr-only">RSS</span>
+            </a>
+
+            <a
               href={languageHref}
               data-locale-target={alternateLocale}
               data-astro-reload
@@ -172,6 +183,16 @@ const emailLabel = `${copy.nav.email} ${SITE.title}`;
           <IconSearch class="size-5" />
           <span class="sr-only">{copy.nav.search}</span>
         </LinkButton>
+
+        <a
+          href="/rss.xml"
+          class="focus-outline flex size-10 items-center justify-center rounded-full text-foreground/68 transition hover:text-accent"
+          title="RSS"
+          aria-label="RSS"
+        >
+          <IconRss class="size-5" />
+          <span class="sr-only">RSS</span>
+        </a>
 
         <a
           href={languageHref}

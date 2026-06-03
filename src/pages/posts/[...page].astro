@@ -4,7 +4,6 @@ import { getCollection } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
 import SiteTopbar from "@/components/SiteTopbar.astro";
 import Datetime from "@/components/Datetime.astro";
-import PageSidebar from "@/components/PageSidebar.astro";
 import getSortedPosts from "@/utils/getSortedPosts";
 import { getPath } from "@/utils/getPath";
 import { SITE } from "@/config";
@@ -18,8 +17,6 @@ export const getStaticPaths = (async ({ paginate }) => {
 const { page } = Astro.props;
 const locale = getLocaleFromPath(Astro.url.pathname);
 const copy = ui[locale];
-const posts = await getCollection("blog", ({ data }) => !data.draft);
-const sortedPosts = getSortedPosts(posts);
 const listPosts = page.data;
 const pageNumbers = Array.from(
   { length: page.lastPage },
@@ -38,11 +35,11 @@ function getPageHref(pageNumber: number) {
     id="main-content"
     data-layout="index"
     data-post-memory-scope="list"
-    class="app-layout pb-10 lg:max-w-7xl lg:pb-14"
+    class="app-layout pb-10 lg:pb-14"
   >
     <section class="overflow-hidden">
       <div class="px-1 py-4 sm:px-2 sm:py-5">
-        <div class="grid gap-10 lg:grid-cols-[minmax(0,1.78fr)_260px]">
+        <div>
           <div class="min-w-0">
             <div class="divide-y divide-border/55" data-post-list>
               {
@@ -93,8 +90,6 @@ function getPageHref(pageNumber: number) {
               </nav>
             )}
           </div>
-
-          <PageSidebar posts={sortedPosts} {locale} />
         </div>
       </div>
     </section>
