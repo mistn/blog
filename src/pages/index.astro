@@ -82,7 +82,7 @@ const pageNumbers = Array.from({ length: totalPages }, (_, index) => index + 1);
               }
             </div>
             {totalPages > 1 && (
-              <nav class="mt-6 md:mt-12 flex justify-center items-center gap-4" aria-label="Pagination Navigation">
+              <nav class="mt-6 md:mt-12 flex justify-center items-center gap-6" aria-label="Pagination Navigation">
                 {pageNumbers.map(pageNumber => (
                   <a
                     href={
@@ -92,8 +92,8 @@ const pageNumbers = Array.from({ length: totalPages }, (_, index) => index + 1);
                     }
                     class={
                       pageNumber === 1
-                        ? "px-4 py-1.5 bg-gray-100 text-gray-900 font-bold rounded-full"
-                        : "text-gray-400 hover:text-gray-900 transition-colors"
+                        ? "text-gray-800 dark:text-gray-200 font-semibold text-base"
+                        : "text-gray-400 dark:text-gray-500 hover:text-gray-900 dark:hover:text-gray-100 transition-colors text-base"
                     }
                     aria-current={pageNumber === 1 ? "page" : undefined}
                   >
