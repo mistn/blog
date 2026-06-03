@@ -53,9 +53,9 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
         <!-- Left: Logo + HomeTabs -->
         <div class="flex items-center gap-6 lg:gap-8">
           <div class="min-w-0">
-            <p class="-ml-[5px] m-0 text-[1.85rem] leading-none font-medium tracking-tight">
+            <a href={getHref("/")} class="-ml-[5px] text-[1.85rem] leading-none font-medium tracking-tight no-underline text-foreground hover:text-foreground/80 transition-colors">
               {SITE.author}
-            </p>
+            </a>
           </div>
 
           <div class="hidden lg:block">
@@ -64,7 +64,7 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
         </div>
 
         <!-- Desktop: icon buttons -->
-        <div class="hidden lg:flex items-center gap-1">
+        <div class="hidden lg:flex items-center gap-1 translate-y-[2px]">
           <LinkButton
             href={localizePath("/search", locale)}
             class="focus-outline flex size-10 items-center justify-center rounded-full text-foreground/68 transition hover:text-accent"

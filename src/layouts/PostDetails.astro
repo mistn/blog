@@ -174,7 +174,7 @@ const nextPost =
                 data-pagefind-ignore
                 data-article-enter
                 style="--article-enter-delay: 112ms;"
-                class="mt-16 mb-4 flex justify-between gap-8 text-sm"
+                class="mt-16 mb-4 flex flex-col gap-3 sm:flex-row"
               >
                 {
                   prevPost && (
@@ -183,9 +183,10 @@ const nextPost =
                         getPath(prevPost.id, prevPost.filePath),
                         locale
                       )}
-                      class="text-gray-500 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
+                      class="group flex flex-col rounded-xl border border-gray-200 bg-gray-100/70 p-5 transition-colors hover:border-gray-300 hover:bg-gray-200/70 sm:w-1/2 dark:border-gray-800 dark:bg-gray-900/30 dark:hover:border-gray-700 dark:hover:bg-gray-900/50"
                     >
-                      {copy.actions.previousPost}
+                      <span class="text-xs text-accent/60 dark:text-accent/50">{copy.actions.previousPost}</span>
+                      <span class="mt-0.5 text-sm font-medium text-gray-800 line-clamp-2 group-hover:text-gray-900 dark:text-gray-200 dark:group-hover:text-gray-100">{prevPost.title}</span>
                     </a>
                   )
                 }
@@ -196,9 +197,10 @@ const nextPost =
                         getPath(nextPost.id, nextPost.filePath),
                         locale
                       )}
-                      class="ml-auto text-right text-gray-500 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
+                      class="group flex flex-col rounded-xl border border-gray-200 bg-gray-100/70 p-5 text-left transition-colors hover:border-gray-300 hover:bg-gray-200/70 sm:text-right sm:w-1/2 dark:border-gray-800 dark:bg-gray-900/30 dark:hover:border-gray-700 dark:hover:bg-gray-900/50"
                     >
-                      {copy.actions.nextPost}
+                      <span class="text-xs text-accent/60 dark:text-accent/50">{copy.actions.nextPost}</span>
+                      <span class="mt-0.5 text-sm font-medium text-gray-800 line-clamp-2 group-hover:text-gray-900 dark:text-gray-200 dark:group-hover:text-gray-100">{nextPost.title}</span>
                     </a>
                   )
                 }

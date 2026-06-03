@@ -15,7 +15,6 @@ const applicationFields = [
   { label: "url", value: siteProfile.href },
   { label: "avatar", value: siteProfile.avatar },
   { label: "desc", value: siteProfile.description },
-  { label: "email", value: "hi@miuo.me" },
 ];
 const applicationText = applicationFields
   .map(field => `${field.label}: ${field.value}`)
@@ -37,39 +36,34 @@ const applicationText = applicationFields
 >
   <SiteTopbar />
 
-  <main id="main-content" class="mx-auto w-full max-w-5xl px-4 pb-14 overflow-x-hidden">
+  <main id="main-content" class="mx-auto w-full max-w-4xl px-4 pt-8 pb-10 md:pt-12 md:pb-14 overflow-x-hidden">
     <PageHeader title={copy.pages.friendsTitle} />
     <section class="py-4" data-pagefind-body>
-      <div class="max-w-5xl">
+      <div class="max-w-4xl">
         <section>
           {
             friendLinks.length > 0 ? (
-              <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
+              <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                 {friendLinks.map(friend => (
                   <a
                     href={friend.href}
                     target="_blank"
                     rel="noreferrer"
-                    class="group relative flex min-h-32 items-start gap-4 rounded-2xl bg-muted/40 p-4 transition-all duration-300 hover:bg-background hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)]"
+                    class="group flex flex-col items-center rounded-2xl bg-muted/40 p-5 text-center transition-shadow transition-transform duration-300 hover:-translate-y-0.5 hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)]"
                   >
                     <img
                       src={friend.avatar ?? defaultFriendAvatar}
                       alt={`${friend.name} avatar`}
-                      class="h-12 w-12 flex-none rounded-full object-cover ring-1 ring-border/40"
+                      class="mb-3 h-14 w-14 rounded-full object-cover ring-1 ring-border/40"
                       loading="lazy"
                     />
-                    <div class="flex min-w-0 flex-1 flex-col">
-                      <div class="flex items-start justify-between gap-2">
-                        <h2 class="truncate text-base font-semibold text-foreground">{friend.blog ?? friend.name}</h2>
-                        <span class="flex-none translate-y-0.5 text-foreground/20 transition-all group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:text-foreground/50" aria-hidden="true">↗</span>
-                      </div>
-                      {
-                        friend.blog && friend.blog !== friend.name && (
-                          <p class="mt-0.5 text-xs text-foreground/45">{friend.name}</p>
-                        )
-                      }
-                      <p class="mt-1.5 line-clamp-2 text-sm leading-relaxed text-foreground/55">{friend.description}</p>
-                    </div>
+                    <h2 class="line-clamp-1 text-sm font-semibold leading-snug text-foreground">{friend.blog ?? friend.name}</h2>
+                    {
+                      friend.blog && friend.blog !== friend.name && (
+                        <p class="mt-0.5 text-[0.7rem] leading-tight text-foreground/45">{friend.name}</p>
+                      )
+                    }
+                    <p class="mt-1.5 line-clamp-2 text-xs leading-snug text-foreground/55">{friend.description}</p>
                   </a>
                 ))}
               </div>

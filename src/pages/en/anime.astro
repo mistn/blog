@@ -88,7 +88,7 @@ const updatedLabel = data.updatedAt
 >
   <SiteTopbar />
 
-  <main class="mx-auto max-w-5xl px-4 pb-14" data-pagefind-body>
+  <main class="mx-auto w-full max-w-5xl px-4 pt-8 pb-10 md:pt-12 md:pb-14" data-pagefind-body>
     <PageHeader title={copy.pages.animeTitle}>
       <dl class="flex flex-wrap gap-x-6 gap-y-0.5">
         <div class="flex items-center gap-1.5">
@@ -142,13 +142,13 @@ const updatedLabel = data.updatedAt
           entries.length > 0 ? (
             <div class="anime-view" data-anime-view="all">
               <div class="anime-archive anime-archive--all" data-anime-pane="all">
-                <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 sm:gap-4">
+                <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 sm:gap-4 min-h-[50vh]">
                   {entries.map(entry => (
                     <a
                       href={entry.url}
                       target="_blank"
                       rel="noreferrer"
-                      class="group relative overflow-hidden rounded-xl shadow-sm ring-1 ring-border/40 transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:ring-border/60 aspect-[2/3]"
+                      class="group relative overflow-hidden rounded-xl shadow-sm ring-1 ring-border/40 transition-shadow transition-transform duration-300 hover:-translate-y-1 hover:shadow-md hover:ring-border/60 aspect-[2/3]"
                     >
                       <img
                         src={entry.cover}
@@ -177,13 +177,13 @@ const updatedLabel = data.updatedAt
                       </p>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 sm:gap-4">
+                    <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 sm:gap-4 min-h-[20vh]">
                       {group.entries.map(entry => (
                         <a
                           href={entry.url}
                           target="_blank"
                           rel="noreferrer"
-                          class="group relative overflow-hidden rounded-xl shadow-sm ring-1 ring-border/40 transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:ring-border/60 aspect-[2/3]"
+                          class="group relative overflow-hidden rounded-xl shadow-sm ring-1 ring-border/40 transition-shadow transition-transform duration-300 hover:-translate-y-1 hover:shadow-md hover:ring-border/60 aspect-[2/3]"
                         >
                           <img
                             src={entry.cover}
