@@ -10,9 +10,9 @@ const getHref = (path: string) => localizePath(path, locale);
 const isActive = (path: string) => currentPath === normalizePath(getHref(path));
 
 const tabClass =
-  "home-tab inline-flex items-center border-b border-transparent px-0.5 py-1 text-[0.95rem] font-medium font-[var(--font-ui-serif)] text-foreground/72 transition hover:border-accent/35 hover:text-foreground dark:text-foreground/74";
+  "home-tab inline-flex items-center px-0.5 py-1 text-[0.95rem] font-medium text-foreground/55 transition hover:text-foreground";
 const activeTabClass =
-  "border-accent/60 text-foreground dark:text-foreground";
+  "font-semibold text-foreground";
 ---
 
 <nav
@@ -61,7 +61,7 @@ const activeTabClass =
 </nav>
 
 <script is:inline>
-  const ACTIVE_HOME_TAB_CLASSES = ["border-accent/60", "text-foreground"];
+  const ACTIVE_HOME_TAB_CLASSES = ["font-semibold", "text-foreground"];
 
   function normalizeHomeTabPath(path) {
     if (!path) return "/";

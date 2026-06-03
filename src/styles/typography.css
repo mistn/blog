@@ -163,20 +163,20 @@
     }
 
     .code-block-frame {
-      @apply relative my-6 rounded-md border border-border/65 bg-background/85 shadow-[0_4px_12px_rgba(15,23,42,0.04)];
+      @apply relative my-6 rounded-xl bg-muted/40;
     }
 
     .code-block-frame.is-collapsed {
-      @apply bg-background/90;
+      @apply bg-muted/40;
     }
 
     .code-block-frame::after {
-      @apply pointer-events-none absolute top-10 right-0 bottom-0 z-10 w-10 rounded-ee-md opacity-100 transition-opacity sm:hidden;
+      @apply pointer-events-none absolute top-10 right-0 bottom-0 z-10 w-10 rounded-ee-xl opacity-100 transition-opacity sm:hidden;
       content: "";
       background: linear-gradient(
         90deg,
         transparent,
-        color-mix(in srgb, var(--background) 78%, transparent)
+        color-mix(in srgb, var(--muted) 78%, transparent)
       );
     }
 
@@ -189,19 +189,19 @@
     }
 
     html[data-theme="dark"] .code-block-frame {
-      @apply bg-muted/30 shadow-[0_4px_16px_rgba(0,0,0,0.24)];
+      @apply bg-muted/30;
     }
 
     .code-block-header {
-      @apply sticky top-0 z-20 flex h-10 items-center justify-between gap-3 rounded-t-md border-b border-border/60 bg-background/85 px-3 text-sm text-foreground;
+      @apply sticky top-0 z-20 flex items-center justify-between gap-3 rounded-t-xl px-4 py-2 text-sm text-foreground/45;
     }
 
     .code-block-frame.is-collapsed .code-block-header {
-      @apply rounded-b-md border-b-0;
+      @apply rounded-b-xl;
     }
 
     html[data-theme="dark"] .code-block-header {
-      @apply bg-muted/55;
+      @apply text-foreground/45;
     }
 
     .code-block-meta {
@@ -209,15 +209,15 @@
     }
 
     .code-block-icon {
-      @apply size-4 flex-none text-foreground/72;
+      @apply size-3.5 flex-none text-foreground/45;
     }
 
     .code-meta-primary {
-      @apply truncate text-xs font-medium leading-none text-foreground/86;
+      @apply truncate text-xs font-medium leading-none text-foreground/60;
     }
 
     .code-language-badge {
-      @apply rounded-sm border border-border/80 bg-muted/60 px-1.5 py-0.5 text-[0.68rem] leading-none font-normal text-foreground/70;
+      @apply rounded-sm bg-muted/60 px-1.5 py-0.5 text-[0.68rem] leading-none font-normal text-foreground/50;
     }
 
     .code-block-actions {
@@ -225,11 +225,11 @@
     }
 
     .code-block-action {
-      @apply inline-flex size-8 flex-none items-center justify-center rounded text-foreground/70 transition hover:bg-background/55 hover:text-accent focus-visible:no-underline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-dashed;
+      @apply inline-flex size-7 flex-none items-center justify-center rounded text-foreground/40 transition hover:text-foreground/70 focus-visible:no-underline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-dashed;
     }
 
     .code-block-action svg {
-      @apply size-4;
+      @apply size-3.5;
     }
 
     .collapse-code-icon {
@@ -251,14 +251,14 @@
 
   /* ===== Code Blocks & Syntax Highlighting ===== */
   .astro-code {
-    @apply flex rounded-b-md border-0 bg-transparent px-4 py-3 text-(--shiki-light) outline-border;
+    @apply flex rounded-b-xl bg-transparent px-4 pb-4 pt-2 text-(--shiki-light) outline-border;
     font-family: var(--font-ui-mono);
-    font-size: 0.96em;
+    font-size: 0.94em;
     font-synthesis: none;
     font-variant-ligatures: none;
     font-weight: 400;
     letter-spacing: 0;
-    line-height: 1.75;
+    line-height: 1.65;
     overscroll-behavior-inline: contain;
     scroll-padding-inline: 1rem;
   }
@@ -266,7 +266,7 @@
   @media (max-width: 639px) {
     .astro-code {
       font-size: 0.9em;
-      line-height: 1.72;
+      line-height: 1.65;
       scrollbar-width: thin;
     }
   }
