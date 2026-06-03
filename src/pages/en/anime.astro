@@ -1,4 +1,5 @@
 ---
+import PageHeader from "@/components/PageHeader.astro";
 import BackToTopButton from "@/components/BackToTopButton.astro";
 import SiteTopbar from "@/components/SiteTopbar.astro";
 import Layout from "@/layouts/Layout.astro";
@@ -87,93 +88,77 @@ const updatedLabel = data.updatedAt
 >
   <SiteTopbar />
 
-  <main class="app-layout pb-14 lg:max-w-7xl lg:pb-18" data-pagefind-body>
-    <section class="px-1 pt-5 sm:px-2 sm:pt-7">
-      <div>
-        <header class="anime-header mb-10 max-w-4xl sm:mb-12">
-          <p
-            class="text-[0.76rem] font-medium tracking-[0.2em] text-foreground/36 uppercase"
-          >
-            {copy.pages.animeEyebrow}
-          </p>
-          <h1
-            class="mt-2 text-[2.3rem] leading-none font-medium tracking-tight text-foreground sm:text-[2.8rem]"
-          >
-            {copy.pages.animeTitle}
-          </h1>
-          <dl class="anime-meta">
-            <div>
-              <dt>Total</dt>
-              <dd>{total} {copy.anime.countUnit}</dd>
-            </div>
-            <div>
-              <dt>{copy.anime.dataFrom}</dt>
-              <dd>
-                <a
-                  href={sourceHref}
-                  target="_blank"
-                  rel="noreferrer"
-                  class="text-accent underline decoration-accent/35 underline-offset-4"
-                >
-                  AniList{data.username ? ` / ${data.username}` : ""}
-                </a>
-              </dd>
-            </div>
-            <div>
-              <dt>List</dt>
-              <dd>normal / completed</dd>
-            </div>
-            {
-              updatedLabel && (
-                <div>
-                  <dt>{copy.anime.updatedAt}</dt>
-                  <dd>{updatedLabel}</dd>
-                </div>
-              )
-            }
-          </dl>
-          <div class="anime-view-toggle" role="tablist" aria-label={copy.anime.viewMode}>
-            <button
-              type="button"
-              class="is-active"
-              data-anime-toggle="all"
-              aria-pressed="true"
+  <main class="mx-auto max-w-4xl px-4 pb-14" data-pagefind-body>
+    <PageHeader title={copy.pages.animeTitle}>
+      <dl class="flex flex-wrap gap-x-6 gap-y-0.5">
+        <div class="flex items-center gap-1.5">
+          <dt class="text-foreground/45">Total</dt>
+          <dd>{total} {copy.anime.countUnit}</dd>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <dt class="text-foreground/45">{copy.anime.dataFrom}</dt>
+          <dd>
+            <a
+              href={sourceHref}
+              target="_blank"
+              rel="noreferrer"
+              class="text-accent underline decoration-accent/35 underline-offset-4"
             >
-              {copy.anime.viewAll}
-            </button>
-            <button
-              type="button"
-              data-anime-toggle="year"
-              aria-pressed="false"
-            >
-              {copy.anime.viewByYear}
-            </button>
-          </div>
-        </header>
-
+              AniList{data.username ? ` / ${data.username}` : ""}
+            </a>
+          </dd>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <dt class="text-foreground/45">List</dt>
+          <dd>normal / completed</dd>
+        </div>
         {
+          updatedLabel && (
+            <div class="flex items-center gap-1.5">
+              <dt class="text-foreground/45">{copy.anime.updatedAt}</dt>
+              <dd>{updatedLabel}</dd>
+            </div>
+          )
+        }
+      </dl>
+    </PageHeader>
+
+    <div class="mb-12 inline-flex rounded-full bg-muted/60 p-1" role="tablist" aria-label={copy.anime.viewMode}>
+      <button type="button" data-anime-toggle="all" aria-pressed="true"
+        class="rounded-full px-5 py-1.5 text-sm font-medium transition-all
+        aria-pressed:bg-background aria-pressed:text-foreground aria-pressed:shadow-sm
+        text-foreground/50 hover:text-foreground/70">
+        {copy.anime.viewAll}
+      </button>
+      <button type="button" data-anime-toggle="year" aria-pressed="false"
+        class="rounded-full px-5 py-1.5 text-sm font-medium transition-all
+        aria-pressed:bg-background aria-pressed:text-foreground aria-pressed:shadow-sm
+        text-foreground/50 hover:text-foreground/70">
+        {copy.anime.viewByYear}
+      </button>
+    </div>
+
+    {
           entries.length > 0 ? (
             <div class="anime-view" data-anime-view="all">
               <div class="anime-archive anime-archive--all" data-anime-pane="all">
-                <div class="anime-list">
+                <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 sm:gap-4">
                   {entries.map(entry => (
                     <a
                       href={entry.url}
                       target="_blank"
                       rel="noreferrer"
-                      class="anime-card group"
+                      class="group relative overflow-hidden rounded-xl shadow-sm ring-1 ring-border/40 transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:ring-border/60 aspect-[2/3]"
                     >
-                      <div class="anime-card__cover">
-                        <img
-                          src={entry.cover}
-                          alt={`${entry.title} cover`}
-                          loading="lazy"
-                        />
-                      </div>
-
-                      <div class="anime-card__body">
-                        <h3>{entry.title}</h3>
-                        <p class="anime-card__meta">
+                      <img
+                        src={entry.cover}
+                        alt={`${entry.title} cover`}
+                        loading="lazy"
+                        class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                      <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/80 via-black/40 to-transparent px-2.5 pt-6 pb-2.5">
+                        <h3 class="line-clamp-2 text-[0.82rem] font-semibold leading-snug text-white sm:text-[0.88rem]">{entry.title}</h3>
+                        <p class="mt-1 text-[0.72rem] text-white/60 sm:text-[0.75rem]">
                           {entry.year ? entry.year : copy.anime.unknownYear}
                         </p>
                       </div>
@@ -192,25 +177,23 @@ const updatedLabel = data.updatedAt
                       </p>
                     </div>
 
-                    <div class="anime-list">
+                    <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 sm:gap-4">
                       {group.entries.map(entry => (
                         <a
                           href={entry.url}
                           target="_blank"
                           rel="noreferrer"
-                          class="anime-card group"
+                          class="group relative overflow-hidden rounded-xl shadow-sm ring-1 ring-border/40 transition-all duration-300 hover:-translate-y-1 hover:shadow-md hover:ring-border/60 aspect-[2/3]"
                         >
-                          <div class="anime-card__cover">
-                            <img
-                              src={entry.cover}
-                              alt={`${entry.title} cover`}
-                              loading="lazy"
-                            />
-                          </div>
-
-                          <div class="anime-card__body">
-                            <h3>{entry.title}</h3>
-                            <p class="anime-card__meta">
+                          <img
+                            src={entry.cover}
+                            alt={`${entry.title} cover`}
+                            loading="lazy"
+                            class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          />
+                          <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/80 via-black/40 to-transparent px-2.5 pt-6 pb-2.5">
+                            <h3 class="line-clamp-2 text-[0.82rem] font-semibold leading-snug text-white sm:text-[0.88rem]">{entry.title}</h3>
+                            <p class="mt-1 text-[0.72rem] text-white/60 sm:text-[0.75rem]">
                               {entry.year ? entry.year : copy.anime.unknownYear}
                             </p>
                           </div>
@@ -232,8 +215,6 @@ const updatedLabel = data.updatedAt
             </div>
           )
         }
-      </div>
-    </section>
   </main>
 
   <BackToTopButton {locale} />
@@ -254,7 +235,6 @@ const updatedLabel = data.updatedAt
       viewRoot.dataset.animeView = value;
       buttons.forEach(button => {
         const isActive = button.dataset.animeToggle === value;
-        button.classList.toggle("is-active", isActive);
         button.setAttribute("aria-pressed", String(isActive));
       });
     };
@@ -295,33 +275,6 @@ const updatedLabel = data.updatedAt
 
   .anime-meta dd {
     margin: 0;
-  }
-
-  .anime-view-toggle {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-top: 1.2rem;
-  }
-
-  .anime-view-toggle button {
-    border: 1px solid color-mix(in srgb, var(--border) 72%, transparent);
-    border-radius: 0.45rem;
-    background: color-mix(in srgb, var(--background) 92%, transparent);
-    padding: 0.35rem 0.95rem;
-    color: color-mix(in srgb, var(--foreground) 62%, transparent);
-    font-size: 0.84rem;
-    font-weight: 500;
-    transition:
-      border-color 160ms ease,
-      color 160ms ease,
-      background-color 160ms ease;
-  }
-
-  .anime-view-toggle button.is-active {
-    border-color: color-mix(in srgb, var(--accent) 55%, transparent);
-    background: color-mix(in srgb, var(--accent) 12%, transparent);
-    color: var(--accent);
   }
 
   .anime-view {
@@ -365,73 +318,6 @@ const updatedLabel = data.updatedAt
   .anime-year-heading p {
     color: color-mix(in srgb, var(--foreground) 44%, transparent);
     font-size: 0.88rem;
-  }
-
-  .anime-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(18.5rem, 1fr));
-    gap: 1rem;
-  }
-
-  .anime-card {
-    display: flex;
-    min-width: 0;
-    gap: 0.9rem;
-    border: 1px solid color-mix(in srgb, var(--border) 78%, transparent);
-    border-radius: 0.8rem;
-    background: color-mix(in srgb, var(--background) 96%, transparent);
-    padding: 0.75rem;
-    color: var(--foreground);
-    transition:
-      border-color 160ms ease,
-      background-color 160ms ease,
-      box-shadow 160ms ease;
-  }
-
-  .anime-card:hover {
-    border-color: color-mix(in srgb, var(--accent) 24%, var(--border));
-    box-shadow: 0 10px 18px rgba(15, 23, 42, 0.08);
-  }
-
-  .anime-card__cover {
-    width: 5.2rem;
-    flex: none;
-    overflow: hidden;
-    border: 1px solid color-mix(in srgb, var(--border) 62%, transparent);
-    border-radius: 0.6rem;
-    background: var(--muted);
-    aspect-ratio: 2 / 3;
-  }
-
-  .anime-card__cover img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .anime-card__body {
-    display: flex;
-    min-width: 0;
-    flex: 1;
-    flex-direction: column;
-    gap: 0.35rem;
-    padding-top: 0.1rem;
-  }
-
-  .anime-card__body h3 {
-    display: -webkit-box;
-    overflow: hidden;
-    -webkit-box-orient: vertical;
-    color: color-mix(in srgb, var(--foreground) 82%, transparent);
-    font-size: 0.98rem;
-    font-weight: 600;
-    line-height: 1.5;
-    -webkit-line-clamp: 2;
-  }
-
-  .anime-card__meta {
-    color: color-mix(in srgb, var(--foreground) 48%, transparent);
-    font-size: 0.82rem;
   }
 
 
@@ -489,33 +375,6 @@ const updatedLabel = data.updatedAt
 
     .anime-year-heading p {
       font-size: 0.8rem;
-    }
-
-    .anime-list {
-      grid-template-columns: 1fr;
-      gap: 0.85rem;
-    }
-
-    .anime-card {
-      padding: 0.7rem;
-    }
-
-    .anime-card__cover {
-      width: 4.7rem;
-    }
-
-    .anime-card__body h3 {
-      font-size: 0.92rem;
-    }
-  }
-
-  @media (max-width: 374px) {
-    .anime-card__cover {
-      width: 4.4rem;
-    }
-
-    .anime-card__body h3 {
-      font-size: 0.88rem;
     }
   }
 </style>

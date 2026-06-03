@@ -1,6 +1,7 @@
 ---
 import type { MarkdownLayoutProps } from "astro";
 import SiteTopbar from "@/components/SiteTopbar.astro";
+import PageHeader from "@/components/PageHeader.astro";
 import Layout from "./Layout.astro";
 import { SITE } from "@/config";
 
@@ -11,33 +12,12 @@ const { frontmatter } = Astro.props;
 
 <Layout title={`${frontmatter.title} | ${SITE.title}`}>
   <SiteTopbar />
-  <div>
-    <main id="main-content" class="app-layout pb-14 lg:max-w-5xl">
-      <section
-        id="about"
-        class="app-prose px-1 py-4 sm:px-2 sm:py-5 prose-img:border-0"
-      >
-        <header class="not-prose max-w-4xl mb-10">
-          {
-            frontmatter.headingEyebrow && (
-              <p class="text-[0.76rem] font-medium tracking-[0.2em] text-foreground/36 uppercase">
-                {frontmatter.headingEyebrow}
-              </p>
-            )
-          }
-          <h1
-            class:list={[
-              "text-[2.2rem] leading-[1.12] font-medium tracking-tight sm:text-[2.6rem]",
-              frontmatter.headingEyebrow && "mt-2",
-            ]}
-          >
-            {frontmatter.title}
-          </h1>
-        </header>
+  <main id="main-content" class="mx-auto max-w-4xl px-4 pb-14">
+    <PageHeader title={frontmatter.title} />
+    <section id="about" class="app-prose prose-img:border-0">
         <div class="*:first:mt-0">
           <slot />
         </div>
       </section>
     </main>
-  </div>
 </Layout>

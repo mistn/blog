@@ -3,14 +3,12 @@ import type { HTMLAttributes } from "astro/types";
 import { SITE } from "@/config";
 
 const currentYear = new Date().getFullYear();
-const displayYear =
-  currentYear > SITE.startYear
-    ? `${SITE.startYear}-${currentYear}`
-    : `${SITE.startYear}`;
 
 type Props = HTMLAttributes<"footer">;
 
 const { class: className, ...attrs } = Astro.props;
+
+const displayYear = currentYear;
 ---
 
 <footer
