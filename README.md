@@ -1,6 +1,6 @@
 # miuo's blog
 
-一个基于 [AstroPaper](https://github.com/satnaing/astro-paper) 深度定制的个人博客，采用 Clean Fit 极简设计风格。
+一个基于 [AstroPaper](https://github.com/satnaing/astro-paper) 深度定制的个人博客。
 
 <https://blog.miuo.me/>
 
@@ -122,6 +122,21 @@ docker compose up -d
 docker build -t miuo-blog .
 docker run -p 4321:80 miuo-blog
 ```
+
+### Cloudflare Pages
+
+1. 将项目推送到 GitHub
+2. 在 [Cloudflare Pages](https://pages.cloudflare.com/) 创建新项目，连接仓库
+3. 构建设置：
+
+| 配置项 | 值 |
+|--------|-----|
+| 框架预设 | Astro |
+| 构建命令 | `pnpm build` |
+| 构建输出目录 | `dist` |
+| Node.js 版本 | 20 或更高 |
+
+4. 部署后，Pages 会自动为每次 `main` 分支推送重新构建
 
 ## 可用命令
 
