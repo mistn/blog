@@ -4,24 +4,21 @@ title: "关于"
 headingEyebrow: "About"
 ---
 
-这里是 miuo 的个人小站。
+这里是 miuo 的数字自留地。
 
-主要记录一些值得留下来的东西：文章、笔记、配置过程、踩坑记录，也包括偶尔的测试和实验内容。
+主要用于沉淀技术笔记、折腾记录以及个人工作流配置。内容多为备忘性质，如果某篇文章刚好也帮到了你，那再好不过。
 
-内容不一定完整，但尽量写得清楚、可复查，方便以后自己翻阅。
+## 实验室
 
-## 关于本站
+运行在云端的一些自托管服务。
 
-- 记录折腾过程和实际使用经验
-- 存放反复用到的笔记和参考
-- 整理输入法、工具、部署和效率相关内容
-
-如果某篇内容刚好也对你有帮助，那就更好了。
+* [听歌记录](https://spotify.miuo.me/?gname=All&token=19b6fb61-e46f-483c-8514-2aab0f51b579) — 最近在听什么
+* [随机壁纸](https://6st.cc.cd) — 自用壁纸 API
+* [图床](https://api.6st.cc.cd/) — 个人图床
+* [临时邮箱](https://mail.6st.cc.cd/) — 临时收件箱
+* [网站状态监控](https://status.miuo.me/status/s) — 看看服务挂没挂
+* [服务器探针](https://ss.miuo.me) — 几台小鸡的运行状态
 
 ## 联系方式
 
-- 邮箱：[hi@miuo.me](mailto:hi@miuo.me)
-
-## 站点源码
-
-本站代码开源在 [GitHub](https://github.com/mistn/blog11)，基于 AstroPaper 主题深度定制。
+* Email: hi@miuo.me
