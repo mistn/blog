@@ -22,3 +22,4 @@ headingEyebrow: "About"
 ## 联系方式
 
 * Email: hi@miuo.me
+* X: [@miuo55](https://x.com/miuo55)
