@@ -57,4 +57,10 @@ export const friendLinks: FriendLink[] = [
     avatar: "https://wutongyu.site/cat-icon.svg",
     description: "全栈&Agent 开发和我的随想",
   },
+  {
+    name: "灵的梦境",
+    href: "https://lemonadorable.github.io/",
+    avatar: "https://lemonadorable.github.io/favicon/favicon.gif",
+    description: "愿美梦成真",
+  },
 ];
