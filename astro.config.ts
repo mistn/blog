@@ -12,6 +12,7 @@ import {
 } from "@shikijs/transformers";
 import { transformerFileName } from "./src/utils/transformers/fileName";
 import { rehypeWrapTables } from "./src/utils/rehypeWrapTables.js";
+import { remarkAlert } from "remark-github-blockquote-alert";
 import { SITE } from "./src/config";
 
 // https://astro.build/config
@@ -28,6 +29,7 @@ export default defineConfig({
       remarkMath,
       remarkToc,
       [remarkCollapse, { test: "Table of contents" }],
+      remarkAlert,
     ],
     rehypePlugins: [rehypeKatex, rehypeWrapTables],
     shikiConfig: {

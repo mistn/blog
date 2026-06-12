@@ -204,6 +204,43 @@
       @apply text-foreground/45;
     }
 
+    .markdown-alert {
+      border: none !important;
+      border-left: none !important;
+      border-radius: 8px !important;
+      padding: 16px 20px !important;
+      margin: 1.5em 0;
+    }
+
+    .markdown-alert-title {
+      display: flex !important;
+      align-items: center !important;
+      gap: 8px;
+      font-weight: 600 !important;
+      font-size: 1.05em !important;
+      margin-top: 0 !important;
+      margin-bottom: 8px !important;
+    }
+
+    .markdown-alert-tip {
+      background-color: rgba(14, 187, 162, 0.08) !important;
+    }
+
+    .markdown-alert-tip .markdown-alert-title {
+      color: #0ebba2 !important;
+    }
+
+    .markdown-alert-tip .markdown-alert-title svg {
+      color: #0ebba2 !important;
+      fill: currentColor;
+    }
+
+    .markdown-alert > *:last-child {
+      margin-bottom: 0 !important;
+      color: var(--foreground);
+      line-height: 1.6;
+    }
+
     .code-block-meta {
       @apply flex min-w-0 items-center gap-2;
     }
