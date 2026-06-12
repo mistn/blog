@@ -96,7 +96,7 @@ const nextPost =
   >
     <section>
       <div class="px-1 py-4 sm:px-2 sm:py-5">
-        <div class="mx-auto max-w-4xl">
+        <div class="mx-auto max-w-5xl">
           <div>
             <BackButton inline {locale} />
 
@@ -105,7 +105,7 @@ const nextPost =
                 data-article-enter
                 style="--article-enter-delay: 0ms;"
                 data-article-enter-type="title"
-                class="max-w-4xl text-3xl leading-tight font-semibold tracking-tight md:text-4xl"
+                class="max-w-5xl text-3xl leading-tight font-semibold tracking-tight md:text-4xl"
               >
                 {title}
               </h1>
@@ -142,7 +142,7 @@ const nextPost =
                 data-article-enter
                 style="--article-enter-delay: 54ms;"
                 data-article-enter-type="content"
-                class="app-prose mt-10 w-full max-w-4xl mx-auto"
+                class="app-prose mt-10 w-full max-w-5xl mx-auto"
               >
                 <Content />
               </div>
@@ -220,9 +220,9 @@ const nextPost =
   define:vars={{
     copyCodeLabel: copy.actions.copy,
     copiedCodeLabel: copy.actions.copied,
-    collapseCodeLabel: locale === "en" ? "Collapse code" : "折叠代码",
-    expandCodeLabel: locale === "en" ? "Expand code" : "展开代码",
-    openImageLabel: locale === "en" ? "Open image preview" : "打开图片预览",
+    collapseCodeLabel: locale === "en" ? "Collapse code" : "鎶樺彔浠ｇ爜",
+    expandCodeLabel: locale === "en" ? "Expand code" : "灞曞紑浠ｇ爜",
+    openImageLabel: locale === "en" ? "Open image preview" : "鎵撳紑鍥剧墖棰勮",
   }}
 >
   function runArticleEnterAnimation() {
