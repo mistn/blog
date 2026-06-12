@@ -259,6 +259,7 @@ const nextPost =
       link.className =
         "heading-link ms-2 no-underline opacity-75 md:opacity-0 md:group-hover:opacity-100 md:focus:opacity-100";
       link.href = "#" + heading.id;
+      link.setAttribute("aria-label", `链接到：${heading.textContent}`);
 
       const span = document.createElement("span");
       span.ariaHidden = "true";
