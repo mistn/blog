@@ -41,7 +41,7 @@ const pageNumbers = Array.from({ length: totalPages }, (_, index) => index + 1);
                     >
                       {post.data.title}
                     </a>
-                    <div class="mt-2.5 md:mt-3.5 flex flex-wrap items-center gap-2.5 text-xs text-foreground/52 [&_svg]:scale-75 [&_svg]:opacity-70">
+                    <div class="mt-2.5 md:mt-3.5 flex flex-wrap items-center gap-2.5 text-xs text-foreground/60 [&_svg]:scale-75 [&_svg]:opacity-70">
                       <Datetime {...post.data} {locale} class="" />
                       {(() => { const s = getReadingStats(post.body || ""); return (<>
                         <span class="inline-flex items-center gap-1">
