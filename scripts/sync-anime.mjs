@@ -202,9 +202,17 @@ async function main() {
     return a.title.localeCompare(b.title, "ja");
   });
 
+  const cached = readCachedOutput();
+
+  const isSame =
+    cached &&
+    Array.isArray(cached.items) &&
+    cached.items.length === dedupedItems.length &&
+    cached.items.every((item, i) => getEntryKey(item) === getEntryKey(dedupedItems[i]));
+
   const output = {
     username: collection?.user?.name ?? DEFAULT_ANILIST_USER_NAME,
-    updatedAt: new Date().toISOString(),
+    updatedAt: isSame ? cached.updatedAt : new Date().toISOString(),
     items: dedupedItems,
   };
 
