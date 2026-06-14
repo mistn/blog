@@ -14,6 +14,8 @@ import { slugifyStr } from "@/utils/slugify";
 import { getReadingStats } from "@/utils/readingTime";
 import { SITE } from "@/config";
 import { getLocaleFromPath, localizePath, ui, type Locale } from "@/i18n";
+import { transformTabs } from "@/utils/tabsPreprocessor";
+import { marked } from "marked";
 
 type Props = {
   post: CollectionEntry<"blog">;
@@ -41,11 +43,25 @@ const {
   hideEditPost,
 } = post.data;
 
-const { Content, headings } = await render(post);
+const rawBody = post.body || "";
+const hasTabs = rawBody.includes("tab-item") && rawBody.includes("::: tab");
 
-const readingStats = getReadingStats(post.body || "");
+let Content;
+let headings: { depth: number; slug: string; text: string }[] = [];
+let tabHtml = "";
 
-const hasMath = post.body?.includes("$") || false;
+if (hasTabs) {
+  const modBody = transformTabs(rawBody);
+  tabHtml = marked.parse(modBody, { async: false }) as string;
+} else {
+  const rendered = await render(post);
+  Content = rendered.Content;
+  headings = rendered.headings;
+}
+
+const readingStats = getReadingStats(rawBody);
+
+const hasMath = rawBody.includes("$") || false;
 
 let ogImageUrl: string | undefined;
 
@@ -157,7 +173,11 @@ const nextPost =
                 data-article-enter-type="content"
                 class="app-prose mt-10 w-full max-w-5xl mx-auto"
               >
-                <Content />
+                {hasTabs ? (
+                  <div set:html={tabHtml} />
+                ) : (
+                  Content && <Content />
+                )}
               </div>
 
               <div
@@ -226,6 +246,61 @@ const nextPost =
   <ArticleImageLightbox {locale} />
   <TableOfContents slot="floating" {headings} {locale} />
 </Layout>
+
+{hasTabs && (
+  <script is:inline data-astro-rerun>
+    (function () {
+      const style = document.getElementById("tabs-inline-style");
+      if (!style) {
+        const s = document.createElement("style");
+        s.id = "tabs-inline-style";
+        s.textContent = 'my-tabs{display:block;margin:1.5em 0;border:1px solid var(--border);border-radius:10px;overflow:hidden}my-tabs .tabs-nav{display:flex;flex-wrap:wrap;border-bottom:1px solid var(--border);background:var(--muted)}my-tabs .tabs-label{cursor:pointer;padding:.6em 1.05em;font-size:.92rem;font-weight:500;line-height:1.4;color:color-mix(in srgb,var(--foreground) 60%,transparent);background:none;border:none;outline:none;font-family:inherit;transition:color .15s,background-color .15s}my-tabs .tabs-label:hover{color:var(--foreground);background:color-mix(in srgb,var(--background) 50%,transparent)}my-tabs .tabs-label.active{color:var(--foreground);background:var(--background);box-shadow:inset 0 -2px 0 var(--accent)}my-tab{display:none;padding:1em 1.15em}my-tab.active{display:block}my-tab>:first-child{margin-top:0}my-tab>:last-child{margin-bottom:0}';
+        document.head.appendChild(s);
+      }
+
+      if (customElements.get("my-tabs")) {
+        document.querySelectorAll("my-tabs").forEach(el => {
+          const nav = el.querySelector(":scope > .tabs-nav");
+          if (nav) nav.remove();
+        });
+      } else {
+        class MyTabs extends HTMLElement {
+          connectedCallback() {
+            const old = this.querySelector(":scope > .tabs-nav");
+            if (old) old.remove();
+            const items = Array.from(this.querySelectorAll(":scope > my-tab"));
+            const nav = document.createElement("div");
+            nav.className = "tabs-nav";
+            items.forEach((item, i) => {
+              const label = item.getAttribute("title") || `Tab ${i + 1}`;
+              const btn = document.createElement("button");
+              btn.className = "tabs-label";
+              btn.textContent = label;
+              btn.addEventListener("click", () => {
+                const it = this.querySelectorAll(":scope > my-tab");
+                const lb = this.querySelectorAll(":scope > .tabs-nav > .tabs-label");
+                it.forEach((el, j) => el.classList.toggle("active", j === i));
+                lb.forEach((el, j) => el.classList.toggle("active", j === i));
+              });
+              if (i === 0) btn.classList.add("active");
+              nav.appendChild(btn);
+            });
+            this.prepend(nav);
+            if (items.length > 0) items[0].classList.add("active");
+          }
+        }
+        customElements.define("my-tabs", MyTabs);
+        customElements.define("my-tab", class extends HTMLElement {});
+      }
+
+      document.querySelectorAll("my-tabs").forEach(el => {
+        if (!el.querySelector(":scope > .tabs-nav")) {
+          el.connectedCallback?.();
+        }
+      });
+    })();
+  </script>
+)}
 
 <script
   is:inline

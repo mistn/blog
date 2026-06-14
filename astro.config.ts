@@ -15,6 +15,8 @@ import { rehypeWrapTables } from "./src/utils/rehypeWrapTables.js";
 import { rehypeLazyImages } from "./src/utils/rehypeLazyImages.js";
 import { remarkAlert } from "remark-github-blockquote-alert";
 import { remarkReadingTime } from "./src/utils/remarkReadingTime";
+import { remarkTabsPlugin } from "./src/utils/remarkTabsPlugin.js";
+import remarkDirective from "remark-directive";
 import { SITE } from "./src/config";
 
 // https://astro.build/config
@@ -29,6 +31,8 @@ export default defineConfig({
     syntaxHighlight: "shiki",
     remarkPlugins: [
       remarkMath,
+      remarkDirective,
+      remarkTabsPlugin,
       remarkToc,
       [remarkCollapse, { test: "Table of contents" }],
       remarkAlert,
