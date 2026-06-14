@@ -1,6 +1,6 @@
 {
   "username": "miuol",
-  "updatedAt": "2026-06-07T19:00:45.636Z",
+  "updatedAt": "2026-06-14T19:02:30.867Z",
   "items": [
     {
       "title": "超かぐや姫！",
@@ -13,6 +13,12 @@
       "cover": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx185660-uB8RUMBGovGr.jpg",
       "year": 2025,
       "url": "https://anilist.co/anime/185660"
+    },
+    {
+      "title": "チェンソーマン レゼ篇",
+      "cover": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx171627-ZN9D7P46yHnw.png",
+      "year": 2025,
+      "url": "https://anilist.co/anime/171627"
     },
     {
       "title": "俺だけレベルアップな件 Season 2 -Arise from the Shadow-",
@@ -541,6 +547,18 @@
       "cover": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/b1506-EHhN6loLBaau.jpg",
       "year": 2006,
       "url": "https://anilist.co/anime/1506"
+    },
+    {
+      "title": "エルフェンリート 通り雨にて 或いは、少女はいかにしてその心情に至ったか?（REGENSCHAUER）",
+      "cover": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/b376-BWSoURbn8HZR.jpg",
+      "year": 2005,
+      "url": "https://anilist.co/anime/376"
+    },
+    {
+      "title": "エルフェンリート",
+      "cover": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx226-MibyRKhIrnTe.png",
+      "year": 2004,
+      "url": "https://anilist.co/anime/226"
     },
     {
       "title": "ほしのこえ",
