@@ -14,7 +14,6 @@ import { transformerFileName } from "./src/utils/transformers/fileName";
 import { rehypeWrapTables } from "./src/utils/rehypeWrapTables.js";
 import { rehypeLazyImages } from "./src/utils/rehypeLazyImages.js";
 import { remarkAlert } from "remark-github-blockquote-alert";
-import { remarkReadingTime } from "./src/utils/remarkReadingTime";
 import { remarkTabsPlugin } from "./src/utils/remarkTabsPlugin.js";
 import remarkDirective from "remark-directive";
 import { SITE } from "./src/config";
@@ -36,7 +35,6 @@ export default defineConfig({
       remarkToc,
       [remarkCollapse, { test: "Table of contents" }],
       remarkAlert,
-      remarkReadingTime,
     ],
     rehypePlugins: [rehypeKatex, rehypeWrapTables, rehypeLazyImages],
     shikiConfig: {
