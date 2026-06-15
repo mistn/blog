@@ -116,7 +116,7 @@ curl -sSL https://resource.fit2cloud.com/1panel/package/quick_start.sh -o quick_
 ### 3.8 面板域名提醒
 
 > [!tip]
-> 面板绑定域名记得加 Termius 里安装面板出现的安全入口后缀
+> 面板绑定域名时，URL 末尾记得加上安装 1Panel 时输出的安全入口后缀（在 Termius 安装日志里可以找到）
 
 ## 4. 服务器安全
 
