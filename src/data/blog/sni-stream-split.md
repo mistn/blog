@@ -18,9 +18,7 @@ description: OpenResty 443 端口冲突解决与 SNI 分流配置记录。
 >
 > 报错：网站访问出现 Cloudflare 525 Error (SSL handshake failed)，OpenResty 容器不断崩溃，陷入 `is restarting` 死循环。面板也随之失联。
 
-## 解决
-
-### 修复 Docker 网络层转发
+## 修复 Docker 网络层转发
 
 OpenResty 运行在容器内，代理流量直接转发至 `127.0.0.1` 无法触达宿主机的 3x-ui。
 
@@ -30,7 +28,7 @@ OpenResty 运行在容器内，代理流量直接转发至 `127.0.0.1` 无法触
 docker network inspect 1panel-network | grep Gateway
 ```
 
-### 完善 Stream 分流配置
+## 完善 Stream 分流配置
 
 修改 `/usr/local/openresty/nginx/conf/nginx.conf`，将前端 443 流量分发至后端 4443 (建站) 和宿主机 8443 (代理)：
 
@@ -55,7 +53,7 @@ stream {
 }
 ```
 
-### 解决 Nginx 443 端口冲突
+## 解决 Nginx 443 端口冲突
 
 崩溃原因：Nginx 的 `stream` 监听了 443，但 1Panel 生成的默认兜底站点（`00.default.conf`）以及新建站点的 `http` 模块同样默认监听了 443，导致抢占死锁：`bind() to 0.0.0.0:443 failed`。
 
@@ -74,7 +72,7 @@ docker exec -it <1Panel-openresty容器名> nginx -t
 docker restart <1Panel-openresty容器名>
 ```
 
-### 获取真实访客 IP
+## 获取真实访客 IP
 
 经过 stream 转发后后端收到全是 `127.0.0.1`。在网站 Nginx 配置的 http 块加入 Cloudflare 真实 IP 规则：
 
