@@ -15,7 +15,7 @@ export const SITE = {
   editPost: {
     enabled: false,
     text: "编辑页面",
-    url: "https://github.com/mistn/blog11/edit/main/",
+    url: "https://github.com/mistn/blog/edit/main/",
   },
   dynamicOgImage: true,
   dir: "ltr", // "rtl" | "auto"

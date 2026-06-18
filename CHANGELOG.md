@@ -10,4 +10,4 @@
 - 自定义 OG 图片生成
 - 中文 UI 定制与配置
 
-详细改动见 [commit history](https://github.com/mistn/blog11).
+详细改动见 [commit history](https://github.com/mistn/blog).
