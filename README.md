@@ -12,10 +12,6 @@
 
 # miuo's blog
 
-<https://blog.miuo.me/>
-
-A personal blog built on [AstroPaper](https://github.com/satnaing/astro-paper) with heavy customizations.
-
 ## Features
 
 - **Bilingual** — English and Chinese content via `/en/` path prefix, UI strings managed in `src/i18n.ts`

@@ -12,8 +12,6 @@
 
 # miuo's blog
 
-<https://blog.miuo.me/>
-
 ## 功能
 
 - **中英双语** — 通过 `/en/` 路径前缀自动切换，UI 文案统一在 `src/i18n.ts` 管理
