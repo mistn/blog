@@ -57,7 +57,7 @@ stream {
 
 stream 和 http 模块都在同一个容器里，都想去抢 443 端口，内核直接报 Address already in use。Nginx 一挂，1Panel 的守护机制就拼命重启容器，结果就是死循环，面板也连不上。
 
-宿主机修改内鬼默认配置（将 443 改为 4443）：
+宿主机修改默认配置（将 443 改为 4443）：
 
 ```bash
 sed -i 's/listen 443 ssl http2;/listen 4443 ssl http2;/g' /opt/1panel/apps/openresty/openresty/conf/conf.d/00.default.conf
