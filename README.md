@@ -3,9 +3,9 @@
 </p>
 
 <p align="center">
-  <a href="https://astro.build/"><img src="https://img.shields.io/badge/Astro-FF5D01?style=flat-square&logo=astro&logoColor=fff" alt="Astro"></a>
-  <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=fff" alt="TypeScript"></a>
-  <a href="https://tailwindcss.com/"><img src="https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=flat-square&logo=tailwindcss&logoColor=fff" alt="Tailwind CSS"></a>
+  <a href="https://astro.build/"><img src="https://img.shields.io/badge/Tech-Astro-FF5D01?style=flat-square&logo=astro&logoColor=fff" alt="Astro"></a>
+  <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/Lang-TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=fff" alt="TypeScript"></a>
+  <a href="https://tailwindcss.com/"><img src="https://img.shields.io/badge/CSS-Tailwind_CSS-06B6D4?style=flat-square&logo=tailwindcss&logoColor=fff" alt="Tailwind CSS"></a>
 </p>
 
 # miuo's blog
