@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="./README.md">English</a>
+  <a href="./README.md">English</a> | 简体中文
 </p>
 
 <p align="center">
@@ -13,8 +13,6 @@
 # miuo's blog
 
 <https://blog.miuo.me/>
-
-基于 [AstroPaper](https://github.com/satnaing/astro-paper) 深度定制的个人博客。
 
 ## 功能
 
