@@ -55,7 +55,7 @@ stream {
 
 ## 解决 Nginx 443 端口冲突
 
-崩溃原因：Nginx 的 `stream` 监听了 443，但 1Panel 生成的默认兜底站点（`00.default.conf`）以及新建站点的 `http` 模块同样默认监听了 443，导致抢占死锁：`bind() to 0.0.0.0:443 failed`。
+stream 和 http 模块都在同一个容器里，都想去抢 443 端口，内核直接报 Address already in use。Nginx 一挂，1Panel 的守护机制就拼命重启容器，结果就是死循环，面板也连不上。
 
 宿主机修改内鬼默认配置（将 443 改为 4443）：
 
