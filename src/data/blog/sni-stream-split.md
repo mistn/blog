@@ -14,13 +14,13 @@ description: OpenResty 443 端口冲突解决与 SNI 分流配置记录。
 ---
 > 系统环境：1Panel + OpenResty (Docker) + 3x-ui + Cloudflare
 >
-> 目标：通过 Nginx `stream` 模块实现 443 端口复用，根据 SNI 自动分流 Xray 代理流量与建站流量。
+> 目标：通过 Nginx `stream` 模块实现 443 端口复用，根据 SNI 自动分流 隧道流量与建站流量。
 >
 > 报错：网站访问出现 Cloudflare 525 Error (SSL handshake failed)，OpenResty 容器不断崩溃，陷入 `is restarting` 死循环。面板也随之失联。
 
 ## 修复 Docker 网络层转发
 
-OpenResty 运行在容器内，代理流量直接转发至 `127.0.0.1` 无法触达宿主机的 3x-ui。
+OpenResty 运行在容器内，隧道流量直接转发至 `127.0.0.1` 无法触达宿主机的 3x-ui。
 
 获取 1Panel 网络网关（通常为 `172.18.0.1`）：
 
@@ -30,16 +30,16 @@ docker network inspect 1panel-network | grep Gateway
 
 ## 完善 Stream 分流配置
 
-修改 `/usr/local/openresty/nginx/conf/nginx.conf`，将前端 443 流量分发至后端 4443 (建站) 和宿主机 8443 (代理)：
+修改 `/usr/local/openresty/nginx/conf/nginx.conf`，将前端 443 流量分发至后端 4443 (建站) 和宿主机 8443 (隧道)：
 
 ```nginx
 stream {
     map $ssl_preread_server_name $backend_name {
-        [www.microsoft.com](https://www.microsoft.com)  xray_backend;   # 代理伪装域名
+        [www.microsoft.com](https://www.microsoft.com)  proxy_backend;
         default            web_backend;    # 正常建站域名
     }
-    upstream xray_backend {
-        server 172.18.0.1:8443; # 指向 Docker 网关，穿出容器到达 3x-ui
+    upstream proxy_backend {
+        server 172.18.0.1:8443; # 指向 Docker 网关，穿出容器
     }
     upstream web_backend {
         server 127.0.0.1:4443;  # 网站配置与 Nginx 同容器，保留本地回环
