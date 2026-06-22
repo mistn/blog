@@ -36,6 +36,11 @@ const currentPath = normalizePath(Astro.url.pathname);
 const isActive = (path: string) => currentPath === normalizePath(getHref(path));
 ---
 
+<!-- ===== Smart Sticky Header ===== -->
+<header
+  id="site-header"
+  class="fixed top-0 w-full z-50 transition-transform duration-300 ease-in-out bg-white/80 backdrop-blur-md dark:bg-[#1e1e1e]/80"
+>
 <!-- ===== Topbar ===== -->
 <section
   class:list={[
@@ -124,6 +129,7 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
       </div>
     </div>
 </section>
+</header>
 
 <!-- ===== Mobile Icons (fixed group) ===== -->
 <div
@@ -362,4 +368,31 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
   document.addEventListener("astro:before-swap", function () {
     closeMenuSilent();
   });
+</script>
+
+<script is:inline>
+  (function () {
+    var header = document.getElementById("site-header");
+    if (!header) return;
+    var lastScrollY = 0;
+    var ticking = false;
+
+    function onScroll() {
+      var currentY = window.scrollY;
+      if (currentY > lastScrollY && currentY > 80) {
+        header.classList.add("-translate-y-full");
+      } else {
+        header.classList.remove("-translate-y-full");
+      }
+      lastScrollY = currentY;
+      ticking = false;
+    }
+
+    window.addEventListener("scroll", function () {
+      if (!ticking) {
+        requestAnimationFrame(onScroll);
+        ticking = true;
+      }
+    }, { passive: true });
+  })();
 </script>
