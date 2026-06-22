@@ -119,22 +119,28 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
           }
         </div>
 
-        <!-- Mobile: Hamburger -->
-        <button
-          id="menu-toggle"
-          class="lg:hidden p-2 -mr-2 text-foreground/68 hover:text-foreground transition-colors"
-          aria-label="Menu"
-          aria-expanded="false"
-        >
-          <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-            <line x1="4" y1="6" x2="20" y2="6" />
-            <line x1="4" y1="12" x2="20" y2="12" />
-            <line x1="4" y1="18" x2="20" y2="18" />
-          </svg>
-        </button>
+        <!-- Mobile: Hamburger (removed, merged below) -->
       </div>
     </div>
 </section>
+
+<!-- ===== Mobile Menu Toggle (fixed) ===== -->
+<button
+  id="menu-toggle"
+  class="group lg:hidden fixed top-6 right-6 z-[100] p-2 text-foreground/68 hover:text-foreground transition-colors"
+  aria-label="Menu"
+  aria-expanded="false"
+>
+  <svg class="size-6 absolute inset-0 m-auto transition-all duration-300 ease-in-out group-aria-expanded:rotate-90 group-aria-expanded:scale-50 group-aria-expanded:opacity-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+    <line x1="4" y1="6" x2="20" y2="6" />
+    <line x1="4" y1="12" x2="20" y2="12" />
+    <line x1="4" y1="18" x2="20" y2="18" />
+  </svg>
+  <svg class="size-6 absolute inset-0 m-auto transition-all duration-300 ease-in-out -rotate-90 scale-50 opacity-0 group-aria-expanded:rotate-0 group-aria-expanded:scale-100 group-aria-expanded:opacity-100" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+    <line x1="6" y1="6" x2="18" y2="18" />
+    <line x1="18" y1="6" x2="6" y2="18" />
+  </svg>
+</button>
 
 <!-- ===== Mobile Full-screen Overlay ===== -->
 <div
@@ -142,17 +148,6 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
   class="fixed inset-0 bg-white dark:bg-background z-[60] hidden flex-col justify-center items-center"
   aria-hidden="true"
 >
-  <!-- Close button -->
-  <button
-    id="menu-close"
-    class="absolute top-6 right-6 p-2 text-gray-400 hover:text-gray-900 dark:text-gray-500 dark:hover:text-gray-100 transition-colors"
-    aria-label="Close menu"
-  >
-    <svg class="size-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-      <line x1="6" y1="6" x2="18" y2="18" />
-      <line x1="18" y1="6" x2="6" y2="18" />
-    </svg>
-  </button>
 
   <!-- Nav links -->
   <nav class="flex flex-col items-center space-y-8">
@@ -328,11 +323,16 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
     var target = /** @type {HTMLElement} */ (e.target);
 
     if (target.closest("#menu-toggle")) {
-      openMenu();
+      var toggle = getToggle();
+      if (toggle && toggle.getAttribute("aria-expanded") === "true") {
+        closeMenu();
+      } else {
+        openMenu();
+      }
       return;
     }
 
-    if (target.closest("#menu-close") || target.closest("[data-overlay-link]")) {
+    if (target.closest("[data-overlay-link]")) {
       closeMenu();
       return;
     }
