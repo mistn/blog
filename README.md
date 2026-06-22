@@ -101,7 +101,7 @@
 | Formatting | [Prettier](https://prettier.io/) + [prettier-plugin-astro](https://github.com/withastro/prettier-plugin-astro) |
 | Lint | [ESLint](https://eslint.org/) Flat Config |
 | CI/CD | GitHub Actions |
-| Deploy | Cloudflare Pages / Docker |
+| Deploy | Vercel / Cloudflare Pages / Docker |
 
 ## Local Development
 
@@ -135,6 +135,19 @@ docker run -p 4321:80 miuo-blog
 | Node.js version | 20+ |
 
 3. Pages auto-rebuilds on every `main` push
+
+### Vercel
+
+1. Push to GitHub, import repo in [Vercel](https://vercel.com)
+2. Vercel auto-detects Astro — no config needed
+3. Every `main` push triggers a new deployment
+
+Or connect via CLI:
+
+```bash
+pnpm dlx vercel        # Deploy preview
+pnpm dlx vercel --prod # Deploy to production
+```
 
 ## Available Commands
 

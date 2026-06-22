@@ -101,7 +101,7 @@
 | 格式化 | [Prettier](https://prettier.io/) + [prettier-plugin-astro](https://github.com/withastro/prettier-plugin-astro) |
 | Lint | [ESLint](https://eslint.org/) Flat Config |
 | CI/CD | GitHub Actions |
-| 部署 | Cloudflare Pages / Docker |
+| 部署 | Vercel / Cloudflare Pages / Docker |
 
 ## 本地运行
 
@@ -135,6 +135,19 @@ docker run -p 4321:80 miuo-blog
 | Node.js 版本 | 20 或更高 |
 
 3. 每次 `main` 分支推送自动重新构建
+
+### Vercel
+
+1. 推送到 GitHub，在 [Vercel](https://vercel.com) 导入仓库
+2. Vercel 自动识别 Astro 项目，无需额外配置
+3. 每次 `main` 分支推送自动部署
+
+或通过 CLI 部署：
+
+```bash
+pnpm dlx vercel        # 部署预览版
+pnpm dlx vercel --prod # 部署到生产环境
+```
 
 ## 可用命令
 

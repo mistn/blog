@@ -1,6 +1,7 @@
 import { defineConfig, envField } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
 import sitemap from "@astrojs/sitemap";
+import vercel from "@astrojs/vercel";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import remarkToc from "remark-toc";
@@ -21,6 +22,12 @@ import { SITE } from "./src/config";
 // https://astro.build/config
 export default defineConfig({
   site: SITE.website,
+  // Output mode: 'static' generates HTML files at build time
+  // Change to 'server' if you need SSR (requires adapter)
+  output: "static",
+  // Vercel adapter - auto-detected when deployed to Vercel
+  // Can be removed if using Cloudflare Pages instead
+  adapter: vercel(),
   integrations: [
     sitemap({
       filter: page => SITE.showArchives || !page.endsWith("/archives"),
