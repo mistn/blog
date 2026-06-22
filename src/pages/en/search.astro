@@ -96,8 +96,24 @@ const backUrl = SITE.showBackButton ? `${Astro.url.pathname}` : "/";
         search.triggerSearch(query);
       }
 
+      // Dynamic clear button visibility
       const searchInput = document.querySelector(".pagefind-ui__search-input");
       const clearButton = document.querySelector(".pagefind-ui__search-clear");
+
+      if (searchInput && clearButton) {
+        // Replace clear button text with X icon
+        clearButton.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+        clearButton.setAttribute("aria-label", "Clear search");
+        clearButton.classList.add("pagefind-ui__search-clear--icon");
+
+        function toggleClearButton() {
+          clearButton.style.display = searchInput.value.length > 0 ? "flex" : "none";
+        }
+
+        toggleClearButton();
+        searchInput.addEventListener("input", toggleClearButton);
+      }
+
       searchInput?.addEventListener("input", resetSearchParam);
       clearButton?.addEventListener("click", resetSearchParam);
 
@@ -134,60 +150,91 @@ const backUrl = SITE.showBackButton ? `${Astro.url.pathname}` : "/";
     --pagefind-ui-image-border-radius: 8px;
     --pagefind-ui-image-box-ratio: 3 / 2;
 
+    /* Mobile margin */
+    margin: 0 1.25rem;
+
+    @media (min-width: 640px) {
+      margin: 0;
+    }
+
     form {
       position: relative;
       display: flex;
       align-items: center;
-      border: 1px solid rgba(0, 0, 0, 0.08);
+      border: 1px solid rgba(0, 0, 0, 0.06);
       border-radius: 0.75rem;
-      padding: 0.5rem 1rem;
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+      padding: 0.625rem 1rem;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
       transition: all 0.2s ease;
       background: transparent;
     }
 
     html[data-theme="dark"] & form {
-      border-color: rgba(255, 255, 255, 0.08);
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+      border-color: rgba(255, 255, 255, 0.06);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
     }
 
     form:focus-within {
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-      border-color: rgba(0, 0, 0, 0.15);
+      border-color: rgba(0, 0, 0, 0.12);
     }
 
     html[data-theme="dark"] & form:focus-within {
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-      border-color: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.12);
     }
 
     form::before {
       background-color: var(--foreground);
     }
 
+    /* Search icon alignment */
+    .pagefind-ui__search-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
     input {
       font-weight: 400;
+      font-size: 1rem; /* Prevent iOS zoom */
       border: none;
       outline: none;
       background: transparent;
       flex: 1;
-      padding: 0.25rem 0;
+      padding: 0.125rem 0.75rem;
+      min-width: 0;
     }
 
     input:focus-visible {
       outline: none;
     }
 
+    /* Clear button - icon only */
     .pagefind-ui__search-clear {
+      display: none; /* Hidden by default, shown via JS */
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      width: 1.75rem;
+      height: 1.75rem;
       border: none;
       background: transparent;
       cursor: pointer;
-      opacity: 0.5;
-      transition: opacity 0.2s ease;
+      color: #9ca3af; /* text-gray-400 */
+      transition: all 0.15s ease;
+      border-radius: 9999px;
+      padding: 0;
     }
 
     .pagefind-ui__search-clear:hover {
-      opacity: 1;
+      color: #6b7280; /* text-gray-500 */
+      background: rgba(0, 0, 0, 0.05);
+    }
+
+    html[data-theme="dark"] .pagefind-ui__search-clear:hover {
+      background: rgba(255, 255, 255, 0.05);
     }
 
     .pagefind-ui__result-title a {
