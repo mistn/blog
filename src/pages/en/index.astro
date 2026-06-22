@@ -23,10 +23,10 @@ const pageNumbers = Array.from({ length: totalPages }, (_, index) => index + 1);
     id="main-content"
     data-layout="index"
     data-post-memory-scope="list"
-    class="mx-auto w-full max-w-5xl px-4 pt-4 pb-10 md:pt-6 md:pb-14"
+    class="mx-auto w-full max-w-4xl px-4 sm:px-6 pt-4 pb-10 md:pt-6 md:pb-14"
   >
     <section class="overflow-hidden">
-        <div class="px-1 py-1.5 sm:px-2 md:py-4">
+      <div class="py-1.5 md:py-4">
         <div>
           <div class="min-w-0">
             <div data-post-list>
@@ -34,7 +34,7 @@ const pageNumbers = Array.from({ length: totalPages }, (_, index) => index + 1);
                 listPosts.map(post => {
 
                   return (
-                  <article class="py-6 md:py-10" data-post-item>
+                  <article class="py-8 md:py-12" data-post-item>
                     <a
                       href={localizePath(getPath(post.id, post.filePath), locale)}
                       data-post-link

@@ -39,13 +39,13 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
 <!-- ===== Topbar ===== -->
 <section
   class:list={[
-    "mx-auto w-full max-w-5xl px-4 lg:py-8",
+    "mx-auto w-full max-w-4xl px-4 sm:px-6 lg:py-8",
     compactMobile ? "py-4" : "py-6",
   ]}
 >
     <div
       class:list={[
-        "px-1 sm:px-2 font-app",
+        "font-app",
         compactMobile ? "pb-3" : "pb-4",
       ]}
     >
