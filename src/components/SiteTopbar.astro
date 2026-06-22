@@ -120,15 +120,15 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
         </div>
 
         <!-- Mobile: search + theme (visible in topbar) -->
-        <div class="flex lg:hidden items-center gap-2">
+        <div class="flex lg:hidden items-center gap-4">
           <a
             href={localizePath("/search", locale)}
-            class="text-foreground/68 hover:text-foreground transition-colors"
+            class="flex size-9 items-center justify-center text-foreground/68 hover:text-foreground transition-colors"
             title={copy.nav.search}
             aria-label={copy.nav.search}
             data-overlay-link
           >
-            <IconSearch class="size-5" />
+            <IconSearch class="size-6" />
           </a>
           {
             SITE.lightAndDarkMode && (
