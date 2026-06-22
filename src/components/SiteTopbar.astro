@@ -36,8 +36,8 @@ const currentPath = normalizePath(Astro.url.pathname);
 const isActive = (path: string) => currentPath === normalizePath(getHref(path));
 ---
 
-<!-- ===== Sticky Header ===== -->
-<header class="sticky top-0 z-50 bg-white dark:bg-[#1e1e1e]">
+<!-- ===== Header ===== -->
+<header>
 <!-- ===== Topbar ===== -->
 <section
   class:list={[
