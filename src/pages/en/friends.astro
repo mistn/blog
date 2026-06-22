@@ -57,14 +57,14 @@ const applicationText = applicationFields
                       class="h-12 w-12 shrink-0 rounded-full object-cover ring-1 ring-border/30 transition-transform duration-500 ease-out group-hover:scale-105 sm:mb-2.5"
                       loading="lazy"
                     />
-                    <div class="min-w-0 sm:w-full">
+                    <div class="min-w-0 flex flex-col justify-center sm:w-full sm:items-center">
                       <h2 class="line-clamp-1 text-sm font-semibold leading-snug text-foreground transition-colors duration-300 group-hover:text-accent">{friend.blog ?? friend.name}</h2>
                       {
                         friend.blog && friend.blog !== friend.name && (
-                          <p class="mt-0.5 text-[0.7rem] leading-tight text-foreground/40">{friend.name}</p>
+                          <p class="mt-1 text-[0.7rem] leading-tight text-foreground/40">{friend.name}</p>
                         )
                       }
-                      <p class="mt-1 line-clamp-2 text-xs leading-snug text-foreground/40">{friend.description}</p>
+                      <p class="mt-1.5 line-clamp-2 text-xs leading-snug text-foreground/40">{friend.description}</p>
                     </div>
                   </a>
                 ))}
