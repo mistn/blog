@@ -113,11 +113,11 @@ const nextPost =
   <main
     id="main-content"
     data-post-memory-scope="post"
-    class="app-layout pb-10 lg:max-w-5xl lg:pb-14"
+    class="app-layout pb-10 lg:max-w-4xl lg:pb-14"
   >
     <section>
       <div class="px-1 py-4 sm:px-2 sm:py-5">
-        <div class="mx-auto max-w-5xl">
+        <div class="mx-auto max-w-4xl">
           <div>
             <BackButton inline {locale} />
 
@@ -126,7 +126,7 @@ const nextPost =
                 data-article-enter
                 style="--article-enter-delay: 0ms;"
                 data-article-enter-type="title"
-                class="max-w-5xl text-3xl leading-tight font-semibold tracking-tight md:text-4xl"
+                class="max-w-4xl text-3xl leading-tight font-semibold tracking-tight md:text-4xl"
               >
                 {title}
               </h1>
@@ -164,7 +164,7 @@ const nextPost =
                 data-article-enter
                 style="--article-enter-delay: 54ms;"
                 data-article-enter-type="content"
-                class="app-prose mt-10 w-full max-w-5xl mx-auto"
+                class="app-prose mt-10 w-full max-w-4xl mx-auto"
               >
                 {hasTabs ? (
                   <div set:html={tabHtml} />
