@@ -1,4 +1,4 @@
----
+﻿---
 import SiteTopbar from "@/components/SiteTopbar.astro";
 import ArtalkComments from "@/components/ArtalkComments.astro";
 import PageHeader from "@/components/PageHeader.astro";
@@ -36,10 +36,10 @@ const applicationText = applicationFields
 >
   <SiteTopbar />
 
-  <main id="main-content" class="mx-auto w-full max-w-5xl px-4 pt-6 pb-10 md:pt-10 md:pb-14 overflow-x-hidden">
+  <main id="main-content" class="mx-auto w-full max-w-4xl px-4 sm:px-6 pt-6 pb-10 md:pt-10 md:pb-14 overflow-x-hidden">
     <PageHeader title={copy.pages.friendsTitle} />
     <section class="py-4" data-pagefind-body>
-      <div class="max-w-5xl">
+      <div class="max-w-4xl">
         <section>
           {
             friendLinks.length > 0 ? (
@@ -94,7 +94,7 @@ const applicationText = applicationFields
         </section>
       </div>
 
-      <div class="max-w-5xl">
+      <div class="max-w-4xl">
         <ArtalkComments pageKey="/friends" pageTitle={copy.pages.friendsTitle} />
       </div>
     </section>
