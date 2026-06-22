@@ -12,7 +12,7 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
 const tabClass =
   "home-tab relative inline-flex items-center px-0.5 py-1 text-lg font-medium text-foreground/65 transition hover:text-foreground after:absolute after:-bottom-0.5 after:left-1/2 after:h-[2px] after:w-0 after:-translate-x-1/2 after:rounded-full after:bg-accent after:transition-all after:duration-200 after:content-['']";
 const activeTabClass =
-  "font-semibold text-foreground after:w-6";
+  "font-semibold text-accent after:w-6";
 ---
 
 <nav
@@ -56,7 +56,7 @@ const activeTabClass =
 </nav>
 
 <script is:inline>
-  const ACTIVE_HOME_TAB_CLASSES = ["font-semibold", "text-foreground"];
+  const ACTIVE_HOME_TAB_CLASSES = ["font-semibold", "text-accent"];
 
   function normalizeHomeTabPath(path) {
     if (!path) return "/";
