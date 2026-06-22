@@ -163,6 +163,10 @@
 
     .code-block-frame {
       @apply relative my-6 rounded-xl border border-gray-200 bg-gray-50/50 dark:border-gray-800 dark:bg-gray-900/50;
+      & > div:not(.code-block-header) {
+        scrollbar-width: none;
+        &::-webkit-scrollbar { display: none; }
+      }
     }
 
     .code-block-frame.is-collapsed {
@@ -176,6 +180,14 @@
         90deg,
         transparent,
         color-mix(in srgb, var(--muted) 78%, transparent)
+      );
+    }
+
+    html[data-theme="dark"] .code-block-frame::after {
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(17, 24, 39, 0.5)
       );
     }
 
