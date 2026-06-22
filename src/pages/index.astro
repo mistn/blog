@@ -53,7 +53,7 @@ const pageNumbers = Array.from({ length: totalPages }, (_, index) => index + 1);
               }
             </div>
             {totalPages > 1 && (
-              <nav class="mt-6 md:mt-12 flex justify-center items-center gap-6" aria-label="Pagination Navigation">
+              <nav class="mt-4 md:mt-8 flex justify-center items-center gap-6" aria-label="Pagination Navigation">
                 {pageNumbers.map(pageNumber => (
                   <a
                     href={

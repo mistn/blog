@@ -22,7 +22,7 @@ const pages = Array.from({ length: page.lastPage }, (_, i) => ({
 
 {
   page.lastPage > 1 && (
-    <nav class="mt-auto mb-8 flex items-center justify-center gap-1.5 text-sm" role="navigation" aria-label="Pagination Navigation">
+    <nav class="mt-auto mb-4 flex items-center justify-center gap-1.5 text-sm" role="navigation" aria-label="Pagination Navigation">
       {
         prevUrl ? (
           <a href={prevUrl} class="px-3 py-1.5 text-foreground/45 transition-colors hover:text-foreground rounded-lg" aria-label={copy.actions.previousPageLabel}>
