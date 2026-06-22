@@ -37,7 +37,7 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
 ---
 
 <!-- ===== Header ===== -->
-<header>
+<header class="relative z-50">
 <!-- ===== Topbar ===== -->
 <section
   class:list={[
@@ -180,18 +180,6 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
   class="fixed inset-0 bg-white dark:bg-background z-[60] hidden flex-col items-center"
   aria-hidden="true"
 >
-
-  <!-- Close button -->
-  <button
-    id="menu-close"
-    class="absolute top-5 right-5 z-50 p-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
-    aria-label="Close menu"
-  >
-    <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
-      <line x1="6" y1="6" x2="18" y2="18" />
-      <line x1="18" y1="6" x2="6" y2="18" />
-    </svg>
-  </button>
 
   <!-- Nav links (centered in remaining space) -->
   <nav class="flex-grow flex flex-col items-center justify-center space-y-6">
@@ -349,7 +337,7 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
       return;
     }
 
-    if (target.closest("#menu-close") || target.closest("[data-overlay-link]")) {
+    if (target.closest("[data-overlay-link]")) {
       closeMenu();
       return;
     }
