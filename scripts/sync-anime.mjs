@@ -4,7 +4,7 @@ import { dirname, resolve } from "node:path";
 
 const ANILIST_API_URL = "https://graphql.anilist.co";
 const OUTPUT_PATH = resolve("src/data/anime.generated.json");
-const DEFAULT_ANILIST_USER_NAME = "miuol";
+const DEFAULT_ANILIST_USER_NAME = "miuo55";
 const COMPLETED_STATUS = "COMPLETED";
 const REQUIRED_CUSTOM_LIST = "normal";
 
