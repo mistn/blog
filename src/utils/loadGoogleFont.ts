@@ -1,8 +1,13 @@
+const fontCache = new Map<string, ArrayBuffer>();
+
 async function loadGoogleFont(
   font: string,
   text: string,
   weight: number
 ): Promise<ArrayBuffer> {
+  const cacheKey = `${font}:${weight}:${text}`;
+  if (fontCache.has(cacheKey)) return fontCache.get(cacheKey)!;
+
   const API = `https://fonts.googleapis.com/css2?family=${font}:wght@${weight}&text=${encodeURIComponent(text)}`;
 
   const css = await (
@@ -26,7 +31,9 @@ async function loadGoogleFont(
     throw new Error("Failed to download dynamic font. Status: " + res.status);
   }
 
-  return res.arrayBuffer();
+  const data = await res.arrayBuffer();
+  fontCache.set(cacheKey, data);
+  return data;
 }
 
 async function loadGoogleFonts(
@@ -35,18 +42,10 @@ async function loadGoogleFonts(
   Array<{ name: string; data: ArrayBuffer; weight: number; style: string }>
 > {
   const fontsConfig = [
-    {
-      name: "IBM Plex Mono",
-      font: "IBM+Plex+Mono",
-      weight: 400,
-      style: "normal",
-    },
-    {
-      name: "IBM Plex Mono",
-      font: "IBM+Plex+Mono",
-      weight: 700,
-      style: "bold",
-    },
+    { name: "IBM Plex Mono", font: "IBM+Plex+Mono", weight: 400, style: "normal" },
+    { name: "IBM Plex Mono", font: "IBM+Plex+Mono", weight: 700, style: "bold" },
+    { name: "Noto Sans SC", font: "Noto+Sans+SC", weight: 400, style: "normal" },
+    { name: "Noto Sans SC", font: "Noto+Sans+SC", weight: 700, style: "normal" },
   ];
 
   const fonts = await Promise.all(
