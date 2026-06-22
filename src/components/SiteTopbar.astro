@@ -176,12 +176,12 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
 <!-- ===== Mobile Full-screen Overlay ===== -->
 <div
   id="mobile-overlay"
-  class="fixed inset-0 bg-white dark:bg-background z-[60] hidden flex-col justify-center items-center"
+  class="fixed inset-0 bg-white dark:bg-background z-[60] hidden flex-col items-center"
   aria-hidden="true"
 >
 
-  <!-- Nav links -->
-  <nav class="flex flex-col items-center space-y-6">
+  <!-- Nav links (centered in remaining space) -->
+  <nav class="flex-grow flex flex-col items-center justify-center space-y-6">
     <a
       href={getHref("/")}
       class:list={[
@@ -248,8 +248,8 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
     </a>
   </nav>
 
-  <!-- Bottom icons -->
-  <div class="absolute bottom-10 flex items-center gap-8">
+  <!-- Bottom icons (sunk to bottom) -->
+  <div class="flex items-center gap-8 mb-12">
     {
       emailLink && emailAddress && (
         <a
