@@ -201,10 +201,11 @@
 
     .markdown-alert {
       border: none !important;
-      border-left: none !important;
-      border-radius: 8px !important;
-      padding: 16px 20px !important;
+      border-left: 4px solid #0ebba2 !important;
+      border-radius: 0 8px 8px 0 !important;
+      padding: 12px 16px !important;
       margin: 1.5em 0;
+      background: transparent !important;
     }
 
     .markdown-alert-title {
@@ -214,11 +215,11 @@
       font-weight: 600 !important;
       font-size: 1.05em !important;
       margin-top: 0 !important;
-      margin-bottom: 8px !important;
+      margin-bottom: 4px !important;
     }
 
     .markdown-alert-tip {
-      background-color: rgba(14, 187, 162, 0.08) !important;
+      border-left-color: #0ebba2 !important;
     }
 
     .markdown-alert-tip .markdown-alert-title {
@@ -234,6 +235,18 @@
       margin-bottom: 0 !important;
       color: var(--foreground);
       line-height: 1.6;
+    }
+
+    html[data-theme="dark"] .markdown-alert {
+      border-left-color: #2dd4bf !important;
+    }
+
+    html[data-theme="dark"] .markdown-alert-tip .markdown-alert-title {
+      color: #2dd4bf !important;
+    }
+
+    html[data-theme="dark"] .markdown-alert-tip .markdown-alert-title svg {
+      color: #2dd4bf !important;
     }
 
     .code-block-meta {
