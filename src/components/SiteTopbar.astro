@@ -37,7 +37,7 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
 ---
 
 <!-- ===== Header ===== -->
-<header class="relative z-50">
+<header class="relative z-[70]">
 <!-- ===== Topbar ===== -->
 <section
   class:list={[
@@ -177,7 +177,7 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
 <!-- ===== Mobile Full-screen Overlay ===== -->
 <div
   id="mobile-overlay"
-  class="fixed inset-0 bg-white dark:bg-background z-[60] hidden flex-col items-center"
+  class="fixed inset-0 bg-white dark:bg-background z-50 hidden flex-col items-center"
   aria-hidden="true"
 >
 
