@@ -173,24 +173,6 @@
       @apply bg-gray-50/50 dark:bg-gray-900/50;
     }
 
-    .code-block-frame::after {
-      @apply pointer-events-none absolute top-10 right-0 bottom-0 z-10 w-10 rounded-ee-xl opacity-100 transition-opacity sm:hidden;
-      content: "";
-      background: linear-gradient(
-        90deg,
-        transparent,
-        color-mix(in srgb, var(--muted) 78%, transparent)
-      );
-    }
-
-    html[data-theme="dark"] .code-block-frame::after {
-      background: linear-gradient(
-        90deg,
-        transparent,
-        rgba(17, 24, 39, 0.5)
-      );
-    }
-
     .code-block-frame.is-collapsed::after {
       @apply hidden;
     }
