@@ -371,7 +371,7 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
 </script>
 
 <script is:inline>
-  (function () {
+  function initStickyHeader() {
     var header = document.getElementById("site-header");
     if (!header) return;
     var lastScrollY = 0;
@@ -394,5 +394,8 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
         ticking = true;
       }
     }, { passive: true });
-  })();
+  }
+
+  document.addEventListener("astro:page-load", initStickyHeader);
+  initStickyHeader();
 </script>
