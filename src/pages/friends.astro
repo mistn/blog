@@ -49,16 +49,16 @@ const applicationText = applicationFields
                     href={friend.href}
                     target="_blank"
                     rel="noreferrer"
-                    class="group flex items-center gap-3 rounded-xl border border-gray-100/60 dark:border-gray-800/60 p-3.5 text-left transition-all duration-200 hover:bg-gray-50/60 dark:hover:bg-gray-800/30 active:scale-[0.99] sm:flex-col sm:items-center sm:gap-0 sm:p-4 sm:text-center"
+                    class="group flex items-center gap-3 rounded-xl border border-gray-100/60 dark:border-gray-800/60 p-3.5 text-left transition-all duration-300 ease-out hover:-translate-y-1 hover:bg-gray-50/60 dark:hover:bg-gray-800/30 hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] dark:hover:shadow-[0_8px_30px_rgba(0,0,0,0.2)] active:scale-[0.99] sm:flex-col sm:items-center sm:gap-0 sm:p-4 sm:text-center"
                   >
                     <img
                       src={friend.avatar ?? defaultFriendAvatar}
                       alt={`${friend.name} avatar`}
-                      class="h-12 w-12 shrink-0 rounded-full object-cover ring-1 ring-border/30 sm:mb-2.5"
+                      class="h-12 w-12 shrink-0 rounded-full object-cover ring-1 ring-border/30 transition-transform duration-500 ease-out group-hover:scale-105 sm:mb-2.5"
                       loading="lazy"
                     />
                     <div class="min-w-0 sm:w-full">
-                      <h2 class="line-clamp-1 text-sm font-semibold leading-snug text-foreground">{friend.blog ?? friend.name}</h2>
+                      <h2 class="line-clamp-1 text-sm font-semibold leading-snug text-foreground transition-colors duration-300 group-hover:text-accent">{friend.blog ?? friend.name}</h2>
                       {
                         friend.blog && friend.blog !== friend.name && (
                           <p class="mt-0.5 text-[0.7rem] leading-tight text-foreground/40">{friend.name}</p>
