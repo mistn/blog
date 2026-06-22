@@ -163,7 +163,8 @@ const backUrl = SITE.showBackButton ? `${Astro.url.pathname}` : "/";
       align-items: center;
       border: 1px solid rgba(0, 0, 0, 0.06);
       border-radius: 0.75rem;
-      padding: 0.625rem 1rem;
+      padding: 0 0.75rem;
+      height: 3rem;
       box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
       transition: all 0.2s ease;
       background: transparent;
@@ -188,14 +189,25 @@ const backUrl = SITE.showBackButton ? `${Astro.url.pathname}` : "/";
       background-color: var(--foreground);
     }
 
-    /* Search icon alignment */
+    /* Search icon - absolute left center */
     .pagefind-ui__search-icon {
+      position: absolute;
+      left: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
       display: flex;
       align-items: center;
       justify-content: center;
-      flex-shrink: 0;
+      pointer-events: none;
+      color: #9ca3af;
+      z-index: 1;
     }
 
+    html[data-theme="dark"] .pagefind-ui__search-icon {
+      color: #6b7280;
+    }
+
+    /* Input - padded for icon space */
     input {
       font-weight: 400;
       font-size: 1rem; /* Prevent iOS zoom */
@@ -203,37 +215,53 @@ const backUrl = SITE.showBackButton ? `${Astro.url.pathname}` : "/";
       outline: none;
       background: transparent;
       flex: 1;
-      padding: 0.125rem 0.75rem;
+      width: 100%;
+      height: 100%;
+      padding: 0 2.5rem 0 2.25rem; /* Right space for clear btn, left space for icon */
       min-width: 0;
+      color: var(--foreground);
+    }
+
+    input::placeholder {
+      color: #9ca3af;
+    }
+
+    html[data-theme="dark"] input::placeholder {
+      color: #6b7280;
     }
 
     input:focus-visible {
       outline: none;
     }
 
-    /* Clear button - icon only */
+    /* Clear button - absolute right center */
     .pagefind-ui__search-clear {
       display: none; /* Hidden by default, shown via JS */
       align-items: center;
       justify-content: center;
-      flex-shrink: 0;
+      position: absolute;
+      right: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
       width: 1.75rem;
       height: 1.75rem;
       border: none;
       background: transparent;
       cursor: pointer;
-      color: #9ca3af; /* text-gray-400 */
+      color: #9ca3af;
       transition: all 0.15s ease;
       border-radius: 9999px;
       padding: 0;
+      z-index: 1;
     }
 
     .pagefind-ui__search-clear:hover {
-      color: #6b7280; /* text-gray-500 */
+      color: #6b7280;
       background: rgba(0, 0, 0, 0.05);
     }
 
     html[data-theme="dark"] .pagefind-ui__search-clear:hover {
+      color: #d1d5db;
       background: rgba(255, 255, 255, 0.05);
     }
 
