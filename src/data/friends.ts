@@ -69,4 +69,10 @@ export const friendLinks: FriendLink[] = [
     avatar: "https://www.github.com/Seeridia.png",
     description: "Seeridia 的小小小的大窝！",
   },
+  {
+    name: "夜轻Blog",
+    href: "https://blog.yeqing.net/",
+    avatar: "https://list.yppp.net/d/cos/yeqing.webp",
+    description: "一个人",
+  },
 ];
