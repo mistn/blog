@@ -13,8 +13,8 @@ headingEyebrow: "About"
 运行在云端的一些自托管服务。
 
 * [听歌记录](https://spotify.miuo.me/?gname=All&token=19b6fb61-e46f-483c-8514-2aab0f51b579) — 最近在听什么
-* [壁纸 API](https://img.2731515.xyz) — 自用壁纸
-* [图床](https://api.2731515.xyz) — 个人图床
+* [壁纸站](https://acg.2731515.xyz) — 壁纸 API · 自用壁纸
+* [壁纸站](https://acg.2731515.xyz) — 图床 · 个人图床
 * [临时邮箱](https://mail.2731515.xyz) — 临时收件箱
 * [网站状态监控](https://stats.uptimerobot.com/tyYiHJaRpS) — 看看服务挂没挂
 * [服务器探针](https://ss.miuo.me) — 服务器的运行状态
