@@ -4,7 +4,7 @@
   "version": "5.5.1",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro check && astro build && pagefind --site dist && node ./scripts/copy-pagefind.mjs",
+    "build": "astro check && astro build && pagefind --site .vercel/output/static && node ./scripts/copy-pagefind.mjs",
     "anime:sync": "node ./scripts/sync-anime.mjs",
     "preview": "astro preview",
     "sync": "astro sync",

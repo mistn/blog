@@ -2,7 +2,7 @@
 import { cpSync, existsSync, mkdirSync } from "node:fs";
 import { resolve } from "node:path";
 
-const sourceDir = resolve("dist/pagefind");
+const sourceDir = resolve(".vercel/output/static/pagefind");
 const targetDir = resolve("public/pagefind");
 
 if (!existsSync(sourceDir)) {
