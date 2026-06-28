@@ -17,7 +17,9 @@ export const AppCard = ({ name, desc, icon, link }) => {
   if (!iconUrl && link) {
     try {
       const domain = new URL(link).hostname;
-      iconUrl = `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
+      const localPath = `/software-icons/${domain}.png`;
+      const apiFallback = `https://icons.duckduckgo.com/ip3/${domain}.ico`;
+      iconUrl = localPath;
     } catch (e) {
       iconUrl = '';
     }
@@ -25,13 +27,16 @@ export const AppCard = ({ name, desc, icon, link }) => {
 
   return (
     <a href={link} target="_blank" rel="noopener noreferrer" class="flex items-center gap-3 py-2.5 group no-underline text-inherit">
-      {iconUrl && (
+      {iconUrl ? (
         <img
           src={iconUrl}
           alt={name}
           class="w-8 h-8 shrink-0 rounded-md !border-none !shadow-none !bg-transparent !p-0 !m-0 group-hover:scale-105 transition-transform duration-300 object-contain"
           loading="lazy"
+          onerror="this.onerror=null;if(!this.dataset.fallback){this.dataset.fallback='1';var d=this.closest('a').href;var u=new URL(d);this.src='https://icons.duckduckgo.com/ip3/'+u.hostname+'.ico'}else{this.src='/software-icons/_fallback.png'}"
         />
+      ) : (
+        <img src="/software-icons/_fallback.png" alt={name} class="w-8 h-8 shrink-0 rounded-md !border-none !shadow-none !bg-transparent !p-0 !m-0 object-contain" loading="lazy" />
       )}
       <div class="flex-1 min-w-0">
         <div class="font-medium text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors text-[14px] leading-tight">
