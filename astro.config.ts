@@ -7,17 +7,13 @@ import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import remarkToc from "remark-toc";
 import remarkCollapse from "remark-collapse";
-import {
-  transformerNotationDiff,
-  transformerNotationHighlight,
-  transformerNotationWordHighlight,
-} from "@shikijs/transformers";
-import { transformerFileName } from "./src/utils/transformers/fileName";
 import { rehypeWrapTables } from "./src/utils/rehypeWrapTables.js";
 import { rehypeLazyImages } from "./src/utils/rehypeLazyImages.js";
 import { remarkAlert } from "remark-github-blockquote-alert";
 import { remarkTabsPlugin } from "./src/utils/remarkTabsPlugin.js";
 import remarkDirective from "remark-directive";
+import expressiveCode from "astro-expressive-code";
+import { pluginCollapsibleSections } from "@expressive-code/plugin-collapsible-sections";
 import { SITE } from "./src/config";
 
 // https://astro.build/config
@@ -30,13 +26,24 @@ export default defineConfig({
   // Can be removed if using Cloudflare Pages instead
   adapter: vercel(),
   integrations: [
+    expressiveCode({
+      themes: ["github-light", "night-owl"],
+      customizeTheme(theme) {
+        if (theme.name === "github-light") theme.name = "light";
+        if (theme.name === "night-owl") theme.name = "dark";
+      },
+      frames: {
+        showCopyToClipboardButton: true,
+      },
+      plugins: [pluginCollapsibleSections()],
+    }),
     sitemap({
       filter: page => SITE.showArchives || !page.endsWith("/archives"),
     }),
     mdx(),
   ],
   markdown: {
-    syntaxHighlight: "shiki",
+    syntaxHighlight: false,
     remarkPlugins: [
       remarkMath,
       remarkDirective,
@@ -46,18 +53,6 @@ export default defineConfig({
       remarkAlert,
     ],
     rehypePlugins: [rehypeKatex, rehypeWrapTables, rehypeLazyImages],
-    shikiConfig: {
-      // For more themes, visit https://shiki.style/themes
-      themes: { light: "github-light", dark: "night-owl" },
-      defaultColor: false,
-      wrap: false,
-      transformers: [
-        transformerFileName({ style: "v2", hideDot: false }),
-        transformerNotationHighlight(),
-        transformerNotationWordHighlight(),
-        transformerNotationDiff({ matchAlgorithm: "v3" }),
-      ],
-    },
   },
   vite: {
     // eslint-disable-next-line

@@ -128,10 +128,6 @@
       letter-spacing: 0;
     }
 
-    .astro-code code {
-      @apply flex-[1_0_100%] bg-inherit p-0;
-    }
-
     blockquote {
       @apply border-s-border wrap-break-word text-foreground/88 opacity-100;
       font-style: normal;
@@ -161,37 +157,7 @@
       @apply focus-visible:border-transparent focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-dashed;
     }
 
-    .code-block-frame {
-      @apply relative my-6 rounded-xl border border-gray-200 bg-gray-50/50 dark:border-gray-800 dark:bg-gray-900/50;
-      & > div:not(.code-block-header) {
-        scrollbar-width: none;
-        &::-webkit-scrollbar { display: none; }
-      }
-    }
 
-    .code-block-frame.is-collapsed {
-      @apply bg-gray-50/50 dark:bg-gray-900/50;
-    }
-
-    .code-block-frame.is-collapsed::after {
-      @apply hidden;
-    }
-
-    .code-block-frame:focus-within::after {
-      @apply opacity-0;
-    }
-
-    .code-block-header {
-      @apply sticky top-0 z-20 flex items-center justify-between gap-3 rounded-t-xl px-4 py-2 text-sm text-foreground/60 bg-gray-100 dark:bg-gray-800 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700;
-    }
-
-    .code-block-frame.is-collapsed .code-block-header {
-      @apply rounded-b-xl;
-    }
-
-    html[data-theme="dark"] .code-block-header {
-      @apply text-foreground/45;
-    }
 
     .markdown-alert {
       border: none !important;
@@ -243,105 +209,12 @@
       color: #2dd4bf !important;
     }
 
-    .code-block-meta {
-      @apply flex min-w-0 items-center gap-2;
-    }
-
-    .code-block-icon {
-      @apply size-3.5 flex-none text-foreground/45;
-    }
-
-    .code-meta-primary {
-      @apply truncate text-xs font-medium leading-none text-foreground/60;
-    }
-
-    .code-language-badge {
-      @apply rounded-sm bg-muted/60 px-1.5 py-0.5 text-[0.68rem] leading-none font-normal text-foreground/50;
-    }
-
-    .code-block-actions {
-      @apply flex flex-none items-center gap-1;
-    }
-
-    .code-block-action {
-      @apply inline-flex size-7 flex-none items-center justify-center rounded text-foreground/40 transition hover:text-foreground/70 focus-visible:no-underline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-dashed;
-    }
-
-    .code-block-action svg {
-      @apply size-3.5;
-    }
-
-    .collapse-code-icon {
-      @apply transition-transform;
-    }
-
-    .code-block-frame.is-collapsed .collapse-code-icon {
-      @apply -rotate-90;
-    }
-
     .katex-display {
       @apply overflow-x-auto py-2 text-foreground;
     }
 
     .katex {
       @apply text-foreground;
-    }
-  }
-
-  /* ===== Code Blocks & Syntax Highlighting ===== */
-  .astro-code {
-    @apply flex rounded-b-xl bg-transparent px-4 pb-4 pt-2 text-(--shiki-light) outline-border;
-    font-family: var(--font-ui-mono);
-    font-size: 0.94em;
-    font-synthesis: none;
-    font-variant-ligatures: none;
-    font-weight: 400;
-    letter-spacing: 0;
-    line-height: 1.65;
-    overscroll-behavior-inline: contain;
-    scroll-padding-inline: 1rem;
-  }
-
-  @media (max-width: 639px) {
-    .astro-code {
-      font-size: 0.9em;
-      line-height: 1.65;
-      scrollbar-width: thin;
-    }
-  }
-
-  html[data-theme="dark"] .astro-code {
-    @apply bg-transparent text-(--shiki-dark);
-  }
-
-  .astro-code span {
-    color: var(--shiki-light);
-    font-style: var(--shiki-light-font-style);
-    font-weight: var(--shiki-light-font-weight);
-    text-decoration: var(--shiki-light-text-decoration);
-  }
-
-  html[data-theme="dark"] .astro-code span {
-    color: var(--shiki-dark);
-    font-style: var(--shiki-dark-font-style);
-    font-weight: var(--shiki-dark-font-weight);
-    text-decoration: var(--shiki-dark-text-decoration);
-  }
-
-  /* Styles for Shiki transformers */
-  /* https://shiki.style/packages/transformers */
-  .astro-code {
-    .line.diff.add {
-      @apply relative inline-block w-full bg-green-400/20 before:absolute before:-left-3 before:text-green-500 before:content-['+'];
-    }
-    .line.diff.remove {
-      @apply relative inline-block w-full bg-red-500/20 before:absolute before:-left-3 before:text-red-500 before:content-['-'];
-    }
-    .line.highlighted {
-      @apply inline-block w-full bg-slate-400/20;
-    }
-    .highlighted-word {
-      @apply rounded-sm border border-border px-0.5 py-px;
     }
   }
 }
