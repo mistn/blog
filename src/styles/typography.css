@@ -129,7 +129,7 @@
     }
 
     blockquote {
-      @apply border-s-border wrap-break-word text-foreground/88 opacity-100;
+      @apply border-s-accent/60 wrap-break-word text-foreground/88 opacity-100;
       font-style: normal;
       quotes: none;
     }
