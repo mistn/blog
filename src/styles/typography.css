@@ -226,3 +226,6 @@
 .expressive-code .frame:focus-within .copy button {
   opacity: 0.75 !important;
 }
+.expressive-code .frame {
+  box-shadow: 0 0 0.25rem var(--ec-frm-shdCol) !important;
+}
