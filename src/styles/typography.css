@@ -134,6 +134,14 @@
       quotes: none;
     }
 
+    .expressive-code .copy button {
+      opacity: 0;
+    }
+    .expressive-code .frame:hover .copy button,
+    .expressive-code .frame:focus-within .copy button {
+      opacity: 0.75;
+    }
+
     blockquote p {
       font-style: normal;
     }
