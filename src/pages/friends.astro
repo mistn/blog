@@ -82,14 +82,24 @@ const applicationText = applicationFields
         <section class="apply-section">
           <div>
             <p class="section-eyebrow">Apply</p>
-            <h2>友链申请格式</h2>
+            <h2>友链申请条件</h2>
+            <ul class="friend-requirements">
+              <li>支持 HTTPS（TLS 1.2/1.3），可在中国大陆正常访问</li>
+              <li>内容健康，符合中国法律法规</li>
+              <li>至少有 5 篇原创文章，无明显商业化内容</li>
+              <li>域名注册超过 3 个月</li>
+              <li>申请前请先添加本站友链</li>
+            </ul>
+          </div>
+
+          <div class="friend-howto">
+            <p class="friend-howto-title">申请方式</p>
             <p>
-              申请交换友链可以在页面底部评论区按这个格式留言。已添加友链后，也可以在评论区补充需要修改的信息。
-            </p>
+              页面底部评论区按格式留言，或发邮件到 <a href="mailto:hi@miuo.me" class="text-accent hover:underline">hi@miuo.me</a>。
             </p>
           </div>
 
-          <div class="friend-application mt-6">
+          <div class="friend-application">
             <p class="friend-application-title">申请模板</p>
             <CodeSnippet code={applicationText} language="yaml" />
           </div>
@@ -136,6 +146,33 @@ const applicationText = applicationFields
 
   .friend-application {
     position: relative;
+  }
+
+  .friend-requirements {
+    list-style: disc;
+    padding-left: 1.25rem;
+    margin-top: 1rem;
+    color: color-mix(in srgb, var(--foreground) 82%, transparent);
+    font-size: 1rem;
+    line-height: 2.2;
+  }
+
+  .friend-howto {
+    margin-top: 1.8rem;
+  }
+
+  .friend-howto-title {
+    margin: 0 0 0.5rem;
+    color: color-mix(in srgb, var(--foreground) 88%, transparent);
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  .friend-howto p {
+    max-width: 42rem;
+    color: color-mix(in srgb, var(--foreground) 82%, transparent);
+    font-size: 1rem;
+    line-height: 2;
   }
 
   .friend-application-title {
