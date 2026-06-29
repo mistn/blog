@@ -2,8 +2,8 @@
 import SiteTopbar from "@/components/SiteTopbar.astro";
 import ArtalkComments from "@/components/ArtalkComments.astro";
 import PageHeader from "@/components/PageHeader.astro";
-import CodeSnippet from "@/components/CodeSnippet.astro";
 import Layout from "@/layouts/Layout.astro";
+import { Code } from "astro-expressive-code/components";
 import { defaultFriendAvatar, friendLinks, siteProfile } from "@/data/friends";
 import { SITE } from "@/config";
 import { ui } from "@/i18n";
@@ -101,7 +101,7 @@ const applicationText = applicationFields
 
           <div class="friend-application">
             <p class="friend-application-title">申请模板</p>
-            <CodeSnippet code={applicationText} language="yaml" />
+            <Code code={applicationText} lang="yaml" />
           </div>
         </section>
       </div>

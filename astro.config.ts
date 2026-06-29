@@ -13,7 +13,6 @@ import { remarkAlert } from "remark-github-blockquote-alert";
 import { remarkTabsPlugin } from "./src/utils/remarkTabsPlugin.js";
 import remarkDirective from "remark-directive";
 import expressiveCode from "astro-expressive-code";
-import { pluginCollapsibleSections } from "@expressive-code/plugin-collapsible-sections";
 import { SITE } from "./src/config";
 
 // https://astro.build/config
@@ -26,17 +25,7 @@ export default defineConfig({
   // Can be removed if using Cloudflare Pages instead
   adapter: vercel(),
   integrations: [
-    expressiveCode({
-      themes: ["github-light", "night-owl"],
-      customizeTheme(theme) {
-        if (theme.name === "github-light") theme.name = "light";
-        if (theme.name === "night-owl") theme.name = "dark";
-      },
-      frames: {
-        showCopyToClipboardButton: true,
-      },
-      plugins: [pluginCollapsibleSections()],
-    }),
+    expressiveCode(),
     sitemap({
       filter: page => SITE.showArchives || !page.endsWith("/archives"),
     }),
