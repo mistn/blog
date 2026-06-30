@@ -75,4 +75,11 @@ export const friendLinks: FriendLink[] = [
     avatar: "https://list.yppp.net/d/cos/yeqing.webp",
     description: "一个人",
   },
+  {
+    name: "顾拾柒",
+    blog: "Olinl Blog",
+    href: "https://blog.olinl.com/",
+    avatar: "https://q2.qlogo.cn/headimg_dl?dst_uin=9892214&spec=0",
+    description: "分享、实践、学习",
+  },
 ];
