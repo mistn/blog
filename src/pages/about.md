@@ -24,4 +24,4 @@ headingEyebrow: "About"
 
 * Email: hi@miuo.me
 * X: [@miuo55](https://x.com/miuo55)
-* Matrix: [@miuo:matrix.org](https://matrix.to/#/@miuo:matrix.org)
+* Matrix: [@miuo\:matrix.org](https://matrix.to/#/@miuo:matrix.org)
