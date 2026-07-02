@@ -54,7 +54,7 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
       <div class="flex items-center justify-between">
         <!-- Left: Logo + HomeTabs -->
         <div class="flex items-center gap-6 lg:gap-8">
-          <div class="min-w-0">
+          <div id="mobile-logo-area" class="min-w-0">
             <a href={getHref("/")} class="-ml-[5px] text-[1.85rem] leading-none font-medium tracking-tight no-underline text-foreground hover:text-foreground/80 transition-colors">
               {SITE.author}
             </a>
@@ -123,35 +123,37 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
 
         <!-- Mobile: search + theme + menu -->
         <div class="flex lg:hidden items-center gap-1">
-          <a
-            href={localizePath("/search", locale)}
-            class="flex w-10 h-10 items-center justify-center p-0 m-0 text-foreground/68 hover:text-foreground transition-colors"
-            title={copy.nav.search}
-            aria-label={copy.nav.search}
-            data-overlay-link
-          >
-            <IconSearch class="w-5 h-5" />
-          </a>
-          {
-            SITE.lightAndDarkMode && (
-              <button
-                id="theme-btn"
-                class="flex w-10 h-10 items-center justify-center p-0 m-0 text-foreground/68 hover:text-foreground transition-colors"
-                title={copy.nav.theme}
-                aria-label={copy.nav.theme}
-                aria-live="polite"
-              >
-                <span
-                  data-theme-icon-anchor
-                  class="pointer-events-none relative w-5 h-5"
-                  aria-hidden="true"
+          <span id="mobile-header-actions" class="contents">
+            <a
+              href={localizePath("/search", locale)}
+              class="flex w-10 h-10 items-center justify-center p-0 m-0 text-foreground/68 hover:text-foreground transition-colors"
+              title={copy.nav.search}
+              aria-label={copy.nav.search}
+              data-overlay-link
+            >
+              <IconSearch class="w-5 h-5" />
+            </a>
+            {
+              SITE.lightAndDarkMode && (
+                <button
+                  id="theme-btn"
+                  class="flex w-10 h-10 items-center justify-center p-0 m-0 text-foreground/68 hover:text-foreground transition-colors"
+                  title={copy.nav.theme}
+                  aria-label={copy.nav.theme}
+                  aria-live="polite"
                 >
-                  <IconMoon class="absolute inset-0 w-full h-full scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
-                  <IconSunHigh class="absolute inset-0 w-full h-full scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
-                </span>
-              </button>
-            )
-          }
+                  <span
+                    data-theme-icon-anchor
+                    class="pointer-events-none relative w-5 h-5"
+                    aria-hidden="true"
+                  >
+                    <IconMoon class="absolute inset-0 w-full h-full scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
+                    <IconSunHigh class="absolute inset-0 w-full h-full scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
+                  </span>
+                </button>
+              )
+            }
+          </span>
           <button
             id="menu-toggle"
             class="group flex w-10 h-10 items-center justify-center p-0 m-0 text-foreground/68 hover:text-foreground transition-colors"
@@ -177,7 +179,7 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
 <!-- ===== Mobile Full-screen Overlay ===== -->
 <div
   id="mobile-overlay"
-  class="fixed inset-0 bg-white dark:bg-background z-50 hidden flex-col items-center"
+  class="fixed inset-0 bg-white dark:bg-background z-50 hidden flex-col items-center overflow-hidden"
   aria-hidden="true"
 >
 
@@ -290,6 +292,22 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
   function getOverlay() { return document.getElementById("mobile-overlay"); }
   function getToggle() { return document.getElementById("menu-toggle"); }
 
+  function preventScroll(e) {
+    e.preventDefault();
+  }
+
+  function lockViewport() {
+    document.documentElement.style.overflow = "hidden";
+    document.body.style.overflow = "hidden";
+    window.addEventListener("touchmove", preventScroll, { passive: false });
+  }
+
+  function unlockViewport() {
+    document.documentElement.style.overflow = "";
+    document.body.style.overflow = "";
+    window.removeEventListener("touchmove", preventScroll);
+  }
+
   function openMenu() {
     var overlay = getOverlay();
     var toggle = getToggle();
@@ -298,7 +316,14 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
     overlay.classList.add("flex");
     overlay.setAttribute("aria-hidden", "false");
     toggle.setAttribute("aria-expanded", "true");
-    document.body.style.overflow = "hidden";
+    lockViewport();
+
+    var logo = document.getElementById("mobile-logo-area");
+    if (logo) logo.style.display = "none";
+    var actions = document.getElementById("mobile-header-actions");
+    if (actions) actions.style.display = "none";
+    var tocToggle = document.querySelector("[data-toc-toggle]");
+    if (tocToggle) tocToggle.style.display = "none";
   }
 
   function closeMenu() {
@@ -309,8 +334,15 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
     overlay.classList.remove("flex");
     overlay.setAttribute("aria-hidden", "true");
     toggle.setAttribute("aria-expanded", "false");
-    document.body.style.overflow = "";
+    unlockViewport();
     toggle.focus();
+
+    var logo = document.getElementById("mobile-logo-area");
+    if (logo) logo.style.display = "";
+    var actions = document.getElementById("mobile-header-actions");
+    if (actions) actions.style.display = "";
+    var tocToggle = document.querySelector("[data-toc-toggle]");
+    if (tocToggle) tocToggle.style.display = "";
   }
 
   function closeMenuSilent() {
@@ -320,8 +352,15 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
     overlay.classList.add("hidden");
     overlay.classList.remove("flex");
     overlay.setAttribute("aria-hidden", "true");
-    document.body.style.overflow = "";
+    unlockViewport();
     if (toggle) toggle.setAttribute("aria-expanded", "false");
+
+    var logo = document.getElementById("mobile-logo-area");
+    if (logo) logo.style.display = "";
+    var actions = document.getElementById("mobile-header-actions");
+    if (actions) actions.style.display = "";
+    var tocToggle = document.querySelector("[data-toc-toggle]");
+    if (tocToggle) tocToggle.style.display = "";
   }
 
   document.addEventListener("click", function (e) {
