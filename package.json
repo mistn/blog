@@ -29,6 +29,7 @@
     "lodash.kebabcase": "^4.1.1",
     "marked": "^18.0.5",
     "mdast-util-to-hast": "^13.2.1",
+    "photoswipe": "^5.4.4",
     "rehype-katex": "^7.0.1",
     "remark-collapse": "^0.1.2",
     "remark-directive": "^4.0.0",

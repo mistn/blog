@@ -5,7 +5,7 @@ import SiteTopbar from "@/components/SiteTopbar.astro";
 import Datetime from "@/components/Datetime.astro";
 import EditPost from "@/components/EditPost.astro";
 import ArtalkComments from "@/components/ArtalkComments.astro";
-import ArticleImageLightbox from "@/components/ArticleImageLightbox.astro";
+
 import BackButton from "@/components/BackButton.astro";
 import TableOfContents from "@/components/TableOfContents.astro";
 import getSortedPosts from "@/utils/getSortedPosts";
@@ -242,7 +242,6 @@ const nextPost =
       </div>
     </section>
   </main>
-  <ArticleImageLightbox {locale} />
   <TableOfContents slot="floating" {headings} {locale} />
 </Layout>
 
@@ -301,19 +300,12 @@ const nextPost =
   </script>
 )}
 
-<script
-  is:inline
-  data-astro-rerun
-  define:vars={{
-    openImageLabel: locale === "en" ? "Open image preview" : "打开图片预览",
-  }}
->
+<script is:inline data-astro-rerun>
   function runArticleEnterAnimation() {
     const nodes = Array.from(document.querySelectorAll("[data-article-enter]"));
 
     for (const node of nodes) {
       node.classList.remove("article-enter");
-      // Force a reflow so the animation reliably restarts after client-side swaps.
       void node.offsetWidth;
       node.classList.add("article-enter");
     }
@@ -342,106 +334,6 @@ const nextPost =
 
   runArticleEnterAnimation();
 
-  function attachImageLightbox() {
-    const article = document.querySelector("#article");
-    const lightbox = document.querySelector("[data-image-lightbox]");
-    const preview = lightbox?.querySelector("[data-lightbox-image]");
-    const caption = lightbox?.querySelector("[data-lightbox-caption]");
-    const prevButton = lightbox?.querySelector("[data-lightbox-prev]");
-    const nextButton = lightbox?.querySelector("[data-lightbox-next]");
-    const closeButtons = Array.from(
-      lightbox?.querySelectorAll("[data-lightbox-close]") ?? []
-    );
-
-    if (
-      !(article instanceof HTMLElement) ||
-      !(lightbox instanceof HTMLElement) ||
-      !(preview instanceof HTMLImageElement) ||
-      !(caption instanceof HTMLElement) ||
-      !(prevButton instanceof HTMLButtonElement) ||
-      !(nextButton instanceof HTMLButtonElement)
-    ) {
-      return;
-    }
-
-    const images = Array.from(article.querySelectorAll("img[src]")).filter(
-      image => image instanceof HTMLImageElement
-    );
-    let currentIndex = 0;
-    let previousFocus = null;
-
-    for (const image of images) {
-      if (!(image instanceof HTMLImageElement)) continue;
-      image.classList.add("article-lightbox-image");
-      image.tabIndex = 0;
-      image.setAttribute("role", "button");
-      image.setAttribute("aria-label", image.alt || openImageLabel);
-      image.addEventListener("click", event => {
-        event.preventDefault();
-        openLightbox(images.indexOf(image));
-      });
-      image.addEventListener("keydown", event => {
-        if (event.key !== "Enter" && event.key !== " ") return;
-        event.preventDefault();
-        openLightbox(images.indexOf(image));
-      });
-    }
-
-    for (const button of closeButtons) {
-      button.addEventListener("click", closeLightbox);
-    }
-
-    prevButton.addEventListener("click", () => showImage(currentIndex - 1));
-    nextButton.addEventListener("click", () => showImage(currentIndex + 1));
-
-    lightbox.addEventListener("keydown", event => {
-      if (event.key === "Escape") {
-        closeLightbox();
-      } else if (event.key === "ArrowLeft") {
-        showImage(currentIndex - 1);
-      } else if (event.key === "ArrowRight") {
-        showImage(currentIndex + 1);
-      }
-    });
-
-    function openLightbox(index) {
-      if (index < 0) return;
-      previousFocus = document.activeElement;
-      showImage(index);
-      lightbox.hidden = false;
-      document.documentElement.classList.add("has-image-lightbox");
-      requestAnimationFrame(() => lightbox.focus());
-    }
-
-    function closeLightbox() {
-      lightbox.hidden = true;
-      document.documentElement.classList.remove("has-image-lightbox");
-
-      if (previousFocus instanceof HTMLElement) {
-        previousFocus.focus();
-      }
-    }
-
-    function showImage(index) {
-      currentIndex = (index + images.length) % images.length;
-      const image = images[currentIndex];
-
-      if (!(image instanceof HTMLImageElement)) return;
-
-      preview.src = image.currentSrc || image.src;
-      preview.alt = image.alt;
-
-      const captionText = image.alt.trim();
-      caption.textContent = captionText;
-      caption.hidden = captionText.length === 0;
-
-      const hasMultipleImages = images.length > 1;
-      prevButton.hidden = !hasMultipleImages;
-      nextButton.hidden = !hasMultipleImages;
-    }
-  }
-  attachImageLightbox();
-
   document.addEventListener("astro:after-swap", () => {
     const isPostScope = document.querySelector(
       '[data-post-memory-scope="post"]'
@@ -449,4 +341,44 @@ const nextPost =
     if (!isPostScope) return;
     window.scrollTo({ left: 0, top: 0, behavior: "instant" });
   });
+</script>
+
+<script>
+import PhotoSwipeLightbox from "photoswipe/lightbox";
+import "photoswipe/dist/photoswipe.css";
+
+function initPhotoSwipe() {
+  if ((window as any).__pswpLightbox) {
+    (window as any).__pswpLightbox.destroy();
+    (window as any).__pswpLightbox = null;
+  }
+
+  const article = document.getElementById("article");
+  if (!article) return;
+  const images = article.querySelectorAll("img[src]");
+  if (images.length === 0) return;
+
+  const lightbox = new PhotoSwipeLightbox({
+    gallery: "#article",
+    children: "img",
+    pswpModule: () => import("photoswipe"),
+  });
+
+  lightbox.addFilter("itemData", (itemData, index) => {
+    const img = (itemData as any).element as HTMLImageElement;
+    if (img) {
+      itemData.src = img.currentSrc || img.src;
+      itemData.width = img.naturalWidth || 0;
+      itemData.height = img.naturalHeight || 0;
+      itemData.alt = img.alt;
+    }
+    return itemData;
+  });
+
+  lightbox.init();
+  (window as any).__pswpLightbox = lightbox;
+}
+
+document.addEventListener("astro:page-load", initPhotoSwipe);
+initPhotoSwipe();
 </script>
