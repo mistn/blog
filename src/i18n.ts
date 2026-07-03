@@ -29,27 +29,35 @@ export const ui = {
     },
     pages: {
       postsTitle: "文章",
-      postsDesc: "这里是我发布过的所有文章。",
+      homeDesc:
+        "miuo 的个人技术博客，分享 VPS 运维、自托管服务搭建、开发工具配置与个人工作流优化等领域的原创笔记与详细教程。",
+      postsDesc:
+        "这里是我发布过的所有技术文章，涵盖 VPS 运维记录、自托管服务部署教程、开发工具配置指南以及个人工作流优化经验。",
       tagsTitle: "标签",
-      tagsDesc: "所有文章里用到的标签。",
+      tagsDesc: "按标签分类浏览所有技术文章，快速定位 VPS、自托管、开发工具等感兴趣的主题与教程。",
       tagTitle: "标签：",
       tagDescPrefix: "所有带有“",
       tagDescSuffix: "”标签的文章。",
       archivesTitle: "归档",
       archivesEyebrow: "Archive",
+      archivesDesc: "按时间线浏览 miuo 博客的全部已发布文章，按年份和月份整理，方便回溯历史技术笔记。",
       searchTitle: "搜索",
-      searchDesc: "搜索站内文章。",
+      searchDesc: "搜索站内技术文章、笔记和教程，通过关键词快速定位你需要的内容。",
       animeTitle: "追番列表",
       animeFullTitle: "追番列表 | miuo",
       animeDesc: "可按年份或全部查看 AniList normal 列表中已看完的动画。",
       animeEyebrow: "Anime Archive",
       friendsTitle: "友链",
-      friendsDesc: "交换友链的小站。",
+      friendsDesc:
+        "miuo 的友情链接页面，收录了多个优质个人独立博客，欢迎通过评论区或邮件提交申请交换友链。",
       friendsEyebrow: "Link Exchange",
       aboutTitle: "关于",
       aboutEyebrow: "About",
+      aboutDesc: "了解 miuo 的个人简介、自托管服务列表（听歌记录、壁纸站、临时邮箱等）以及联系方式。",
       notFoundTitle: "页面未找到",
       notFoundCta: "返回首页",
+      notFoundDesc:
+        "您访问的页面不存在，可能已被移除或链接错误。返回 miuo 博客首页浏览更多技术文章。",
     },
     sidebar: {
       notebook: "笔记",
@@ -127,28 +135,40 @@ export const ui = {
     },
     pages: {
       postsTitle: "Posts",
-      postsDesc: "All the articles I have posted.",
+      homeDesc:
+        "miuo's personal tech blog with notes and tutorials on VPS operations, self-hosting services, developer tooling, privacy protection, and workflow optimization.",
+      postsDesc:
+        "All the articles I have posted, covering VPS operations, self-hosting tutorials, dev tooling guides, and workflow optimization tips.",
       tagsTitle: "Tags",
-      tagsDesc: "All the tags used in posts.",
+      tagsDesc:
+        "Browse articles by tag to quickly find technical topics and tutorials that interest you.",
       tagTitle: "Tag: ",
       tagDescPrefix: 'All posts tagged "',
       tagDescSuffix: '".',
       archivesTitle: "Archive",
       archivesEyebrow: "Archive",
+      archivesDesc:
+        "Browse all published articles on miuo's blog in chronological order, organized by year and month for easy reference.",
       searchTitle: "Search",
-      searchDesc: "Search articles on this site.",
+      searchDesc:
+        "Search articles, notes and tutorials on this site to quickly find what you need.",
       animeTitle: "Anime List",
       animeFullTitle: "Anime List | miuo",
       animeDesc:
         "Completed anime from the AniList normal list, viewable by year or as a full list.",
       animeEyebrow: "Anime Archive",
       friendsTitle: "Friends",
-      friendsDesc: "Sites exchanged as friend links.",
+      friendsDesc:
+        "Browse miuo's collection of personal indie blog friend links. Apply for a link exchange via the comment section or by email.",
       friendsEyebrow: "Link Exchange",
       aboutTitle: "About",
       aboutEyebrow: "About",
+      aboutDesc:
+        "Learn about miuo — personal profile, list of self-hosted services, and contact information.",
       notFoundTitle: "Page Not Found",
       notFoundCta: "Go back home",
+      notFoundDesc:
+        "The page you are looking for does not exist. Return to miuo's blog homepage for more technical articles.",
     },
     sidebar: {
       notebook: "Notebook",

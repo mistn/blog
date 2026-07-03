@@ -13,7 +13,7 @@ const posts = await getCollection("blog");
 const tags = getUniqueTags(posts);
 ---
 
-<Layout title={`${copy.pages.tagsTitle} | ${SITE.title}`} {locale}>
+<Layout title={`${copy.pages.tagsTitle} | ${SITE.title}`} description={copy.pages.tagsDesc} {locale}>
   <Main pageTitle={copy.pages.tagsTitle} pageDesc={copy.pages.tagsDesc}>
     <ul class="flex flex-wrap gap-6">
       {tags.map(({ tag, tagName }) => <Tag {tag} {tagName} {locale} />)}

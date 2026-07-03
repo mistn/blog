@@ -4,13 +4,16 @@ import SiteTopbar from "@/components/SiteTopbar.astro";
 import PageHeader from "@/components/PageHeader.astro";
 import Layout from "./Layout.astro";
 import { SITE } from "@/config";
+import { getLocaleFromPath, ui } from "@/i18n";
 
 type Props = MarkdownLayoutProps<{ title: string; headingEyebrow?: string }>;
 
 const { frontmatter } = Astro.props;
+const locale = getLocaleFromPath(Astro.url.pathname);
+const copy = ui[locale];
 ---
 
-<Layout title={`${frontmatter.title} | ${SITE.title}`}>
+<Layout title={`${frontmatter.title} | ${SITE.title}`} description={copy.pages.aboutDesc}>
   <SiteTopbar />
   <main id="main-content" class="mx-auto w-full max-w-4xl px-4 sm:px-6 pt-6 pb-10 md:pt-10 md:pb-14">
     <PageHeader title={frontmatter.title} />

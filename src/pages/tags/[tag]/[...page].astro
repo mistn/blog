@@ -32,7 +32,7 @@ const pageTitle = `${copy.pages.tagTitle}${tagName}`;
 const pageDesc = `${copy.pages.tagDescPrefix}${tagName}${copy.pages.tagDescSuffix}`;
 ---
 
-<Layout title={`${pageTitle} | ${SITE.title}`}>
+<Layout title={`${pageTitle} | ${SITE.title}`} description={pageDesc}>
   <Main pageTitle={pageTitle} pageDesc={pageDesc}>
     <ul>
       {page.data.map(data => <Card {...data} {locale} />)}

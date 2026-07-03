@@ -6,19 +6,23 @@ import Datetime from "@/components/Datetime.astro";
 import getSortedPosts from "@/utils/getSortedPosts";
 import { getPath } from "@/utils/getPath";
 import { SITE } from "@/config";
-import { getLocaleFromPath, localizePath } from "@/i18n";
+import { getLocaleFromPath, localizePath, ui } from "@/i18n";
 
 
 const posts = await getCollection("blog");
 const locale = getLocaleFromPath(Astro.url.pathname);
+const copy = ui[locale];
 const sortedPosts = getSortedPosts(posts);
 const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
 const listPosts = recentPosts.slice(0, SITE.postPerPage);
 const totalPages = Math.ceil(recentPosts.length / SITE.postPerPage);
 const pageNumbers = Array.from({ length: totalPages }, (_, index) => index + 1);
+
+const pageTitle = `${SITE.title} - 技术笔记与个人博客`;
+const pageDesc = copy.pages.homeDesc;
 ---
 
-<Layout>
+<Layout title={pageTitle} description={pageDesc}>
   <SiteTopbar />
   <main
     id="main-content"
@@ -27,6 +31,7 @@ const pageNumbers = Array.from({ length: totalPages }, (_, index) => index + 1);
     class="mx-auto w-full max-w-4xl px-5 sm:px-6 pt-4 pb-10 md:pt-6 md:pb-14"
   >
     <section class="overflow-hidden">
+      <h1 class="sr-only">最新文章</h1>
       <div class="py-1.5 md:py-4">
         <div>
           <div class="min-w-0">

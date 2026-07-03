@@ -9,7 +9,7 @@ const locale = getLocaleFromPath(Astro.url.pathname);
 const copy = ui[locale];
 ---
 
-<Layout title={`404 ${copy.pages.notFoundTitle} | ${SITE.title}`}>
+<Layout title={`404 ${copy.pages.notFoundTitle} | ${SITE.title}`} description={copy.pages.notFoundDesc}>
   <Header />
 
   <main

@@ -14,7 +14,7 @@ const copy = ui[locale];
 let tags = getUniqueTags(posts);
 ---
 
-<Layout title={`${copy.pages.tagsTitle} | ${SITE.title}`}>
+<Layout title={`${copy.pages.tagsTitle} | ${SITE.title}`} description={copy.pages.tagsDesc}>
   <Main pageTitle={copy.pages.tagsTitle} pageDesc={copy.pages.tagsDesc}>
     <ul class="flex flex-wrap gap-6">
       {tags.map(({ tag, tagName }) => <Tag {tag} {tagName} {locale} />)}

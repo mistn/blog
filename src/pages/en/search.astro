@@ -10,7 +10,7 @@ const copy = ui[locale];
 const backUrl = SITE.showBackButton ? `${Astro.url.pathname}` : "/";
 ---
 
-<Layout title={`${copy.pages.searchTitle} | ${SITE.title}`} {locale}>
+<Layout title={`${copy.pages.searchTitle} | ${SITE.title}`} description={copy.pages.searchDesc} {locale}>
   <Main pageTitle={copy.pages.searchTitle} pageDesc={copy.pages.searchDesc}>
     <div id="pagefind-search" class="mt-8" transition:persist data-backurl={backUrl}></div>
   </Main>
