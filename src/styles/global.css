@@ -1,5 +1,34 @@
 @import "tailwindcss";
 @import "./typography.css";
+@import "remark-github-blockquote-alert/alert.css";
+
+html[data-theme="light"] {
+  --color-border-default: #d0d7de;
+  --color-accent-fg: #0969da;
+  --color-accent-emphasis: #0969da;
+  --color-danger-fg: #d1242f;
+  --color-danger-emphasis: #cf222e;
+  --color-attention-fg: #9a6700;
+  --color-attention-emphasis: #9a6700;
+  --color-done-fg: #8250df;
+  --color-done-emphasis: #8250df;
+  --color-success-fg: #1a7f37;
+  --color-success-emphasis: #1f883d;
+}
+
+html[data-theme="dark"] {
+  --color-border-default: #30363d;
+  --color-accent-fg: #58a6ff;
+  --color-accent-emphasis: #1f6feb;
+  --color-danger-fg: #f85149;
+  --color-danger-emphasis: #da3633;
+  --color-attention-fg: #d29922;
+  --color-attention-emphasis: #9e6a03;
+  --color-done-fg: #a371f7;
+  --color-done-emphasis: #8957e5;
+  --color-success-fg: #3fb950;
+  --color-success-emphasis: #238636;
+}
 
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
@@ -242,3 +271,5 @@ html.is-restoring-scroll [data-post-memory-scope="list"] {
 #article img {
   cursor: zoom-in;
 }
+
+
