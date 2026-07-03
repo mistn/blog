@@ -2,6 +2,7 @@
 import PageHeader from "@/components/PageHeader.astro";
 import SiteTopbar from "@/components/SiteTopbar.astro";
 import Layout from "@/layouts/Layout.astro";
+import ArtalkComments from "@/components/ArtalkComments.astro";
 import animeData from "@/data/anime.generated.json";
 import type { AnimeDataPayload, AnimeItem } from "@/types/anime";
 import { getDateLocale, ui } from "@/i18n";
@@ -215,6 +216,8 @@ const updatedLabel = data.updatedAt
           )
         }
   </main>
+
+  <ArtalkComments pageKey="/anime" pageTitle={pageTitle} />
 
   <button
     id="anime-btt"
