@@ -146,7 +146,7 @@
     }
 
     details {
-      @apply inline-block cursor-pointer text-foreground select-none [&_ul]:my-0!;
+      @apply block cursor-pointer text-foreground select-none [&_ul]:my-0!;
     }
     details:not([open]) p {
       display: none;

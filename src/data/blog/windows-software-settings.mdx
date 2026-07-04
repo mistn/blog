@@ -163,7 +163,24 @@ export const CardGroup = ({ title, children }) => (
 
 ![](https://s3.2731515.xyz/PicGo/20260502193819q24E3U.webp)
 
-## 3. 常用网站
+## 3. 一键安装
+
+<details>
+<summary>scoop 批量安装所有列出的软件</summary>
+
+```powershell
+# 添加所需 bucket
+scoop bucket add nerd-fonts
+scoop bucket add lemon
+scoop bucket add versions
+
+# 批量安装
+scoop install 7zip aria2 chafa context-menu-manager czkawka-gui dark ffmpeg git innounp JetBrainsMono-NF localsend mpv neovim-nightly nodejs-lts openssl piclist pnpm python rclone scoop-search tree-sitter unigetui
+```
+
+</details>
+
+## 4. 常用网站
 
 <CardGroup>
   <AppCard name="FreeMdict Forum" link="https://forum.freemdict.com/" desc="MDict 词典资源交流论坛，可用于查找词典资源和配置经验" />
