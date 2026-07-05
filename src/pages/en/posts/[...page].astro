@@ -4,6 +4,7 @@ import { getCollection } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
 import SiteTopbar from "@/components/SiteTopbar.astro";
 import Datetime from "@/components/Datetime.astro";
+import Pagination from "@/components/Pagination.astro";
 import getSortedPosts from "@/utils/getSortedPosts";
 import { getPath } from "@/utils/getPath";
 import { SITE } from "@/config";
@@ -18,15 +19,9 @@ const { page } = Astro.props;
 const locale = "en";
 const copy = ui[locale];
 const listPosts = page.data;
-const pageNumbers = Array.from(
-  { length: page.lastPage },
-  (_, index) => index + 1
-);
 
-function getPageHref(pageNumber: number) {
-  if (pageNumber === 1) return localizePath("/", locale);
-  return localizePath(`/posts/${pageNumber}`, locale);
-}
+const buildPageUrl = (n: number) =>
+  n === 1 ? localizePath("/", locale) : localizePath(`/posts/${n}`, locale);
 ---
 
 <Layout title={`${copy.pages.postsTitle} | ${SITE.title}`} {locale}>
@@ -67,25 +62,7 @@ function getPageHref(pageNumber: number) {
               }
             </div>
 
-            {page.lastPage > 1 && (
-              <nav class="mt-4 md:mt-8 flex justify-center items-center gap-6" aria-label="Pagination Navigation">
-                {pageNumbers.map(pageNumber => (
-                  <a
-                    href={getPageHref(pageNumber)}
-                    class={
-                      pageNumber === page.currentPage
-                        ? "text-gray-800 dark:text-gray-200 font-semibold text-base"
-                        : "text-gray-400 dark:text-gray-500 hover:text-gray-900 dark:hover:text-gray-100 transition-colors text-base"
-                    }
-                    aria-current={
-                      pageNumber === page.currentPage ? "page" : undefined
-                    }
-                  >
-                    {pageNumber}
-                  </a>
-                ))}
-              </nav>
-            )}
+            <Pagination currentPage={page.currentPage} lastPage={page.lastPage} {buildPageUrl} {locale} />
           </div>
         </div>
       </div>

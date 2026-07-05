@@ -12,78 +12,60 @@
 
 ## Features
 
-- **Bilingual** — English and Chinese content via `/en/` path prefix, UI strings managed in `src/i18n.ts`
-- **AniList Integration** — Weekly auto-sync of completed anime, displayed in card grids grouped by year
-- **Friend Links** — Vertical card layout, exchange via [Artalk](https://artalk.js.org/) comments
-- **Offline Search** — Full-text search powered by [Pagefind](https://pagefind.app/)
-- **Auto OG Images** — Social share images generated at build with Satori
+- **Bilingual** — English and Chinese, UI strings managed in `src/i18n.ts`, `/en/` path prefix
+- **AniList Integration** — Weekly auto-sync of completed anime via GitHub Actions
+- **Friend Links** — Exchange via Artalk comments, managed in `src/data/friends.ts`
+- **Offline Search** — Full-text search via Pagefind
+- **Auto OG Images** — Social share images generated at build with Satori + Sharp
 - **KaTeX** — Inline and block math rendering
-- **Shiki** — Dual-theme code highlighting (github-light / night-owl) with filename, diff & highlight annotations
-- **GitHub-style Callouts** — `> [!tip]` / `[!note]` / `[!warning]` syntax, Obsidian-style rendering
-- **Dark/Light Mode** — `data-theme` attribute driven, follows system or manual toggle
-- **Responsive Design** — Mobile full-screen navigation, adaptive card layout
+- **Shiki** — Dual-theme code highlighting with filename, diff & highlight annotations
+- **GitHub-style Callouts** — `> [!tip]` / `[!note]` / `[!warning]` syntax
+- **Dark/Light Mode** — `data-theme` attribute, follows system or manual toggle
+- **Responsive Design** — Mobile navigation, adaptive layout
 - **RSS & Sitemap** — Auto-generated
-- **Draft & Pagination** — Filter by publish date, paginated index and archive
+- **Pagination** — Unified `Pagination` component with ellipsis truncation, reused across index, posts, and tag pages
 
 ## Directory Structure
 
 ```
 /
-├── public/                    # Static assets (avatar, favicon, Pagefind index)
+├── public/                    # Static assets
 ├── src/
-│   ├── assets/
-│   │   └── icons/             # 26 SVG outline icons
-│   ├── components/            # 20 reusable components
-│   │   ├── SiteTopbar.astro   # Top bar (logo, nav, search, theme toggle)
-│   │   ├── HomeTabs.astro     # Desktop navigation tabs
-│   │   ├── CodeSnippet.astro  # Code block with copy button
-│   │   ├── BackToTopButton.astro  # Glassmorphism floating back-to-top
-│   │   ├── TableOfContents.astro  # Floating TOC modal
-│   │   └── ArtalkComments.astro   # Artalk comment integration
+│   ├── assets/icons/          # SVG icons
+│   ├── components/            # Reusable Astro components
+│   │   ├── Pagination.astro   # Pagination with ellipsis & i18n
+│   │   ├── SiteTopbar.astro
+│   │   ├── CodeSnippet.astro
+│   │   ├── BackToTopButton.astro
+│   │   ├── TableOfContents.astro
+│   │   └── ArtalkComments.astro
 │   ├── data/
 │   │   ├── blog/              # Markdown posts
-│   │   ├── anime.generated.json   # Auto-synced anime data
-│   │   └── friends.ts         # Friend links data
-│   ├── layouts/
-│   │   ├── Layout.astro       # Global base layout
-│   │   ├── PostDetails.astro  # Post detail layout
-│   │   ├── Main.astro         # Common page layout
-│   │   └── AboutLayout.astro  # About page layout
-│   ├── pages/
-│   │   ├── index.astro        # Home (paginated post list)
-│   │   ├── about.md           # About page
-│   │   ├── anime.astro        # Anime grid
-│   │   ├── friends.astro      # Friend link cards
-│   │   ├── search.astro       # Pagefind search
-│   │   ├── 404.astro
-│   │   ├── robots.txt.ts
-│   │   ├── rss.xml.ts
-│   │   ├── og.png.ts          # Default OG image
-│   │   ├── archives/          # Archive pages
+│   │   ├── anime.generated.json
+│   │   └── friends.ts
+│   ├── layouts/               # Layouts (Layout, PostDetails, Main, AboutLayout)
+│   ├── pages/                 # Routes: index, about, anime, friends, search, 404
 │   │   ├── posts/             # Post detail + paginated list
-│   │   ├── tags/              # Tag aggregation + filter
-│   │   └── en/                # English pages
-│   ├── scripts/               # Client scripts (theme, back-to-top)
+│   │   ├── tags/              # Tag pages with pagination
+│   │   ├── archives/
+│   │   └── en/                # English pages (mirrored structure)
 │   ├── styles/
-│   │   ├── global.css         # Global styles + Tailwind v4 config
-│   │   └── typography.css     # Typography & code block styles
-│   ├── types/                 # TypeScript type definitions
+│   │   ├── global.css
+│   │   └── typography.css
 │   ├── utils/                 # Utility functions
 │   ├── config.ts              # Site configuration
-│   ├── constants.ts           # Social links & sharing config
 │   ├── content.config.ts      # Content collection schema
 │   └── i18n.ts                # Bilingual UI strings
 ├── scripts/
-│   ├── sync-anime.mjs         # AniList anime sync
-│   └── copy-pagefind.mjs      # Copy Pagefind assets after build
+│   ├── sync-anime.mjs
+│   └── copy-pagefind.mjs
 ├── .github/workflows/
-│   ├── ci.yml                 # PR build & format check
-│   └── anime-sync.yml         # Weekly auto anime sync
-├── Dockerfile                 # Multi-stage Docker build
+│   ├── ci.yml
+│   └── anime-sync.yml
+├── Dockerfile
 ├── docker-compose.yml
 ├── astro.config.ts
-├── package.json
-└── pnpm-lock.yaml
+└── package.json
 ```
 
 ## Tech Stack
@@ -92,14 +74,14 @@
 |------|-----------|
 | Framework | [Astro](https://astro.build/) v5 |
 | Language | TypeScript |
-| Styling | [Tailwind CSS](https://tailwindcss.com/) v4 + [@tailwindcss/typography](https://tailwindcss.com/docs/typography-plugin) |
+| Styling | [Tailwind CSS](https://tailwindcss.com/) v4 + `@tailwindcss/typography` |
 | Search | [Pagefind](https://pagefind.app/) |
 | Code Highlight | [Shiki](https://shiki.style/) |
 | Math | [KaTeX](https://katex.org/) |
 | OG Image | [Satori](https://github.com/vercel/satori) + [Sharp](https://sharp.pixelplumbing.com/) |
 | Comments | [Artalk](https://artalk.js.org/) |
-| Formatting | [Prettier](https://prettier.io/) + [prettier-plugin-astro](https://github.com/withastro/prettier-plugin-astro) |
-| Lint | [ESLint](https://eslint.org/) Flat Config |
+| Formatting | Prettier + `prettier-plugin-astro` |
+| Lint | ESLint Flat Config |
 | CI/CD | GitHub Actions |
 | Deploy | Vercel / Cloudflare Pages / Docker |
 
@@ -107,8 +89,8 @@
 
 ```bash
 pnpm install
-pnpm dev       # Start dev server at localhost:4321
-pnpm build     # Production build
+pnpm dev       # localhost:4321
+pnpm build     # Production build + Pagefind indexing
 pnpm preview   # Preview build
 ```
 
@@ -116,16 +98,9 @@ pnpm preview   # Preview build
 
 ```bash
 docker compose up -d
-
-# or build manually
-docker build -t miuo-blog .
-docker run -p 4321:80 miuo-blog
 ```
 
 ### Cloudflare Pages
-
-1. Push to GitHub, connect repo in Cloudflare Pages
-2. Build settings:
 
 | Config | Value |
 |--------|-------|
@@ -134,52 +109,36 @@ docker run -p 4321:80 miuo-blog
 | Output directory | `dist` |
 | Node.js version | 20+ |
 
-3. Pages auto-rebuilds on every `main` push
-
 ### Vercel
 
-1. Push to GitHub, import repo in [Vercel](https://vercel.com)
-2. Vercel auto-detects Astro — no config needed
-3. Every `main` push triggers a new deployment
+Auto-detects Astro — import repo and deploy.
 
-Or connect via CLI:
-
-```bash
-pnpm dlx vercel        # Deploy preview
-pnpm dlx vercel --prod # Deploy to production
-```
-
-## Available Commands
+## Commands
 
 | Command | Description |
 |---------|------------|
 | `pnpm dev` | Start dev server |
-| `pnpm build` | Production build |
+| `pnpm build` | Production build + Pagefind |
 | `pnpm preview` | Preview build |
 | `pnpm sync` | Generate Astro types |
-| `pnpm anime:sync` | Sync AniList anime data |
+| `pnpm anime:sync` | Sync AniList data |
 | `pnpm format` | Prettier format |
-| `pnpm format:check` | Check format |
 | `pnpm lint` | ESLint check |
 
-## Site Configuration
+## Configuration
 
-Edit `src/config.ts` to modify:
-
-- `website` — Site URL
-- `author` / `title` — Author & title
-- `desc` — Site description
-- `lightAndDarkMode` — Toggle dark/light mode
-- `postPerIndex` / `postPerPage` — Posts per page
-- `showArchives` — Show archive page
-- `editPost` — "Edit this page" link
+Edit `src/config.ts`:
+- `website` / `author` / `title` / `desc`
+- `postPerPage` — Posts per page (default: 4)
+- `lightAndDarkMode` — Toggle theme
+- `editPost` — GitHub edit link
 
 ## Customization
 
-- **Anime Sync**: Run `pnpm anime:sync` to sync from AniList, generates `src/data/anime.generated.json`. GitHub Actions runs weekly.
-- **Friend Links**: Edit `src/data/friends.ts`. Submit via Artalk comments on the friends page.
-- **Bilingual Content**: UI strings in `src/i18n.ts`, English pages under `src/pages/en/`, accessible via `/en/` path.
-- **Posts**: Markdown files in `src/data/blog/`, frontmatter requires `title`, `pubDatetime`, `description`, `tags`.
+- **Anime**: `pnpm anime:sync` syncs from AniList. GitHub Actions runs weekly.
+- **Friends**: Edit `src/data/friends.ts`.
+- **i18n**: UI strings in `src/i18n.ts`. English routes under `/en/`.
+- **Posts**: Markdown in `src/data/blog/`. Required frontmatter: `title`, `pubDatetime`, `description`, `tags`.
 
 ## License
 

@@ -8,7 +8,7 @@ import Pagination from "@/components/Pagination.astro";
 import getUniqueTags from "@/utils/getUniqueTags";
 import getPostsByTag from "@/utils/getPostsByTag";
 import { SITE } from "@/config";
-import { getLocaleFromPath, ui } from "@/i18n";
+import { getLocaleFromPath, localizePath, ui } from "@/i18n";
 
 export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
   const posts = await getCollection("blog");
@@ -26,8 +26,11 @@ export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
 }
 
 const { page, tagName } = Astro.props;
+const { tag } = Astro.params;
 const locale = getLocaleFromPath(Astro.url.pathname);
 const copy = ui[locale];
+const buildPageUrl = (n: number) =>
+  n === 1 ? localizePath(`/tags/${tag}`, locale) : localizePath(`/tags/${tag}/${n}`, locale);
 const pageTitle = `${copy.pages.tagTitle}${tagName}`;
 const pageDesc = `${copy.pages.tagDescPrefix}${tagName}${copy.pages.tagDescSuffix}`;
 ---
@@ -39,5 +42,5 @@ const pageDesc = `${copy.pages.tagDescPrefix}${tagName}${copy.pages.tagDescSuffi
     </ul>
   </Main>
 
-  <Pagination {page} {locale} />
+  <Pagination currentPage={page.currentPage} lastPage={page.lastPage} {buildPageUrl} {locale} />
 </Layout>

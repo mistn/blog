@@ -1,55 +1,73 @@
 ---
-import type { Page } from "astro";
-import type { CollectionEntry } from "astro:content";
-import { getLocaleFromPath, localizePath, ui, type Locale } from "@/i18n";
+import { getLocaleFromPath, ui, type Locale } from "@/i18n";
 
 type Props = {
-  page: Page<CollectionEntry<"blog">>;
+  currentPage: number;
+  lastPage: number;
+  buildPageUrl: (pageNumber: number) => string;
   locale?: Locale;
 };
 
-const { page, locale = getLocaleFromPath(Astro.url.pathname) } = Astro.props;
-const copy = ui[locale];
-const prevUrl = page.url.prev ? localizePath(page.url.prev, locale) : undefined;
-const nextUrl = page.url.next ? localizePath(page.url.next, locale) : undefined;
+const {
+  currentPage,
+  lastPage,
+  buildPageUrl,
+  locale = getLocaleFromPath(Astro.url.pathname),
+} = Astro.props;
 
-const pages = Array.from({ length: page.lastPage }, (_, i) => ({
-  number: i + 1,
-  url: i + 1 === 1 ? localizePath("/", locale) : localizePath(`/posts/${i + 1}`, locale),
-  current: i + 1 === page.currentPage,
-}));
+const copy = ui[locale];
+const prevUrl = currentPage > 1 ? buildPageUrl(currentPage - 1) : undefined;
+const nextUrl = currentPage < lastPage ? buildPageUrl(currentPage + 1) : undefined;
+
+function getPages(): (number | "...")[] {
+  if (lastPage <= 5) {
+    return Array.from({ length: lastPage }, (_, i) => i + 1);
+  }
+
+  if (currentPage <= 3) {
+    return [1, 2, 3, "...", lastPage];
+  }
+
+  if (currentPage >= lastPage - 2) {
+    return [1, "...", lastPage - 2, lastPage - 1, lastPage];
+  }
+
+  return [1, "...", currentPage, "...", lastPage];
+}
+
+const pages = getPages();
 ---
 
 {
-  page.lastPage > 1 && (
+  lastPage > 1 && (
     <nav class="mt-auto mb-4 flex items-center justify-center gap-1.5 text-sm" role="navigation" aria-label="Pagination Navigation">
-      {
-        prevUrl ? (
-          <a href={prevUrl} class="px-3 py-1.5 text-foreground/45 transition-colors hover:text-foreground rounded-lg" aria-label={copy.actions.previousPageLabel}>
-            {copy.actions.previousPage}
-          </a>
-        ) : (
-          <span class="px-3 py-1.5 text-foreground/20">{copy.actions.previousPage}</span>
-        )
-      }
+      {prevUrl ? (
+        <a href={prevUrl} class="flex h-7 w-7 items-center justify-center text-[22px] text-foreground/45 transition-colors hover:text-foreground rounded-lg leading-none -translate-y-[2px]" aria-label={copy.actions.previousPageLabel}>
+          ‹
+        </a>
+      ) : (
+        <span class="flex h-7 w-7 items-center justify-center text-[22px] text-foreground/20 leading-none -translate-y-[2px]">‹</span>
+      )}
 
       {pages.map(p =>
-        p.current ? (
-          <span class="rounded-lg bg-muted/60 px-3 py-1.5 font-semibold text-foreground">{p.number}</span>
+        p === "..." ? (
+          <span class="flex h-7 w-7 items-center justify-center text-foreground/30">⋯</span>
+        ) : p === currentPage ? (
+          <span class="flex h-7 w-7 items-center justify-center rounded-lg bg-muted/60 font-semibold text-foreground">{p}</span>
         ) : (
-          <a href={p.url} class="rounded-lg px-3 py-1.5 text-foreground/45 transition-colors hover:text-foreground">{p.number}</a>
+          <a href={buildPageUrl(p)} class="flex h-7 w-7 items-center justify-center rounded-lg text-foreground/45 transition-colors hover:text-foreground">{p}</a>
         )
       )}
 
-      {
-        nextUrl ? (
-          <a href={nextUrl} class="px-3 py-1.5 text-foreground/45 transition-colors hover:text-foreground rounded-lg" aria-label={copy.actions.nextPageLabel}>
-            {copy.actions.nextPage}
-          </a>
-        ) : (
-          <span class="px-3 py-1.5 text-foreground/20">{copy.actions.nextPage}</span>
-        )
-      }
+      {nextUrl ? (
+        <a href={nextUrl} class="flex h-7 w-7 items-center justify-center text-[22px] text-foreground/45 transition-colors hover:text-foreground rounded-lg leading-none -translate-y-[2px]" aria-label={copy.actions.nextPageLabel}>
+          <span class="inline-block [transform:scaleX(-1)]">‹</span>
+        </a>
+      ) : (
+        <span class="flex h-7 w-7 items-center justify-center text-[22px] text-foreground/20 leading-none -translate-y-[2px]">
+          <span class="inline-block [transform:scaleX(-1)]">‹</span>
+        </span>
+      )}
     </nav>
   )
 }

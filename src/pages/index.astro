@@ -3,6 +3,7 @@ import { getCollection } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
 import SiteTopbar from "@/components/SiteTopbar.astro";
 import Datetime from "@/components/Datetime.astro";
+import Pagination from "@/components/Pagination.astro";
 import getSortedPosts from "@/utils/getSortedPosts";
 import { getPath } from "@/utils/getPath";
 import { SITE } from "@/config";
@@ -16,7 +17,9 @@ const sortedPosts = getSortedPosts(posts);
 const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
 const listPosts = recentPosts.slice(0, SITE.postPerPage);
 const totalPages = Math.ceil(recentPosts.length / SITE.postPerPage);
-const pageNumbers = Array.from({ length: totalPages }, (_, index) => index + 1);
+
+const buildPageUrl = (n: number) =>
+  n === 1 ? localizePath("/", locale) : localizePath(`/posts/${n}`, locale);
 
 const pageTitle = `${SITE.title} - 技术笔记与个人博客`;
 const pageDesc = copy.pages.homeDesc;
@@ -57,27 +60,7 @@ const pageDesc = copy.pages.homeDesc;
                 ))
               }
             </div>
-            {totalPages > 1 && (
-              <nav class="mt-4 md:mt-8 flex justify-center items-center gap-6" aria-label="Pagination Navigation">
-                {pageNumbers.map(pageNumber => (
-                  <a
-                    href={
-                      pageNumber === 1
-                        ? localizePath("/", locale)
-                        : localizePath(`/posts/${pageNumber}`, locale)
-                    }
-                    class={
-                      pageNumber === 1
-                        ? "text-gray-800 dark:text-gray-200 font-semibold text-base"
-                        : "text-gray-400 dark:text-gray-500 hover:text-gray-900 dark:hover:text-gray-100 transition-colors text-base"
-                    }
-                    aria-current={pageNumber === 1 ? "page" : undefined}
-                  >
-                    {pageNumber}
-                  </a>
-                ))}
-              </nav>
-            )}
+            <Pagination currentPage={1} lastPage={totalPages} {buildPageUrl} {locale} />
           </div>
         </div>
       </div>
