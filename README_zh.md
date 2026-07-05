@@ -12,78 +12,71 @@
 
 ## 功能
 
-- **中英双语** — 通过 `/en/` 路径前缀自动切换，UI 文案统一在 `src/i18n.ts` 管理
-- **AniList 追番** — 每周自动同步已看完的动画，卡片网格展示，按年份分组
-- **友链交换** — 垂直名片式卡片布局，通过 [Artalk](https://artalk.js.org/) 评论区交换
-- **静态搜索** — [Pagefind](https://pagefind.app/) 离线全文搜索
-- **文章 OG 图片** — 使用 Satori 自动生成社交分享图
-- **KaTeX 数学公式** — 行内与块级公式渲染
-- **Shiki 代码高亮** — 双主题（github-light / night-owl），文件名提示、diff 与 highlight 注解
-- **GitHub 风格提示块** — 支持 `> [!tip]` / `[!note]` / `[!warning]` 语法，Obsidian 风格渲染
+- **中英双语** — 通过 `/en/` 路径前缀切换，UI 文案统一在 `src/i18n.ts` 管理
+- **AniList 追番** — 每周自动同步已看完的动画，卡片网格展示
+- **友链交换** — 通过 Artalk 评论区交换，数据在 `src/data/friends.ts`
+- **离线搜索** — Pagefind 全文搜索
+- **自动 OG 图片** — 构建时为每篇文章生成社交分享图（Satori + Sharp）
+- **KaTeX** — 行内与块级数学公式
+- **Shiki** — 双主题代码高亮，支持文件名、diff 与 highlight 注解
+- **GitHub 风格提示块** — `> [!tip]` / `[!note]` / `[!warning]` 语法
 - **深浅色模式** — `data-theme` 属性驱动，跟随系统或手动切换
-- **响应式设计** — 移动端全屏覆盖式导航，文章卡片自适应
-- **RSS 订阅 & Sitemap** — 自动生成
-- **草稿 & 分页** — 按发布时间过滤，首页与文章列表分页
+- **响应式设计** — 移动端适配
+- **RSS & Sitemap** — 自动生成
+- **统一分页** — 带省略号截断的分页组件，首页、文章列表、标签页复用
 
 ## 目录结构
 
 ```
 /
-├── public/                    # 静态资源（头像、favicon、Pagefind 索引）
+├── public/                    # 静态资源
 ├── src/
-│   ├── assets/
-│   │   └── icons/             # 26 个 SVG 线框图标
-│   ├── components/            # 20 个可复用组件
+│   ├── assets/icons/          # 26 个 SVG 出线图标
+│   ├── components/            # 19 个可复用组件
+│   │   ├── Pagination.astro   # 分页（省略号截断 + 中英双语）
 │   │   ├── SiteTopbar.astro   # 顶栏（Logo、导航、搜索、主题切换）
 │   │   ├── HomeTabs.astro     # 桌面端导航标签
 │   │   ├── CodeSnippet.astro  # 代码块（含复制按钮）
-│   │   ├── BackToTopButton.astro  # 返回顶部（毛玻璃悬浮）
-│   │   ├── TableOfContents.astro  # 文章目录（悬浮弹窗）
-│   │   └── ArtalkComments.astro   # Artalk 评论集成
+│   │   ├── BackToTopButton.astro
+│   │   ├── TableOfContents.astro
+│   │   ├── ArtalkComments.astro
+│   │   ├── Card.astro / Datetime.astro / Tag.astro
+│   │   ├── Header.astro / Footer.astro / Socials.astro
+│   │   ├── ShareLinks.astro / LinkButton.astro / EditPost.astro
+│   │   ├── Breadcrumb.astro / BackButton.astro / PageHeader.astro
+│   │   └── ArticleImageLightbox.astro
 │   ├── data/
-│   │   ├── blog/              # Markdown 文章
-│   │   ├── anime.generated.json    # 自动同步的追番数据
-│   │   └── friends.ts         # 友链数据
-│   ├── layouts/
-│   │   ├── Layout.astro       # 全局基础布局
-│   │   ├── PostDetails.astro  # 文章详情布局
-│   │   ├── Main.astro         # 通用页面布局
-│   │   └── AboutLayout.astro  # 关于页面布局
+│   │   ├── blog/              # 15 篇 Markdown/MDX 文章
+│   │   ├── anime.generated.json
+│   │   └── friends.ts
+│   ├── layouts/               # Layout, PostDetails, Main, AboutLayout
 │   ├── pages/
-│   │   ├── index.astro        # 首页（分页文章列表）
-│   │   ├── about.md           # 关于页
-│   │   ├── anime.astro        # 追番页
-│   │   ├── friends.astro      # 友链页
-│   │   ├── search.astro       # 搜索页
-│   │   ├── 404.astro
-│   │   ├── robots.txt.ts
-│   │   ├── rss.xml.ts
-│   │   ├── og.png.ts          # 默认 OG 图片
-│   │   ├── archives/          # 归档页
-│   │   ├── posts/             # 文章详情 + 分页列表
-│   │   ├── tags/              # 标签聚合 + 标签筛选
-│   │   └── en/                # 英文版全量页面
-│   ├── scripts/               # 客户端脚本
+│   │   ├── index.astro        # 首页（分页）
+│   │   ├── about.md / anime.astro / friends.astro / search.astro / 404.astro
+│   │   ├── posts/             # 文章详情 + 分页列表 + 每篇文章 OG 图生成
+│   │   ├── tags/              # 标签聚合 + 分页筛选
+│   │   ├── archives/
+│   │   └── en/                # 英文版页面（镜像结构）
+│   ├── scripts/               # theme.ts, back-button-fallback.ts
 │   ├── styles/
-│   │   ├── global.css         # 全局样式 + Tailwind v4 配置
+│   │   ├── global.css         # Tailwind v4 配置
 │   │   └── typography.css     # 排版与代码块样式
 │   ├── types/                 # TypeScript 类型定义
-│   ├── utils/                 # 工具函数
+│   ├── utils/                 # 15 个工具模块（OG 模板、rehype 插件等）
 │   ├── config.ts              # 站点配置
 │   ├── constants.ts           # 社交链接与分享配置
 │   ├── content.config.ts      # 内容集合 Schema
 │   └── i18n.ts                # 中英文 UI 文案
 ├── scripts/
-│   ├── sync-anime.mjs         # AniList 追番数据同步
-│   └── copy-pagefind.mjs      # 构建后复制 Pagefind 资源
+│   ├── sync-anime.mjs
+│   └── copy-pagefind.mjs
 ├── .github/workflows/
-│   ├── ci.yml                 # PR 构建与格式检查
-│   └── anime-sync.yml         # 每周自动同步追番
-├── Dockerfile                 # 多阶段 Docker 构建
+│   ├── ci.yml
+│   └── anime-sync.yml
+├── Dockerfile
 ├── docker-compose.yml
 ├── astro.config.ts
-├── package.json
-└── pnpm-lock.yaml
+└── package.json
 ```
 
 ## 技术栈
@@ -92,14 +85,14 @@
 |------|------|
 | 框架 | [Astro](https://astro.build/) v5 |
 | 语言 | TypeScript |
-| 样式 | [Tailwind CSS](https://tailwindcss.com/) v4 + [@tailwindcss/typography](https://tailwindcss.com/docs/typography-plugin) |
+| 样式 | [Tailwind CSS](https://tailwindcss.com/) v4 + `@tailwindcss/typography` |
 | 搜索 | [Pagefind](https://pagefind.app/) |
 | 代码高亮 | [Shiki](https://shiki.style/) |
 | 数学公式 | [KaTeX](https://katex.org/) |
 | OG 图片 | [Satori](https://github.com/vercel/satori) + [Sharp](https://sharp.pixelplumbing.com/) |
 | 评论 | [Artalk](https://artalk.js.org/) |
-| 格式化 | [Prettier](https://prettier.io/) + [prettier-plugin-astro](https://github.com/withastro/prettier-plugin-astro) |
-| Lint | [ESLint](https://eslint.org/) Flat Config |
+| 格式化 | Prettier + `prettier-plugin-astro` |
+| Lint | ESLint Flat Config |
 | CI/CD | GitHub Actions |
 | 部署 | Vercel / Cloudflare Pages / Docker |
 
@@ -107,8 +100,8 @@
 
 ```bash
 pnpm install
-pnpm dev       # 启动开发服务器
-pnpm build     # 生产构建
+pnpm dev       # localhost:4321
+pnpm build     # astro check && astro build + Pagefind 索引
 pnpm preview   # 预览构建
 ```
 
@@ -116,70 +109,47 @@ pnpm preview   # 预览构建
 
 ```bash
 docker compose up -d
-
-# 或手动构建
-docker build -t miuo-blog .
-docker run -p 4321:80 miuo-blog
 ```
 
 ### Cloudflare Pages
-
-1. 推送到 GitHub，在 Cloudflare Pages 连接仓库
-2. 构建设置：
 
 | 配置项 | 值 |
 |--------|-----|
 | 框架预设 | Astro |
 | 构建命令 | `pnpm build` |
-| 构建输出目录 | `dist` |
-| Node.js 版本 | 20 或更高 |
-
-3. 每次 `main` 分支推送自动重新构建
+| 输出目录 | `dist` |
+| Node.js | 20+ |
 
 ### Vercel
 
-1. 推送到 GitHub，在 [Vercel](https://vercel.com) 导入仓库
-2. Vercel 自动识别 Astro 项目，无需额外配置
-3. 每次 `main` 分支推送自动部署
-
-或通过 CLI 部署：
-
-```bash
-pnpm dlx vercel        # 部署预览版
-pnpm dlx vercel --prod # 部署到生产环境
-```
+自动识别 Astro 项目，导入仓库即可。
 
 ## 可用命令
 
 | 命令 | 说明 |
 |------|------|
 | `pnpm dev` | 启动开发服务器 |
-| `pnpm build` | 生产构建 |
+| `pnpm build` | 生产构建 + Pagefind |
 | `pnpm preview` | 预览构建 |
 | `pnpm sync` | 生成 Astro 类型 |
-| `pnpm anime:sync` | 同步 AniList 追番数据 |
+| `pnpm anime:sync` | 同步 AniList 数据 |
 | `pnpm format` | Prettier 格式化 |
-| `pnpm format:check` | 检查格式 |
 | `pnpm lint` | ESLint 检查 |
 
 ## 站点配置
 
-编辑 `src/config.ts` 可修改：
-
-- `website` — 站点 URL
-- `author` / `title` — 作者与标题
-- `desc` — 站点描述
-- `lightAndDarkMode` — 是否启用深浅色切换
-- `postPerIndex` / `postPerPage` — 首页与列表页每页文章数
-- `showArchives` — 是否显示归档页
+编辑 `src/config.ts`：
+- `website` / `author` / `title` / `desc`
+- `postPerPage` — 每页文章数（默认 4）
+- `lightAndDarkMode` — 深浅色切换
 - `editPost` — 文章底部"编辑此页"链接
 
 ## 自定义
 
-- **追番同步**：运行 `pnpm anime:sync` 从 AniList 同步数据，生成 `src/data/anime.generated.json`。GitHub Actions 每周一自动执行。
-- **友链**：编辑 `src/data/friends.ts` 添加或修改友链，页面底部的 Artalk 评论区用于交换申请。
-- **双语内容**：UI 文案在 `src/i18n.ts`，英文页面放在 `src/pages/en/` 下，通过 `/en/` 路径访问。
-- **文章**：Markdown 文件放在 `src/data/blog/`，头部 frontmatter 需包含 `title`、`pubDatetime`、`description`、`tags`。
+- **追番**：`pnpm anime:sync` 同步 AniList，GitHub Actions 每周自动执行
+- **友链**：编辑 `src/data/friends.ts`
+- **双语**：UI 文案在 `src/i18n.ts`，英文页面在 `src/pages/en/`
+- **文章**：Markdown 放在 `src/data/blog/`，需 `title` / `pubDatetime` / `description` / `tags`
 
 ## License
 
@@ -187,4 +157,4 @@ MIT
 
 ---
 
-基于 [AstroPaper](https://github.com/satnaing/astro-paper) 构建，由 [miuo](https://blog.miuo.me/) 定制维护。
+基于 [AstroPaper](https://github.com/satnaing/astro-paper) 构建，由 [miuo](https://blog.miuo.me/) 维护。

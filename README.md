@@ -12,18 +12,18 @@
 
 ## Features
 
-- **Bilingual** — English and Chinese, UI strings managed in `src/i18n.ts`, `/en/` path prefix
+- **Bilingual** — English and Chinese, UI strings in `src/i18n.ts`, `/en/` path prefix
 - **AniList Integration** — Weekly auto-sync of completed anime via GitHub Actions
 - **Friend Links** — Exchange via Artalk comments, managed in `src/data/friends.ts`
 - **Offline Search** — Full-text search via Pagefind
-- **Auto OG Images** — Social share images generated at build with Satori + Sharp
+- **Auto OG Images** — Per-post social share images at build with Satori + Sharp
 - **KaTeX** — Inline and block math rendering
 - **Shiki** — Dual-theme code highlighting with filename, diff & highlight annotations
 - **GitHub-style Callouts** — `> [!tip]` / `[!note]` / `[!warning]` syntax
 - **Dark/Light Mode** — `data-theme` attribute, follows system or manual toggle
 - **Responsive Design** — Mobile navigation, adaptive layout
 - **RSS & Sitemap** — Auto-generated
-- **Pagination** — Unified `Pagination` component with ellipsis truncation, reused across index, posts, and tag pages
+- **Pagination** — Unified component with ellipsis truncation, reused across index, posts, and tags
 
 ## Directory Structure
 
@@ -31,29 +31,40 @@
 /
 ├── public/                    # Static assets
 ├── src/
-│   ├── assets/icons/          # SVG icons
-│   ├── components/            # Reusable Astro components
+│   ├── assets/icons/          # 26 SVG outline icons
+│   ├── components/            # 19 reusable Astro components
 │   │   ├── Pagination.astro   # Pagination with ellipsis & i18n
-│   │   ├── SiteTopbar.astro
-│   │   ├── CodeSnippet.astro
+│   │   ├── SiteTopbar.astro   # Top bar (logo, nav, search, theme toggle)
+│   │   ├── HomeTabs.astro     # Desktop navigation tabs
+│   │   ├── CodeSnippet.astro  # Code block with copy button
 │   │   ├── BackToTopButton.astro
 │   │   ├── TableOfContents.astro
-│   │   └── ArtalkComments.astro
+│   │   ├── ArtalkComments.astro
+│   │   ├── Card.astro / Datetime.astro / Tag.astro
+│   │   ├── Header.astro / Footer.astro / Socials.astro
+│   │   ├── ShareLinks.astro / LinkButton.astro / EditPost.astro
+│   │   ├── Breadcrumb.astro / BackButton.astro / PageHeader.astro
+│   │   └── ArticleImageLightbox.astro
 │   ├── data/
-│   │   ├── blog/              # Markdown posts
+│   │   ├── blog/              # 15 Markdown/MDX posts
 │   │   ├── anime.generated.json
 │   │   └── friends.ts
-│   ├── layouts/               # Layouts (Layout, PostDetails, Main, AboutLayout)
-│   ├── pages/                 # Routes: index, about, anime, friends, search, 404
-│   │   ├── posts/             # Post detail + paginated list
-│   │   ├── tags/              # Tag pages with pagination
+│   ├── layouts/               # Layout, PostDetails, Main, AboutLayout
+│   ├── pages/
+│   │   ├── index.astro        # Home (paginated)
+│   │   ├── about.md / anime.astro / friends.astro / search.astro / 404.astro
+│   │   ├── posts/             # Post detail + paginated list + per-post OG image
+│   │   ├── tags/              # Tag aggregation + paginated filtering
 │   │   ├── archives/
 │   │   └── en/                # English pages (mirrored structure)
+│   ├── scripts/               # theme.ts, back-button-fallback.ts
 │   ├── styles/
-│   │   ├── global.css
-│   │   └── typography.css
-│   ├── utils/                 # Utility functions
+│   │   ├── global.css         # Tailwind v4 config
+│   │   └── typography.css     # Typography & code blocks
+│   ├── types/                 # TypeScript definitions
+│   ├── utils/                 # 15 utility modules (OG templates, rehype plugins, etc.)
 │   ├── config.ts              # Site configuration
+│   ├── constants.ts           # Social links & sharing config
 │   ├── content.config.ts      # Content collection schema
 │   └── i18n.ts                # Bilingual UI strings
 ├── scripts/
@@ -90,7 +101,7 @@
 ```bash
 pnpm install
 pnpm dev       # localhost:4321
-pnpm build     # Production build + Pagefind indexing
+pnpm build     # astro check && astro build + Pagefind indexing
 pnpm preview   # Preview build
 ```
 
