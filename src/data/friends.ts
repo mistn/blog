@@ -82,4 +82,10 @@ export const friendLinks: FriendLink[] = [
     avatar: "https://q2.qlogo.cn/headimg_dl?dst_uin=9892214&spec=0",
     description: "分享、实践、学习",
   },
+  {
+    name: "胡杨怕火",
+    href: "https://funingna-wakawaka.github.io/",
+    avatar: "https://funingna-wakawaka.github.io/images/0.png",
+    description: "传递笑容魔法的Ciallo～(∠・ω< )⌒☆加一下友链",
+  },
 ];
