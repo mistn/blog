@@ -86,6 +86,6 @@ export const friendLinks: FriendLink[] = [
     name: "胡杨怕火",
     href: "https://funingna-wakawaka.github.io/",
     avatar: "https://funingna-wakawaka.github.io/images/0.png",
-    description: "传递笑容魔法的Ciallo～(∠・ω< )⌒☆加一下友链",
+    description: "传递笑容魔法的Ciallo～(∠・ω< )⌒☆",
   },
 ];
