@@ -157,4 +157,4 @@ MIT
 
 ---
 
-基于 [AstroPaper](https://github.com/satnaing/astro-paper) 构建，由 [miuo](https://blog.miuo.me/) 维护。
+基于 [AstroPaper](https://github.com/satnaing/astro-paper) 构建，由 [miuo](https://miuo.me/) 维护。

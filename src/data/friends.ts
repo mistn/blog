@@ -12,9 +12,9 @@ export const defaultFriendAvatar = "/friend-default-avatar.avif";
 
 export const siteProfile = {
   name: "miuo",
-  href: "https://blog.miuo.me/",
+  href: "https://miuo.me/",
   description: "Notes, essays, experiments, and the bits worth keeping around.",
-  avatar: "https://blog.miuo.me/avatar.avif",
+  avatar: "https://miuo.me/avatar.avif",
 };
 
 export const friendLinks: FriendLink[] = [

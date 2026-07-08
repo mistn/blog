@@ -3,4 +3,4 @@ Allow: /
 Disallow: /404/
 Disallow: /en/404/
 
-Sitemap: https://blog.miuo.me/sitemap-index.xml
+Sitemap: https://miuo.me/sitemap-index.xml

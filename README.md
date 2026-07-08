@@ -157,4 +157,4 @@ MIT
 
 ---
 
-Built on [AstroPaper](https://github.com/satnaing/astro-paper), maintained by [miuo](https://blog.miuo.me/).
+Built on [AstroPaper](https://github.com/satnaing/astro-paper), maintained by [miuo](https://miuo.me/).

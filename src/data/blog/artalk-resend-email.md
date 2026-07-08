@@ -179,7 +179,7 @@ description: 使用 Resend 为 Artalk 评论系统配置邮件通知，并自定
         </div>
         <div class="footer">
             <p>本邮件为系统自动发送，请勿直接回复。</p>
-            <p>Copyright © 2026 <a href="https://blog.miuo.me" target="_blank">miuo</a></p>
+            <p>Copyright © 2026 <a href="https://miuo.me" target="_blank">miuo</a></p>
         </div>
     </div>
 </body>

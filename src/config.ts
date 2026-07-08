@@ -1,5 +1,5 @@
 export const SITE = {
-  website: "https://blog.miuo.me/",
+  website: "https://miuo.me/",
   author: "miuo",
   startYear: 2025,
   profile: "",
