@@ -106,15 +106,11 @@ const containerId = `artalk-comments-${pageKey.replace(/[^a-zA-Z0-9_-]/g, "-")}`
     try {
       const { default: Artalk } = await import(ARTALK_JS_URL);
 
-      if (window.location.search) {
-        window.history.replaceState({}, "", window.location.pathname);
-      }
-
       window.__artalk = Artalk.init({
         el,
         server,
         site: siteName,
-        pageKey: window.location.pathname,
+        pageKey,
         pageTitle,
         darkMode: isDarkTheme(),
         locale: {
@@ -189,6 +185,8 @@ const containerId = `artalk-comments-${pageKey.replace(/[^a-zA-Z0-9_-]/g, "-")}`
   }
 
   function scheduleArtalkMount(retryCount = 0) {
+    if (window.__artalkMounting) return;
+
     const el = document.getElementById(containerId);
 
     if (!el) {
@@ -200,10 +198,13 @@ const containerId = `artalk-comments-${pageKey.replace(/[^a-zA-Z0-9_-]/g, "-")}`
       return;
     }
 
+    window.__artalkMounting = true;
     void mountArtalk().then(() => {
       requestAnimationFrame(() => {
         syncArtalkTheme();
       });
+    }).finally(() => {
+      window.__artalkMounting = false;
     });
   }
 
