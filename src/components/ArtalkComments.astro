@@ -106,11 +106,15 @@ const containerId = `artalk-comments-${pageKey.replace(/[^a-zA-Z0-9_-]/g, "-")}`
     try {
       const { default: Artalk } = await import(ARTALK_JS_URL);
 
+      if (window.location.search) {
+        window.history.replaceState({}, "", window.location.pathname);
+      }
+
       window.__artalk = Artalk.init({
         el,
         server,
         site: siteName,
-        pageKey,
+        pageKey: window.location.pathname,
         pageTitle,
         darkMode: isDarkTheme(),
         locale: {
