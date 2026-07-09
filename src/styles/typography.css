@@ -158,6 +158,7 @@
 
     pre {
       @apply focus-visible:border-transparent focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-dashed;
+      line-height: 1.6;
     }
 
 
