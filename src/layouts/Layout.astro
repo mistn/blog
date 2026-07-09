@@ -155,13 +155,11 @@ const resolvedStructuredData = structuredData
       set:html={JSON.stringify(resolvedStructuredData)}
     />
 
-    <!-- Enable RSS feed auto-discovery  -->
-    <!-- https://docs.astro.build/en/recipes/rss/#enabling-rss-feed-auto-discovery -->
     <link
       rel="alternate"
-      type="application/rss+xml"
+      type="application/atom+xml"
       title={SITE.title}
-      href={new URL("rss.xml", Astro.site)}
+      href={new URL("atom.xml", Astro.site)}
     />
 
     <meta name="theme-color" content="" />
