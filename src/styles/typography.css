@@ -158,6 +158,13 @@
 
     pre {
       @apply focus-visible:border-transparent focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-dashed;
+    }
+
+    pre code,
+    pre .line,
+    pre .highlight-line {
+      display: block;
+      margin: 0;
       line-height: 1.6;
     }
 
