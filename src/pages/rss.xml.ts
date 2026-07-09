@@ -2,6 +2,7 @@ import { getCollection, type CollectionEntry } from "astro:content";
 import { getPath } from "@/utils/getPath";
 import getSortedPosts from "@/utils/getSortedPosts";
 import { SITE } from "@/config";
+import { marked } from "marked";
 
 function escapeXml(str: string): string {
   return str
@@ -16,31 +17,48 @@ function formatRssDate(date: Date): string {
   return date.toUTCString();
 }
 
+async function renderBody(post: CollectionEntry<"blog">): Promise<string> {
+  if (!post.body) return "";
+
+  if (post.filePath?.endsWith(".mdx")) return "";
+
+  try {
+    return await marked.parse(post.body);
+  } catch {
+    return "";
+  }
+}
+
 export async function GET() {
   const posts = await getCollection("blog");
   const sortedPosts = getSortedPosts(posts);
   const siteUrl = SITE.website.replace(/\/$/, "");
 
-  const items = sortedPosts
-    .map((post) => {
-      const { data } = post;
-      const path = getPath(post.id, post.filePath);
-      const url = `${siteUrl}${path}`;
-      const pubDate = new Date(data.modDatetime ?? data.pubDatetime);
+  const items = (
+    await Promise.all(
+      sortedPosts.map(async (post) => {
+        const { data } = post;
+        const path = getPath(post.id, post.filePath);
+        const url = `${siteUrl}${path}`;
+        const pubDate = new Date(data.modDatetime ?? data.pubDatetime);
+        const body = await renderBody(post);
+        const content = body || data.description;
 
-      return `
+        return `
     <item>
       <title>${escapeXml(data.title)}</title>
       <link>${escapeXml(url)}</link>
       <guid isPermaLink="true">${escapeXml(url)}</guid>
       <description>${escapeXml(data.description)}</description>
+      <content:encoded><![CDATA[${content}]]></content:encoded>
       <pubDate>${formatRssDate(pubDate)}</pubDate>
     </item>`;
-    })
-    .join("");
+      })
+    )
+  ).join("");
 
   const feed = `<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>${escapeXml(SITE.title)}</title>
     <description>${escapeXml(SITE.desc)}</description>
