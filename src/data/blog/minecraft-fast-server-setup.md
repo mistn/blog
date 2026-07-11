@@ -65,7 +65,7 @@ sudo ufw status
 ![](https://s3.2731515.xyz/PicGo/20260711123722h23uPu.webp)
 ![](https://s3.2731515.xyz/PicGo/202607111238266jy5cJ.webp)
 
-网络允许的话选择需要的版本下载即可。由于我是服务器没有代理，所以手动安装。
+网络允许的话选择需要的版本下载即可。由于我的服务器没有代理，所以手动安装。
 
 举例想玩 26.1.2 版本，先下载对应的 Java 25：
 
@@ -112,7 +112,7 @@ which java
 java -Xms3500M -Xmx3500M -jar paper-26.1.2-74.jar nogui
 ```
 
-`Xms` 和 `Xmx` 根据服务器内存自行替换，建议两者设相同。其他全部不用动。
+`Xms` 和 `Xmx` 根据服务器内存自行替换，建议两个设成一样。其他全部不用动。
 
 ![](https://s3.2731515.xyz/PicGo/20260711125500E20D8Q.webp)
 
@@ -134,50 +134,16 @@ java -Xms3500M -Xmx3500M -jar paper-26.1.2-74.jar nogui
 
 ### 4.2 修改 `paper-global.yml`
 
-**漏斗优化** — 找到 `hopper:` 这一大类，把 `false` 改成 `true`：
+找到对应字段改成下面的值：
 
-```yaml
-hopper:
-  cooldown-when-full: true
-  disable-move-event: true
-  ignore-occluding-blocks: false
-```
+- `hopper.disable-move-event:` `false` → `true`（漏斗优化）
+- `collisions.max-entity-collisions:` `8` → `4`（实体碰撞上限）
+- `environment.optimize-explosions:` `false` → `true`（爆炸优化）
+- `chunks.entity-per-chunk-save-limit.arrow:` `-1` → `16`（限制箭矢堆积）
+- `chunks.entity-per-chunk-save-limit.experience_orb:` `-1` → `16`（限制经验球堆积）
 
 > [!note]
-> `disable-move-event: true` 会影响依赖漏斗物品检测的 redstone 机器，生电玩家建议保持 `false`，普通生存无影响。
-
-**实体碰撞上限** — 找到 `collisions:` 这一大类，把 `8` 改成 `4`：
-
-```yaml
-collisions:
-  allow-player-cramming-damage: false
-  allow-vehicle-collisions: true
-  fix-climbing-bypassing-cramming-rule: false
-  max-entity-collisions: 4
-  only-players-collide: false
-```
-
-**爆炸优化** — 找到 `environment:` 这一大类，开启优化：
-
-```yaml
-environment:
-  nether-ceiling-void-damage-height: disabled
-  optimize-explosions: true
-  portal-create-radius: 16
-```
-
-**限制掉落物** — 找到 `chunks:` 类，`-1` 代表无限制，改成 `16`：
-
-```yaml
-chunks:
-  auto-save-interval: default
-  delay-chunk-unloads-by: 10s
-  entity-per-chunk-save-limit:
-    arrow: 16
-    ender_pearl: -1
-    experience_orb: 16
-    fireball: -1
-```
+> 漏斗优化会影响依赖漏斗物品检测的 redstone 机器，生电玩家建议保持默认，普通生存无影响。
 
 ## 5. 插件推荐
 
