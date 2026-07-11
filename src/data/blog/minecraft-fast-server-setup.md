@@ -138,7 +138,7 @@ java -Xms3500M -Xmx3500M -jar paper-26.1.2-74.jar nogui
 - `simulation-distance=6` （模拟距离调低）
 - `network-compression-threshold=64` （优化网络包）
 
-### 4.2 修改 `paper-global.yml`
+### 4.2 修改 `paper-world-defaults.yml`
 
 找到对应字段改成下面的值：
 
@@ -149,7 +149,7 @@ java -Xms3500M -Xmx3500M -jar paper-26.1.2-74.jar nogui
 - `chunks.entity-per-chunk-save-limit.experience_orb:` `-1` → `16`（限制经验球堆积）
 
 > [!note]
-> 漏斗优化会影响依赖漏斗物品检测的 redstone 机器，生电玩家建议保持默认，普通生存无影响。
+> 以上几项均为安全优化，基本不影响普通生存。但对于红石机器、TNT 复制等高精度生电设施可能有影响，生电玩家建议按需保持默认值。
 
 ## 5. 插件推荐
 
@@ -157,7 +157,18 @@ java -Xms3500M -Xmx3500M -jar paper-26.1.2-74.jar nogui
 
 <https://modrinth.com/plugin/chunky>
 
-可以预渲染地图存到硬盘，防止跑图卡顿。
+可以预渲染地图存到硬盘，防止跑图卡顿。设置半径 5000 格并开始预生成：
+
+```
+chunky radius 5000
+chunky start
+```
+
+查看进度：
+
+```
+chunky progress
+```
 
 ### AuthMe
 
