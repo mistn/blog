@@ -126,6 +126,7 @@
       font-variant-ligatures: none;
       font-weight: 400;
       letter-spacing: 0;
+      border: 1px solid color-mix(in srgb, var(--border) 30%, transparent);
     }
 
     blockquote {
