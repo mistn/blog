@@ -103,7 +103,7 @@ export async function GET() {
       status: 200,
       headers: {
         "Content-Type": "application/json",
-        "Cache-Control": "public, s-maxage=21600, stale-while-revalidate=86400",
+        "Cache-Control": "public, s-maxage=43200, stale-while-revalidate=604800",
         "X-Cache": isFresh ? "HIT" : "STALE",
       },
     });
@@ -116,7 +116,7 @@ export async function GET() {
       status: 200,
       headers: {
         "Content-Type": "application/json",
-        "Cache-Control": "public, s-maxage=21600, stale-while-revalidate=86400",
+        "Cache-Control": "public, s-maxage=43200, stale-while-revalidate=604800",
         "X-Cache": "MISS",
       },
     });
