@@ -54,7 +54,7 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
       <div class="flex items-center justify-between">
         <!-- Left: Logo -->
         <div id="mobile-logo-area" class="min-w-0">
-          <a href={getHref("/")} class="-ml-[5px] text-[1.85rem] leading-none font-medium tracking-tight no-underline text-foreground hover:text-foreground/80 transition-colors">
+          <a href={getHref("/")} class="text-[1.85rem] leading-none font-medium tracking-tight no-underline text-foreground hover:text-foreground/80 transition-colors">
             {SITE.author}
           </a>
         </div>
@@ -67,7 +67,7 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
           </div>
 
           <!-- Vertical divider -->
-          <div class="w-px h-5 bg-border/50" aria-hidden="true"></div>
+          <div class="w-0.5 h-5 bg-border" aria-hidden="true"></div>
 
           <!-- Icon group -->
           <div class="flex items-center gap-4">

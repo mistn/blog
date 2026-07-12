@@ -8,17 +8,9 @@ headingEyebrow: "About"
 
 主要用于沉淀技术笔记、折腾记录以及个人工作流配置。内容多为备忘性质，如果某篇文章刚好也帮到了你，那再好不过。本站源码在 [GitHub](https://github.com/mistn/blog)。
 
-* [Windows 自用软件与设置（长期更新）](/posts/windows-software-settings/) — 日常软件清单与环境配置参考
+[Windows 自用软件与设置（长期更新）](/posts/windows-software-settings/) — 日常软件清单与环境配置参考
 
-## 实验室
 
-运行在云端的一些自托管服务。
-
-* [听歌记录](https://spotify.miuo.me/?gname=All&token=19b6fb61-e46f-483c-8514-2aab0f51b579) — 最近在听什么
-* [壁纸站](https://acg.2731515.xyz) — 壁纸
-* [临时邮箱](https://mail.2731515.xyz) — 临时收件箱
-* [网站状态监控](https://stats.uptimerobot.com/tyYiHJaRpS) — 看看服务挂没挂
-* [服务器探针](https://ss.miuo.me) — 服务器的运行状态
 
 ## 联系方式
 
