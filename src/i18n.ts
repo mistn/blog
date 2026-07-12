@@ -18,6 +18,7 @@ export const ui = {
       home: "首页",
       archives: "归档",
       anime: "追番",
+      lab: "实验室",
       friends: "友链",
       about: "关于",
       search: "搜索",
@@ -47,6 +48,9 @@ export const ui = {
       animeFullTitle: "追番列表 | miuo",
       animeDesc: "可按年份或全部查看 AniList normal 列表中已看完的动画。",
       animeEyebrow: "Anime Archive",
+      labTitle: "实验室",
+      labFullTitle: "实验室 | miuo",
+      labDesc: "一些实验性项目和小玩意儿。",
       friendsTitle: "友链",
       friendsDesc:
         "miuo 的友情链接页面，收录了多个优质个人独立博客，欢迎通过评论区或邮件提交申请交换友链。",
@@ -124,6 +128,7 @@ export const ui = {
       home: "Home",
       archives: "Archive",
       anime: "Anime",
+      lab: "Lab",
       friends: "Friends",
       about: "About",
       search: "Search",
@@ -157,6 +162,9 @@ export const ui = {
       animeDesc:
         "Completed anime from the AniList normal list, viewable by year or as a full list.",
       animeEyebrow: "Anime Archive",
+      labTitle: "Lab",
+      labFullTitle: "Lab | miuo",
+      labDesc: "Experimental projects and little gadgets.",
       friendsTitle: "Friends",
       friendsDesc:
         "Browse miuo's collection of personal indie blog friend links. Apply for a link exchange via the comment section or by email.",

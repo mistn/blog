@@ -3,5 +3,11 @@
   "framework": "astro",
   "buildCommand": "pnpm build",
   "outputDirectory": "dist",
-  "installCommand": "pnpm install"
+  "installCommand": "pnpm install",
+  "crons": [
+    {
+      "path": "/api/monitors",
+      "schedule": "0 */6 * * *"
+    }
+  ]
 }

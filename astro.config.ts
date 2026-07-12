@@ -18,8 +18,6 @@ import { SITE } from "./src/config";
 // https://astro.build/config
 export default defineConfig({
   site: SITE.website,
-  // Output mode: 'static' generates HTML files at build time
-  // Change to 'server' if you need SSR (requires adapter)
   output: "static",
   // Vercel adapter - auto-detected when deployed to Vercel
   // Can be removed if using Cloudflare Pages instead
@@ -62,6 +60,16 @@ export default defineConfig({
       PUBLIC_GOOGLE_SITE_VERIFICATION: envField.string({
         access: "public",
         context: "client",
+        optional: true,
+      }),
+      PUBLIC_UPROBOT_API_KEY: envField.string({
+        access: "public",
+        context: "client",
+        optional: true,
+      }),
+      UPROBOT_API_KEY: envField.string({
+        access: "secret",
+        context: "server",
         optional: true,
       }),
     },
