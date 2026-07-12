@@ -41,84 +41,89 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
 <!-- ===== Topbar ===== -->
 <section
   class:list={[
-    "mx-auto w-full max-w-4xl px-4 sm:px-6 lg:py-8",
+    "mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8 lg:py-8",
     compactMobile ? "py-4" : "py-6",
   ]}
 >
     <div
       class:list={[
-        "font-app",
+        "font-app relative",
         compactMobile ? "pb-3" : "pb-4",
       ]}
     >
       <div class="flex items-center justify-between">
-        <!-- Left: Logo + HomeTabs -->
-        <div class="flex items-center gap-6 lg:gap-8">
-          <div id="mobile-logo-area" class="min-w-0">
-            <a href={getHref("/")} class="-ml-[5px] text-[1.85rem] leading-none font-medium tracking-tight no-underline text-foreground hover:text-foreground/80 transition-colors">
-              {SITE.author}
-            </a>
-          </div>
-
-          <div class="hidden lg:block">
-            <HomeTabs />
-          </div>
+        <!-- Left: Logo -->
+        <div id="mobile-logo-area" class="min-w-0">
+          <a href={getHref("/")} class="-ml-[5px] text-[1.85rem] leading-none font-medium tracking-tight no-underline text-foreground hover:text-foreground/80 transition-colors">
+            {SITE.author}
+          </a>
         </div>
 
-        <!-- Desktop: icon buttons -->
-        <div class="hidden lg:flex items-center gap-1 translate-y-[2px]">
-          <LinkButton
-            href={localizePath("/search", locale)}
-            class="focus-outline flex size-10 items-center justify-center rounded-full text-foreground/68 transition hover:text-accent"
-            title={copy.nav.search}
-            aria-label={copy.nav.search}
-          >
-            <IconSearch class="size-5" />
-            <span class="sr-only">{copy.nav.search}</span>
-          </LinkButton>
+        <!-- Right: Nav links + Icons (desktop) -->
+        <div class="hidden lg:flex items-center gap-6">
+          <!-- Text menu group -->
+          <div class="flex items-center gap-5">
+            <HomeTabs />
+          </div>
 
-          <a
-            href="/rss.xml"
-            class="focus-outline flex size-10 items-center justify-center rounded-full text-foreground/68 transition hover:text-accent"
-            title="RSS"
-            aria-label="RSS"
-          >
-            <IconRss class="size-5" />
-            <span class="sr-only">RSS</span>
-          </a>
+          <!-- Vertical divider -->
+          <div class="w-px h-5 bg-border/50" aria-hidden="true"></div>
 
-          <a
-            href={languageHref}
-            data-locale-target={alternateLocale}
-            data-astro-reload
-            class="group inline-flex size-10 items-center justify-center gap-1 rounded-full text-foreground/68 transition focus-outline hover:text-accent"
-            title={copy.nav.languageLabel}
-            aria-label={copy.nav.languageLabel}
-          >
-            <IconLanguage class="size-5" />
-            <span class="sr-only">{copy.nav.languageLabel}</span>
-          </a>
+          <!-- Icon group -->
+          <div class="flex items-center gap-4">
+            <LinkButton
+              href={localizePath("/search", locale)}
+              class="focus-outline flex size-10 items-center justify-center rounded-full text-foreground/68 transition hover:text-accent"
+              title={copy.nav.search}
+              aria-label={copy.nav.search}
+            >
+              <IconSearch class="size-5" />
+              <span class="sr-only">{copy.nav.search}</span>
+            </LinkButton>
 
-          {
-            SITE.lightAndDarkMode && (
-              <button
-                id="theme-btn-desktop"
-                class="focus-outline relative size-10 rounded-full text-foreground/68 transition hover:text-accent"
-                title={copy.nav.theme}
-                aria-label={copy.nav.theme}
-                aria-live="polite"
-              >
-                <span
-                  data-theme-icon-anchor
-                  class="pointer-events-none absolute top-[50%] left-[50%] size-5 -translate-[50%]"
-                  aria-hidden="true"
+            <a
+              href="/rss.xml"
+              class="focus-outline flex size-10 items-center justify-center rounded-full text-foreground/68 transition hover:text-accent"
+              title="RSS"
+              aria-label="RSS"
+            >
+              <IconRss class="size-5" />
+              <span class="sr-only">RSS</span>
+            </a>
+
+            <a
+              href={languageHref}
+              data-locale-target={alternateLocale}
+              data-astro-reload
+              class="group inline-flex size-10 items-center justify-center rounded-full text-foreground/68 transition focus-outline hover:text-accent"
+              title={copy.nav.languageLabel}
+              aria-label={copy.nav.languageLabel}
+            >
+              <IconLanguage class="size-5" />
+              <span class="sr-only">{copy.nav.languageLabel}</span>
+            </a>
+
+            {
+              SITE.lightAndDarkMode && (
+                <button
+                  id="theme-btn-desktop"
+                  class="focus-outline relative size-10 rounded-full text-foreground/68 transition hover:text-accent"
+                  title={copy.nav.theme}
+                  aria-label={copy.nav.theme}
+                  aria-live="polite"
                 >
-                  <IconMoon class="absolute inset-0 h-full w-full scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
-                  <IconSunHigh class="absolute inset-0 h-full w-full scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
-                </span>
-              </button>
-            )
-          }
+                  <span
+                    data-theme-icon-anchor
+                    class="pointer-events-none absolute top-[50%] left-[50%] size-5 -translate-[50%]"
+                    aria-hidden="true"
+                  >
+                    <IconMoon class="absolute inset-0 h-full w-full scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
+                    <IconSunHigh class="absolute inset-0 h-full w-full scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
+                  </span>
+                </button>
+              )
+            }
+          </div>
         </div>
 
         <!-- Mobile: search + theme + menu -->
@@ -129,7 +134,7 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
               class="flex w-10 h-10 items-center justify-center p-0 m-0 text-foreground/68 hover:text-foreground transition-colors"
               title={copy.nav.search}
               aria-label={copy.nav.search}
-              data-overlay-link
+              data-menu-link
             >
               <IconSearch class="w-5 h-5" />
             </a>
@@ -172,203 +177,203 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
           </button>
         </div>
       </div>
+
+      <!-- ===== Mobile Dropdown Card ===== -->
+      <div
+        id="mobile-dropdown"
+        class="hidden absolute top-full right-0 mt-2 w-64 rounded-xl border border-border/40 shadow-xl z-50 origin-top-right"
+        aria-hidden="true"
+      >
+        <nav class="py-2">
+          <a
+            href={getHref("/")}
+            class:list={[
+              "block px-4 py-4 text-sm text-left transition-colors",
+              isActive("/")
+                ? "font-semibold text-foreground"
+                : "font-medium text-foreground/65 hover:text-foreground",
+            ]}
+            data-menu-link
+          >
+            {copy.nav.home}
+          </a>
+          <div class="mx-4 border-b border-border/40" aria-hidden="true"></div>
+          {
+            SITE.showArchives && (
+              <>
+                <a
+                  href={getHref("/archives")}
+                  class:list={[
+                    "block px-4 py-4 text-sm text-left transition-colors",
+                    isActive("/archives")
+                      ? "font-semibold text-foreground"
+                      : "font-medium text-foreground/65 hover:text-foreground",
+                  ]}
+                  data-menu-link
+                >
+                  {copy.nav.archives}
+                </a>
+                <div class="mx-4 border-b border-border/40" aria-hidden="true"></div>
+              </>
+            )
+          }
+          <a
+            href={getHref("/anime")}
+            class:list={[
+              "block px-4 py-4 text-sm text-left transition-colors",
+              isActive("/anime")
+                ? "font-semibold text-foreground"
+                : "font-medium text-foreground/65 hover:text-foreground",
+            ]}
+            data-menu-link
+          >
+            {copy.nav.anime}
+          </a>
+          <div class="mx-4 border-b border-border/40" aria-hidden="true"></div>
+          <a
+            href={getHref("/lab")}
+            class:list={[
+              "block px-4 py-4 text-sm text-left transition-colors",
+              isActive("/lab")
+                ? "font-semibold text-foreground"
+                : "font-medium text-foreground/65 hover:text-foreground",
+            ]}
+            data-menu-link
+          >
+            {copy.nav.lab}
+          </a>
+          <div class="mx-4 border-b border-border/40" aria-hidden="true"></div>
+          <a
+            href={getHref("/friends")}
+            class:list={[
+              "block px-4 py-4 text-sm text-left transition-colors",
+              isActive("/friends")
+                ? "font-semibold text-foreground"
+                : "font-medium text-foreground/65 hover:text-foreground",
+            ]}
+            data-menu-link
+          >
+            {copy.nav.friends}
+          </a>
+          <div class="mx-4 border-b border-border/40" aria-hidden="true"></div>
+          <a
+            href={getHref("/about")}
+            class:list={[
+              "block px-4 py-4 text-sm text-left transition-colors",
+              isActive("/about")
+                ? "font-semibold text-foreground"
+                : "font-medium text-foreground/65 hover:text-foreground",
+            ]}
+            data-menu-link
+          >
+            {copy.nav.about}
+          </a>
+        </nav>
+
+        <div class="border-t border-border/40" aria-hidden="true"></div>
+
+        <div class="flex items-center justify-center gap-8 py-4 px-4">
+          {
+            emailLink && emailAddress && (
+              <a
+                href={emailLink.href}
+                class="text-foreground/50 hover:text-foreground transition-colors"
+                title={emailLabel}
+                aria-label={emailLabel}
+              >
+                <IconMail class="size-5" />
+              </a>
+            )
+          }
+          <a
+            href="/rss.xml"
+            class="text-foreground/50 hover:text-foreground transition-colors"
+            title="RSS"
+            aria-label="RSS"
+          >
+            <IconRss class="size-5" />
+          </a>
+          <a
+            href={languageHref}
+            data-locale-target={alternateLocale}
+            data-astro-reload
+            class="text-foreground/50 hover:text-foreground transition-colors"
+            title={copy.nav.languageLabel}
+            aria-label={copy.nav.languageLabel}
+          >
+            <IconLanguage class="size-5" />
+          </a>
+        </div>
+      </div>
     </div>
 </section>
 </header>
 
-<!-- ===== Mobile Full-screen Overlay ===== -->
+<!-- ===== Mobile Menu Overlay ===== -->
 <div
   id="mobile-overlay"
-  class="fixed inset-0 bg-white dark:bg-background z-50 hidden flex-col items-center overflow-hidden"
+  class="fixed inset-0 z-40 hidden opacity-0 transition-opacity duration-200 ease-out"
   aria-hidden="true"
->
-
-  <!-- Nav links (centered in remaining space) -->
-  <nav class="flex-grow flex flex-col items-center justify-center space-y-6">
-    <a
-      href={getHref("/")}
-      class:list={[
-        "text-xl font-medium py-2 px-8 transition-colors",
-        isActive("/")
-          ? "text-gray-900 dark:text-gray-100 font-semibold"
-          : "text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100",
-      ]}
-      data-overlay-link
-    >
-      {copy.nav.home}
-    </a>
-    {
-      SITE.showArchives && (
-        <a
-          href={getHref("/archives")}
-          class:list={[
-            "text-xl font-medium py-2 px-8 transition-colors",
-            isActive("/archives")
-              ? "text-gray-900 dark:text-gray-100 font-semibold"
-              : "text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100",
-          ]}
-          data-overlay-link
-        >
-          {copy.nav.archives}
-        </a>
-      )
-    }
-    <a
-      href={getHref("/anime")}
-      class:list={[
-        "text-xl font-medium py-2 px-8 transition-colors",
-        isActive("/anime")
-          ? "text-gray-900 dark:text-gray-100 font-semibold"
-          : "text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100",
-      ]}
-      data-overlay-link
-    >
-      {copy.nav.anime}
-    </a>
-    <a
-      href={getHref("/friends")}
-      class:list={[
-        "text-xl font-medium py-2 px-8 transition-colors",
-        isActive("/friends")
-          ? "text-gray-900 dark:text-gray-100 font-semibold"
-          : "text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100",
-      ]}
-      data-overlay-link
-    >
-      {copy.nav.friends}
-    </a>
-    <a
-      href={getHref("/about")}
-      class:list={[
-        "text-xl font-medium py-2 px-8 transition-colors",
-        isActive("/about")
-          ? "text-gray-900 dark:text-gray-100 font-semibold"
-          : "text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100",
-      ]}
-      data-overlay-link
-    >
-      {copy.nav.about}
-    </a>
-  </nav>
-
-  <!-- Bottom icons (sunk to bottom) -->
-  <div class="flex items-center gap-8 mb-12">
-    {
-      emailLink && emailAddress && (
-        <a
-          href={emailLink.href}
-          class="text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
-          title={emailLabel}
-          aria-label={emailLabel}
-        >
-          <IconMail class="size-7" />
-        </a>
-      )
-    }
-
-    <a
-      href="/rss.xml"
-      class="text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
-      title="RSS"
-      aria-label="RSS"
-    >
-      <IconRss class="size-7" />
-    </a>
-
-    <a
-      href={languageHref}
-      data-locale-target={alternateLocale}
-      data-astro-reload
-      class="text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
-      title={copy.nav.languageLabel}
-      aria-label={copy.nav.languageLabel}
-    >
-      <IconLanguage class="size-7" />
-    </a>
-  </div>
-</div>
+></div>
 
 <script is:inline>
+  function getDropdown() { return document.getElementById("mobile-dropdown"); }
   function getOverlay() { return document.getElementById("mobile-overlay"); }
   function getToggle() { return document.getElementById("menu-toggle"); }
 
-  function preventScroll(e) {
-    e.preventDefault();
-  }
-
-  function lockViewport() {
-    document.documentElement.style.overflow = "hidden";
-    document.body.style.overflow = "hidden";
-    window.addEventListener("touchmove", preventScroll, { passive: false });
-  }
-
-  function unlockViewport() {
-    document.documentElement.style.overflow = "";
-    document.body.style.overflow = "";
-    window.removeEventListener("touchmove", preventScroll);
+  function isMenuOpen() {
+    var toggle = getToggle();
+    return toggle && toggle.getAttribute("aria-expanded") === "true";
   }
 
   function openMenu() {
+    var dd = getDropdown();
     var overlay = getOverlay();
     var toggle = getToggle();
-    if (!overlay || !toggle) return;
+    if (!dd || !overlay || !toggle) return;
     overlay.classList.remove("hidden");
-    overlay.classList.add("flex");
+    dd.classList.remove("hidden");
+    requestAnimationFrame(function () {
+      overlay.classList.remove("opacity-0");
+    });
+    dd.setAttribute("aria-hidden", "false");
     overlay.setAttribute("aria-hidden", "false");
     toggle.setAttribute("aria-expanded", "true");
-    lockViewport();
-
-    var logo = document.getElementById("mobile-logo-area");
-    if (logo) logo.style.display = "none";
-    var actions = document.getElementById("mobile-header-actions");
-    if (actions) actions.style.display = "none";
-    var tocToggle = document.querySelector("[data-toc-toggle]");
-    if (tocToggle) tocToggle.style.display = "none";
   }
 
   function closeMenu() {
+    var dd = getDropdown();
     var overlay = getOverlay();
     var toggle = getToggle();
-    if (!overlay || !toggle) return;
-    overlay.classList.add("hidden");
-    overlay.classList.remove("flex");
+    if (!dd || !overlay) return;
+    overlay.classList.add("opacity-0");
+    dd.classList.add("hidden");
+    dd.setAttribute("aria-hidden", "true");
+    overlay.addEventListener("transitionend", function handler() {
+      overlay.classList.add("hidden");
+      overlay.removeEventListener("transitionend", handler);
+    }, { once: true });
     overlay.setAttribute("aria-hidden", "true");
-    toggle.setAttribute("aria-expanded", "false");
-    unlockViewport();
-    toggle.focus();
-
-    var logo = document.getElementById("mobile-logo-area");
-    if (logo) logo.style.display = "";
-    var actions = document.getElementById("mobile-header-actions");
-    if (actions) actions.style.display = "";
-    var tocToggle = document.querySelector("[data-toc-toggle]");
-    if (tocToggle) tocToggle.style.display = "";
+    if (toggle) toggle.setAttribute("aria-expanded", "false");
   }
 
   function closeMenuSilent() {
+    var dd = getDropdown();
     var overlay = getOverlay();
-    var toggle = getToggle();
-    if (!overlay) return;
-    overlay.classList.add("hidden");
-    overlay.classList.remove("flex");
+    if (!dd || !overlay) return;
+    dd.classList.add("hidden");
+    dd.setAttribute("aria-hidden", "true");
+    overlay.classList.add("hidden", "opacity-0");
     overlay.setAttribute("aria-hidden", "true");
-    unlockViewport();
+    var toggle = getToggle();
     if (toggle) toggle.setAttribute("aria-expanded", "false");
-
-    var logo = document.getElementById("mobile-logo-area");
-    if (logo) logo.style.display = "";
-    var actions = document.getElementById("mobile-header-actions");
-    if (actions) actions.style.display = "";
-    var tocToggle = document.querySelector("[data-toc-toggle]");
-    if (tocToggle) tocToggle.style.display = "";
   }
 
   document.addEventListener("click", function (e) {
     var target = /** @type {HTMLElement} */ (e.target);
 
     if (target.closest("#menu-toggle")) {
-      var toggle = getToggle();
-      if (toggle && toggle.getAttribute("aria-expanded") === "true") {
+      if (isMenuOpen()) {
         closeMenu();
       } else {
         openMenu();
@@ -376,21 +381,21 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
       return;
     }
 
-    if (target.closest("[data-overlay-link]")) {
+    if (target.closest("[data-menu-link]")) {
       closeMenu();
       return;
     }
 
-    var overlay = getOverlay();
-    if (overlay && e.target === overlay && overlay.getAttribute("aria-hidden") === "false") {
+    if (target.closest("#mobile-overlay")) {
       closeMenu();
+      return;
     }
   });
 
   document.addEventListener("keydown", function (e) {
     if (e.key === "Escape") {
-      var overlay = getOverlay();
-      if (overlay && overlay.getAttribute("aria-hidden") === "false") {
+      var dd = getDropdown();
+      if (dd && !dd.classList.contains("hidden")) {
         closeMenu();
       }
     }
@@ -400,3 +405,21 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
     closeMenuSilent();
   });
 </script>
+
+<style>
+  #mobile-dropdown {
+    background: var(--background);
+  }
+
+  [data-theme="dark"] #mobile-dropdown {
+    border-color: color-mix(in srgb, var(--border) 60%, transparent);
+  }
+
+  #mobile-overlay {
+    background: color-mix(in srgb, var(--background) 75%, transparent);
+  }
+
+  [data-theme="dark"] #mobile-overlay {
+    background: color-mix(in srgb, black 40%, transparent);
+  }
+</style>
