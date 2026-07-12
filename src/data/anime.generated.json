@@ -1,6 +1,6 @@
 {
   "username": "miuo55",
-  "updatedAt": "2026-06-28T18:57:34.726Z",
+  "updatedAt": "2026-07-12T18:43:20.018Z",
   "items": [
     {
       "title": "超かぐや姫！",
@@ -63,6 +63,12 @@
       "url": "https://anilist.co/anime/161964"
     },
     {
+      "title": "邪神ちゃんドロップキック【世紀末編】",
+      "cover": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx164551-QysYBZwUrpYv.png",
+      "year": 2023,
+      "url": "https://anilist.co/anime/164551"
+    },
+    {
       "title": "名探偵コナン 黒鉄の魚影",
       "cover": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx156841-eCdzTqfaqNb7.png",
       "year": 2023,
@@ -117,6 +123,12 @@
       "url": "https://anilist.co/anime/126425"
     },
     {
+      "title": "邪神ちゃんドロップキックX",
+      "cover": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx124641-mTkrFwhFqoFT.jpg",
+      "year": 2022,
+      "url": "https://anilist.co/anime/124641"
+    },
+    {
       "title": "サマーゴースト",
       "cover": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx130050-rXTPVJ9UGN8Y.jpg",
       "year": 2021,
@@ -157,6 +169,18 @@
       "cover": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx107201-zQYOPotwmSXO.png",
       "year": 2020,
       "url": "https://anilist.co/anime/107201"
+    },
+    {
+      "title": "邪神ちゃんドロップキック’ 千歳編",
+      "cover": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx118125-7ob1bSjvOMfr.jpg",
+      "year": 2020,
+      "url": "https://anilist.co/anime/118125"
+    },
+    {
+      "title": "邪神ちゃんドロップキック’（ダッシュ）",
+      "cover": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx107294-zWscZpb7wYLH.jpg",
+      "year": 2020,
+      "url": "https://anilist.co/anime/107294"
     },
     {
       "title": "無能なナナ",
@@ -223,6 +247,12 @@
       "cover": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx100714-1glYB8znGJ5W.png",
       "year": 2018,
       "url": "https://anilist.co/anime/100714"
+    },
+    {
+      "title": "邪神ちゃんドロップキック ONA",
+      "cover": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx104278-GMm8Ab0gB6Br.png",
+      "year": 2018,
+      "url": "https://anilist.co/anime/104278"
     },
     {
       "title": "東京喰種-トーキョーグール-:re",
