@@ -88,4 +88,10 @@ export const friendLinks: FriendLink[] = [
     avatar: "https://funingna-wakawaka.github.io/images/0.png",
     description: "传递笑容魔法的Ciallo～(∠・ω< )⌒☆",
   },
+  {
+    name: "Eric's blog",
+    href: "https://153030.xyz",
+    avatar: "https://153030.xyz/Avatar.jpg",
+    description: "一个记录日常所遇问题的博客",
+  },
 ];
