@@ -94,4 +94,10 @@ export const friendLinks: FriendLink[] = [
     avatar: "https://153030.xyz/Avatar.jpg",
     description: "一个记录日常所遇问题的博客",
   },
+  {
+    name: "Zorro's blog",
+    href: "https://blog.zuodev.top",
+    avatar: "https://blog.zuodev.top/file/picture/User.jpg",
+    description: "记录生活、分享技术。",
+  },
 ];
