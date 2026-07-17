@@ -14,5 +14,5 @@ headingEyebrow: "About"
 
 ## 联系方式
 
-* Email: miuobox@gmail.com
+* Email: [miuobox@gmail.com](mailto:miuobox@gmail.com)
 * Telegram: [@hacu0](https://t.me/hacu0)
