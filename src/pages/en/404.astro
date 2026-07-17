@@ -1,7 +1,5 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-import Header from "@/components/Header.astro";
-import LinkButton from "@/components/LinkButton.astro";
 import { SITE } from "@/config";
 import { localizePath, ui } from "@/i18n";
 
@@ -10,22 +8,26 @@ const copy = ui[locale];
 ---
 
 <Layout title={`404 ${copy.pages.notFoundTitle} | ${SITE.title}`} description={copy.pages.notFoundDesc} {locale}>
-  <Header />
-
   <main
     id="main-content"
-    class="app-layout flex flex-1 items-center justify-center"
+    class="app-layout min-h-[80vh] flex flex-col items-center justify-center"
   >
-    <div class="mb-14 flex flex-col items-center justify-center">
-      <h1 class="text-9xl font-bold text-accent">404</h1>
-      <span aria-hidden="true">¯\_(ツ)_/¯</span>
-      <p class="mt-4 text-2xl sm:text-3xl">{copy.pages.notFoundTitle}</p>
-      <LinkButton
+    <div class="flex flex-col items-center text-center">
+      <p class="text-[10rem] sm:text-[12rem] font-black leading-none text-accent select-none">
+        404
+      </p>
+      <p class="mt-2 text-xl sm:text-2xl font-medium text-foreground/80">
+        {copy.pages.notFoundTitle}
+      </p>
+      <p class="mt-2 max-w-sm text-sm text-foreground/40 leading-relaxed">
+        {copy.pages.notFoundDesc}
+      </p>
+      <a
         href={localizePath("/", locale)}
-        class="my-6 text-lg underline decoration-dashed underline-offset-8"
+        class="mt-8 inline-flex items-center gap-1.5 rounded-xl bg-accent px-5 py-2.5 text-sm font-medium text-white transition hover:opacity-85"
       >
         {copy.pages.notFoundCta}
-      </LinkButton>
+      </a>
     </div>
   </main>
 
