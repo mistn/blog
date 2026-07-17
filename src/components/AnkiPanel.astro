@@ -66,8 +66,10 @@ const labels = {
     if (!panel) return;
 
     const learned: number = data.today_learned || 0;
-    const total: number = data.today_total || 0;
     const mins: number = data.duration_minutes || 0;
+    const words: string[] = (data.recent_words || []).filter(
+      (w: string, i: number, arr: string[]) => arr.indexOf(w) === i
+    ).slice(0, 10);
     const updated = data.last_updated
       ? new Date(data.last_updated).toLocaleString(FMT, { hour12: false })
       : '---';
@@ -91,6 +93,10 @@ const labels = {
             <p class="text-lg font-bold text-foreground mt-0.5">${mins}<span class="text-sm font-normal text-foreground/25"> ${L.min}</span></p>
           </div>
         </div>
+        ${words.length > 0 ? `
+        <div class="flex flex-wrap gap-1.5 mt-3">
+          ${words.map((w: string) => `<span class="inline-flex items-center px-2 py-0.5 rounded-md text-[0.65rem] bg-border/10 text-foreground/55">${escapeHtml(w)}</span>`).join('')}
+        </div>` : ''}
         <p class="mt-3 text-[0.65rem] text-foreground/25">${L.source}</p>
       </div>`;
   }
