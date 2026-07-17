@@ -34,12 +34,6 @@ const labels = {
   </div>
 </section>
 
-<style is:global>
-  .anki-ring {
-    transition: stroke-dashoffset 1s ease-out;
-  }
-</style>
-
 <script>
   const root = document.querySelector<HTMLElement>('[data-anki-locale]')!;
   const LOCALE: string = root.dataset.ankiLocale!;
@@ -72,17 +66,11 @@ const labels = {
     if (!panel) return;
 
     const learned: number = data.today_learned || 0;
-    const total: number = data.today_total || 1;
-    const pct = Math.min(100, Math.round((learned / total) * 100));
-    const words: string[] = data.recent_words || [];
+    const total: number = data.today_total || 0;
     const mins: number = data.duration_minutes || 0;
     const updated = data.last_updated
       ? new Date(data.last_updated).toLocaleString(FMT, { hour12: false })
       : '---';
-
-    const r = 38;
-    const circ = 2 * Math.PI * r;
-    const offset = circ - (pct / 100) * circ;
 
     panel.innerHTML = `
       <div class="rounded-2xl border border-border/40 bg-background/50 backdrop-blur-sm p-3.5 sm:p-4 transition-all duration-300 hover:border-border/60 hover:shadow-lg hover:shadow-foreground/[0.03]">
@@ -93,47 +81,18 @@ const labels = {
           </div>
           <span class="text-[0.65rem] text-foreground/35 font-mono tabular-nums">${L.updated} ${updated}</span>
         </div>
-        <div class="flex items-center gap-4 sm:gap-5">
-          <div class="relative shrink-0">
-            <svg class="size-20 -rotate-90" viewBox="0 0 100 100">
-              <circle cx="50" cy="50" r="${r}" fill="none" stroke="currentColor" stroke-width="5" class="text-border/20" />
-              <circle cx="50" cy="50" r="${r}" fill="none" stroke="url(#anki-g)" stroke-width="5" stroke-linecap="round"
-                stroke-dasharray="${circ}" stroke-dashoffset="${circ}" class="anki-ring" />
-              <defs>
-                <linearGradient id="anki-g" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="#34d399" />
-                  <stop offset="50%" stop-color="#10b981" />
-                  <stop offset="100%" stop-color="#059669" />
-                </linearGradient>
-              </defs>
-            </svg>
-            <div class="absolute inset-0 flex flex-col items-center justify-center">
-              <span class="text-xl font-bold text-foreground leading-none">${pct}</span>
-              <span class="text-[0.6rem] text-foreground/40">%</span>
-            </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div class="rounded-xl bg-emerald-500/5 border border-emerald-500/10 px-3.5 py-2.5">
+            <span class="text-[0.65rem] text-foreground/40 uppercase tracking-wider font-medium">${L.new}</span>
+            <p class="text-lg font-bold text-foreground mt-0.5">${learned}</p>
           </div>
-          <div class="flex-1 grid grid-cols-1 gap-2.5 min-w-0">
-            <div class="rounded-xl bg-emerald-500/5 border border-emerald-500/10 px-3.5 py-2.5">
-              <span class="text-[0.65rem] text-foreground/40 uppercase tracking-wider font-medium">${L.new}</span>
-              <p class="text-lg font-bold text-foreground mt-0.5">${learned}<span class="text-sm font-normal text-foreground/25"> / ${total}</span></p>
-            </div>
-            <div class="rounded-xl bg-sky-500/5 border border-sky-500/10 px-3.5 py-2.5">
-              <span class="text-[0.65rem] text-foreground/40 uppercase tracking-wider font-medium">${L.study}</span>
-              <p class="text-lg font-bold text-foreground mt-0.5">${mins}<span class="text-sm font-normal text-foreground/25"> ${L.min}</span></p>
-            </div>
+          <div class="rounded-xl bg-sky-500/5 border border-sky-500/10 px-3.5 py-2.5">
+            <span class="text-[0.65rem] text-foreground/40 uppercase tracking-wider font-medium">${L.study}</span>
+            <p class="text-lg font-bold text-foreground mt-0.5">${mins}<span class="text-sm font-normal text-foreground/25"> ${L.min}</span></p>
           </div>
         </div>
-        ${words.length > 0 ? `
-        <div class="flex flex-wrap gap-1.5 mt-3">
-          ${words.map((w: string) => `<span class="inline-flex items-center px-2.5 py-1 rounded-lg text-[0.65rem] font-medium bg-emerald-500/[0.07] text-foreground/70 border border-emerald-500/[0.1] transition-colors hover:bg-emerald-500/[0.12] hover:text-foreground/90">${escapeHtml(w)}</span>`).join('')}
-        </div>` : ''}
         <p class="mt-3 text-[0.65rem] text-foreground/25">${L.source}</p>
       </div>`;
-
-    requestAnimationFrame(() => {
-      const ring = panel.querySelector('.anki-ring') as SVGElement | null;
-      if (ring) ring.style.strokeDashoffset = String(offset);
-    });
   }
 
   document.addEventListener('astro:page-load', () => {
