@@ -1,4 +1,5 @@
 ---
+import AnkiPanel from "@/components/AnkiPanel.astro";
 import PageHeader from "@/components/PageHeader.astro";
 import SiteTopbar from "@/components/SiteTopbar.astro";
 import Layout from "@/layouts/Layout.astro";
@@ -17,7 +18,9 @@ const pageDescription = copy.pages.labDesc;
     <PageHeader title={copy.pages.labTitle} />
 
     <div class="pt-8">
-      <section id="uptime-monitors">
+      <AnkiPanel locale="zh" />
+
+      <section id="uptime-monitors" class="mt-12">
         <div class="flex items-center justify-between mb-6">
           <h2 class="text-lg font-semibold text-foreground">UptimeRobot 监控</h2>
           <div id="monitor-status-bar" class="flex items-center gap-3 text-xs text-foreground/50">
@@ -111,18 +114,9 @@ const pageDescription = copy.pages.labDesc;
     height: 0.5rem;
     border-radius: 9999px;
     animation: dot-breathe 2.5s ease-in-out infinite;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-  .status-dot:hover {
-    transform: scale(3);
-    box-shadow: 0 0 12px 4px currentColor;
-    animation: none;
   }
   .status-badge {
     transition: box-shadow 0.2s ease;
-  }
-  .status-badge:hover {
-    box-shadow: 0 0 12px 2px currentColor;
   }
   .status-bar {
     transition: transform 0.15s ease, opacity 0.15s ease;
@@ -303,10 +297,30 @@ const pageDescription = copy.pages.labDesc;
   function showTooltip(bar) {
     const tip = ensureTooltip();
     tip.textContent = bar.dataset.tip || "";
+    tip.classList.remove("visible");
+    // force layout so we can measure
+    tip.style.left = "0";
+    tip.style.top = "0";
+    tip.style.transform = "none";
+
     const rect = bar.getBoundingClientRect();
-    tip.style.left = `${rect.left + rect.width / 2}px`;
-    tip.style.top = `${rect.bottom + 4}px`;
-    tip.style.transform = "translate(-50%, 0)";
+    const tw = tip.offsetWidth;
+    const th = tip.offsetHeight;
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+
+    let left = rect.left + rect.width / 2 - tw / 2;
+    let top = rect.bottom + 4;
+
+    // clamp horizontal
+    if (left < 8) left = 8;
+    if (left + tw > vw - 8) left = vw - tw - 8;
+
+    // flip above if too close to bottom
+    if (top + th > vh - 8) top = rect.top - th - 4;
+
+    tip.style.left = `${left}px`;
+    tip.style.top = `${top}px`;
     requestAnimationFrame(() => tip.classList.add("visible"));
     activeBar = bar;
   }
