@@ -1,4 +1,4 @@
-import { defineConfig, envField } from "astro/config";
+import { defineConfig } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
 import sitemap from "@astrojs/sitemap";
 import vercel from "@astrojs/vercel";
@@ -54,25 +54,6 @@ export default defineConfig({
   image: {
     responsiveStyles: true,
     layout: "constrained",
-  },
-  env: {
-    schema: {
-      PUBLIC_GOOGLE_SITE_VERIFICATION: envField.string({
-        access: "public",
-        context: "client",
-        optional: true,
-      }),
-      PUBLIC_UPROBOT_API_KEY: envField.string({
-        access: "public",
-        context: "client",
-        optional: true,
-      }),
-      UPROBOT_API_KEY: envField.string({
-        access: "secret",
-        context: "server",
-        optional: true,
-      }),
-    },
   },
   experimental: {
     preserveScriptOrder: true,
