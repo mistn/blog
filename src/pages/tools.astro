@@ -7,15 +7,15 @@ import { getLocaleFromPath, ui } from "@/i18n";
 
 const locale = getLocaleFromPath(Astro.url.pathname);
 const copy = ui[locale];
-const pageTitle = copy.pages.labFullTitle;
-const pageDescription = copy.pages.labDesc;
+const pageTitle = copy.pages.toolsFullTitle;
+const pageDescription = copy.pages.toolsDesc;
 ---
 
 <Layout title={pageTitle} description={pageDescription}>
   <SiteTopbar />
 
   <main class="mx-auto w-full max-w-4xl px-4 sm:px-6 pt-8 pb-10 md:pt-12 md:pb-14">
-    <PageHeader title={copy.pages.labTitle} />
+    <PageHeader title={copy.pages.toolsTitle} />
 
     <div class="pt-8">
       <AnkiPanel locale="zh" />

@@ -231,16 +231,16 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
           </a>
           <div class="mx-4 border-b border-border/40" aria-hidden="true"></div>
           <a
-            href={getHref("/lab")}
+            href={getHref("/tools")}
             class:list={[
               "block px-4 py-4 text-sm text-left transition-colors",
-              isActive("/lab")
+              isActive("/tools")
                 ? "font-semibold text-foreground"
                 : "font-medium text-foreground/65 hover:text-foreground",
             ]}
             data-menu-link
           >
-            {copy.nav.lab}
+            {copy.nav.tools}
           </a>
           <div class="mx-4 border-b border-border/40" aria-hidden="true"></div>
           <a

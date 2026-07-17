@@ -5,7 +5,7 @@
 ## 功能
 
 - 中英双语（`/en/` 路径前缀）
-- UptimeRobot 监控面板 + 自托管服务入口（`/lab`）
+- UptimeRobot 监控面板 + 自托管服务入口（`/tools`）
 - AniList 追番自动同步
 - Pagefind 离线搜索、KaTeX 公式、Shiki 代码高亮
 - 深浅色模式、响应式、RSS、Sitemap
