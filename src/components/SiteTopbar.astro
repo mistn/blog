@@ -34,6 +34,7 @@ const emailLabel = `${copy.nav.email} ${SITE.title}`;
 const getHref = (path: string) => localizePath(path, locale);
 const currentPath = normalizePath(Astro.url.pathname);
 const isActive = (path: string) => currentPath === normalizePath(getHref(path));
+const isPathActive = (path: string) => currentPath.startsWith(normalizePath(getHref(path)) + "/");
 ---
 
 <!-- ===== Header ===== -->
@@ -51,7 +52,7 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
         compactMobile ? "pb-3" : "pb-4",
       ]}
     >
-      <div class="flex items-center justify-between">
+      <div class="flex items-center justify-between lg:grid lg:grid-cols-3">
         <!-- Left: Logo -->
         <div id="mobile-logo-area" class="min-w-0">
           <a href={getHref("/")} class="text-[1.85rem] leading-none font-medium tracking-tight no-underline text-foreground hover:text-foreground/80 transition-colors">
@@ -59,18 +60,15 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
           </a>
         </div>
 
-        <!-- Right: Nav links + Icons (desktop) -->
-        <div class="hidden lg:flex items-center gap-6">
-          <!-- Text menu group -->
-          <div class="flex items-center gap-5">
-            <HomeTabs />
-          </div>
+        <!-- Center: Nav links (desktop) -->
+        <div class="hidden lg:flex justify-self-center">
+          <HomeTabs />
+        </div>
 
-          <!-- Vertical divider -->
-          <div class="w-0.5 h-5 bg-border" aria-hidden="true"></div>
-
-          <!-- Icon group -->
-          <div class="flex items-center gap-4">
+        <!-- Right: Icons -->
+        <div class="flex items-center gap-1 justify-self-end">
+          <!-- Desktop icons -->
+          <div class="hidden lg:flex items-center gap-4">
             <LinkButton
               href={localizePath("/search", locale)}
               class="focus-outline flex size-10 items-center justify-center rounded-full text-foreground/68 transition hover:text-accent"
@@ -124,10 +122,9 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
               )
             }
           </div>
-        </div>
 
-        <!-- Mobile: search + theme + menu -->
-        <div class="flex lg:hidden items-center gap-1">
+          <!-- Mobile: search + theme + menu -->
+          <div class="flex lg:hidden items-center gap-1">
           <span id="mobile-header-actions" class="contents">
             <a
               href={localizePath("/search", locale)}
@@ -175,8 +172,9 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
               <line x1="18" y1="6" x2="6" y2="18" />
             </svg>
           </button>
-        </div>
-      </div>
+          </div>   <!-- end mobile icons -->
+        </div>     <!-- end right column -->
+      </div>       <!-- end topbar row -->
 
       <!-- ===== Mobile Dropdown Card ===== -->
       <div
@@ -198,25 +196,38 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
             {copy.nav.home}
           </a>
           <div class="mx-4 border-b border-border/40" aria-hidden="true"></div>
+          <div class="px-4 py-3 text-xs font-semibold text-foreground/40 uppercase tracking-wider">
+            {copy.nav.articles}
+          </div>
           {
             SITE.showArchives && (
-              <>
-                <a
-                  href={getHref("/archives")}
-                  class:list={[
-                    "block px-4 py-4 text-sm text-left transition-colors",
-                    isActive("/archives")
-                      ? "font-semibold text-foreground"
-                      : "font-medium text-foreground/65 hover:text-foreground",
-                  ]}
-                  data-menu-link
-                >
-                  {copy.nav.archives}
-                </a>
-                <div class="mx-4 border-b border-border/40" aria-hidden="true"></div>
-              </>
+              <a
+                href={getHref("/archives")}
+                class:list={[
+                  "block pl-8 pr-4 py-3 text-sm text-left transition-colors",
+                  isActive("/archives")
+                    ? "font-semibold text-foreground"
+                    : "font-medium text-foreground/65 hover:text-foreground",
+                ]}
+                data-menu-link
+              >
+                {copy.nav.archives}
+              </a>
             )
           }
+          <a
+            href={getHref("/weekly")}
+            class:list={[
+              "block pl-8 pr-4 py-3 text-sm text-left transition-colors",
+              isActive("/weekly") || isPathActive("/weekly")
+                ? "font-semibold text-foreground"
+                : "font-medium text-foreground/65 hover:text-foreground",
+            ]}
+            data-menu-link
+          >
+            {copy.nav.weekly}
+          </a>
+          <div class="mx-4 border-b border-border/40" aria-hidden="true"></div>
           <a
             href={getHref("/anime")}
             class:list={[
@@ -228,19 +239,6 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
             data-menu-link
           >
             {copy.nav.anime}
-          </a>
-          <div class="mx-4 border-b border-border/40" aria-hidden="true"></div>
-          <a
-            href={getHref("/tools")}
-            class:list={[
-              "block px-4 py-4 text-sm text-left transition-colors",
-              isActive("/tools")
-                ? "font-semibold text-foreground"
-                : "font-medium text-foreground/65 hover:text-foreground",
-            ]}
-            data-menu-link
-          >
-            {copy.nav.tools}
           </a>
           <div class="mx-4 border-b border-border/40" aria-hidden="true"></div>
           <a
@@ -256,17 +254,32 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
             {copy.nav.friends}
           </a>
           <div class="mx-4 border-b border-border/40" aria-hidden="true"></div>
+          <div class="px-4 py-3 text-xs font-semibold text-foreground/40 uppercase tracking-wider">
+            {copy.nav.about}
+          </div>
           <a
             href={getHref("/about")}
             class:list={[
-              "block px-4 py-4 text-sm text-left transition-colors",
+              "block pl-8 pr-4 py-3 text-sm text-left transition-colors",
               isActive("/about")
                 ? "font-semibold text-foreground"
                 : "font-medium text-foreground/65 hover:text-foreground",
             ]}
             data-menu-link
           >
-            {copy.nav.about}
+            {copy.nav.aboutMe}
+          </a>
+          <a
+            href={getHref("/tools")}
+            class:list={[
+              "block pl-8 pr-4 py-3 text-sm text-left transition-colors",
+              isActive("/tools")
+                ? "font-semibold text-foreground"
+                : "font-medium text-foreground/65 hover:text-foreground",
+            ]}
+            data-menu-link
+          >
+            {copy.nav.tools}
           </a>
         </nav>
 

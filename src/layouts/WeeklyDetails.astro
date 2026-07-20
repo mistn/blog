@@ -1,0 +1,154 @@
+---
+import { render, type CollectionEntry } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import SiteTopbar from "@/components/SiteTopbar.astro";
+import Datetime from "@/components/Datetime.astro";
+import BackButton from "@/components/BackButton.astro";
+import ArtalkComments from "@/components/ArtalkComments.astro";
+import TableOfContents from "@/components/TableOfContents.astro";
+import { getWeeklyPath } from "@/utils/getWeeklyPath";
+import { slugifyStr } from "@/utils/slugify";
+import { SITE } from "@/config";
+import { getLocaleFromPath, localizePath, type Locale } from "@/i18n";
+
+type Props = {
+  post: CollectionEntry<"weekly">;
+  locale?: Locale;
+};
+
+const {
+  post,
+  locale = getLocaleFromPath(Astro.url.pathname),
+} = Astro.props;
+
+const { title, description, pubDatetime, modDatetime, tags } = post.data;
+
+const rendered = await render(post);
+const Content = rendered.Content;
+const headings = rendered.headings;
+
+const layoutProps = {
+  title: `${title} | ${SITE.title}`,
+  description,
+  pubDatetime,
+  modDatetime,
+  scrollSmooth: true,
+  locale,
+};
+---
+
+<Layout {...layoutProps}>
+  <SiteTopbar />
+  <main
+    id="main-content"
+    class="app-layout pb-10 lg:max-w-4xl lg:pb-14"
+  >
+    <section>
+      <div class="px-1 py-4 sm:px-2 sm:py-5">
+        <div class="mx-auto max-w-4xl">
+          <div>
+            <BackButton inline {locale} />
+
+            <article class="pt-2" data-pagefind-body>
+              <h1 class="max-w-4xl text-3xl leading-tight font-semibold tracking-tight md:text-4xl">
+                {title}
+              </h1>
+
+              <div class="mt-4 flex flex-wrap items-center gap-3 text-sm text-foreground/65">
+                <Datetime {pubDatetime} {modDatetime} size="lg" {locale} showUpdated={true} />
+              </div>
+
+              <div
+                id="article"
+                class="app-prose mt-10 w-full max-w-4xl mx-auto"
+              >
+                <Content />
+              </div>
+
+              <div class="mt-12 flex flex-wrap gap-3">
+                {tags.map(tag => (
+                  <a
+                    href={localizePath(`/tags/${slugifyStr(tag)}/`, locale)}
+                    class="text-xs text-gray-400 hover:text-gray-900 dark:text-gray-500 dark:hover:text-gray-100 transition-colors"
+                  >
+                    {tag}
+                  </a>
+                ))}
+              </div>
+
+              <ArtalkComments
+                pageKey={getWeeklyPath(post.id, post.filePath)}
+                pageTitle={title}
+              />
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <TableOfContents slot="floating" {headings} {locale} />
+</Layout>
+
+<script>
+import PhotoSwipeLightbox from "photoswipe/lightbox";
+import "photoswipe/dist/photoswipe.css";
+
+function initPhotoSwipe() {
+  if ((window as any).__pswpLightbox) {
+    (window as any).__pswpLightbox.destroy();
+    (window as any).__pswpLightbox = null;
+  }
+
+  const article = document.getElementById("article");
+  if (!article) return;
+  const images = article.querySelectorAll("img[src]");
+  if (images.length === 0) return;
+
+  const lightbox = new PhotoSwipeLightbox({
+    gallery: "#article",
+    children: "img",
+    pswpModule: () => import("photoswipe"),
+  });
+
+  lightbox.addFilter("itemData", (itemData) => {
+    const img = (itemData as any).element as HTMLImageElement;
+    if (img) {
+      itemData.src = img.currentSrc || img.src;
+      itemData.width = img.naturalWidth || 0;
+      itemData.height = img.naturalHeight || 0;
+      itemData.alt = img.alt;
+    }
+    return itemData;
+  });
+
+  lightbox.init();
+  (window as any).__pswpLightbox = lightbox;
+}
+
+document.addEventListener("astro:page-load", initPhotoSwipe);
+initPhotoSwipe();
+</script>
+
+<script is:inline data-astro-rerun>
+  function addHeadingLinks() {
+    const headings = Array.from(
+      document.querySelectorAll("h2, h3, h4, h5, h6")
+    );
+    for (const heading of headings) {
+      heading.classList.add("group");
+      const link = document.createElement("a");
+      link.className =
+        "heading-link ms-2 no-underline opacity-75 md:opacity-0 md:group-hover:opacity-100 md:focus:opacity-100";
+      link.href = "#" + heading.id;
+      link.setAttribute("aria-label", `Link to: ${heading.textContent}`);
+
+      const span = document.createElement("span");
+      span.ariaHidden = "true";
+      span.innerText = "#";
+      link.appendChild(span);
+      heading.appendChild(link);
+    }
+  }
+
+  addHeadingLinks();
+</script>

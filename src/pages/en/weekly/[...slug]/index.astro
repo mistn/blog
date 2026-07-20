@@ -1,0 +1,18 @@
+---
+import { getCollection } from "astro:content";
+import WeeklyDetails from "@/layouts/WeeklyDetails.astro";
+import { getWeeklyPath } from "@/utils/getWeeklyPath";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("weekly", ({ data }) => !data.draft);
+  return posts.map(post => ({
+    params: { slug: getWeeklyPath(post.id, post.filePath, false) },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const locale = "en";
+---
+
+<WeeklyDetails post={post} {locale} />

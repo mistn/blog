@@ -16,11 +16,14 @@ export const ui = {
     },
     nav: {
       home: "首页",
+      articles: "文章",
       archives: "归档",
+      weekly: "周记",
       anime: "追番",
       tools: "工具",
       friends: "友链",
       about: "关于",
+      aboutMe: "关于我",
       search: "搜索",
       skipToContent: "跳到正文",
       theme: "切换浅色/深色模式",
@@ -55,6 +58,8 @@ export const ui = {
       friendsDesc:
         "miuo 的友情链接页面，收录了多个优质个人独立博客，欢迎通过评论区或邮件提交申请交换友链。",
       friendsEyebrow: "Link Exchange",
+      weeklyTitle: "周记",
+      weeklyDesc: "定期记录与分享。",
       aboutTitle: "关于",
       aboutEyebrow: "About",
       aboutDesc: "了解 miuo 的个人简介、自托管服务列表（听歌记录、壁纸站、临时邮箱等）以及联系方式。",
@@ -126,11 +131,14 @@ export const ui = {
     },
     nav: {
       home: "Home",
+      articles: "Articles",
       archives: "Archive",
+      weekly: "Weekly",
       anime: "Anime",
       tools: "Tools",
       friends: "Friends",
       about: "About",
+      aboutMe: "About Me",
       search: "Search",
       skipToContent: "Skip to content",
       theme: "Toggle light and dark mode",
@@ -169,6 +177,8 @@ export const ui = {
       friendsDesc:
         "Browse miuo's collection of personal indie blog friend links. Apply for a link exchange via the comment section or by email.",
       friendsEyebrow: "Link Exchange",
+      weeklyTitle: "Weekly",
+      weeklyDesc: "Regular notes and sharing.",
       aboutTitle: "About",
       aboutEyebrow: "About",
       aboutDesc:

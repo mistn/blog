@@ -1,0 +1,50 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "@/layouts/Layout.astro";
+import SiteTopbar from "@/components/SiteTopbar.astro";
+import Datetime from "@/components/Datetime.astro";
+import PageHeader from "@/components/PageHeader.astro";
+import getSortedWeekly from "@/utils/getSortedWeekly";
+import { getWeeklyPath } from "@/utils/getWeeklyPath";
+import { SITE } from "@/config";
+import { getLocaleFromPath, localizePath, ui } from "@/i18n";
+
+const locale = getLocaleFromPath(Astro.url.pathname);
+const copy = ui[locale];
+const posts = await getCollection("weekly");
+const sortedPosts = getSortedWeekly(posts);
+const pageTitle = copy.pages.weeklyTitle;
+const pageDesc = copy.pages.weeklyDesc;
+---
+
+<Layout title={`${pageTitle} | ${SITE.title}`} description={pageDesc}>
+  <SiteTopbar />
+  <main class="mx-auto w-full max-w-4xl px-4 sm:px-6 pt-8 pb-10 md:pt-12 md:pb-14">
+    <PageHeader title={pageTitle} />
+
+    <div class="space-y-8">
+      {
+        sortedPosts.length > 0 ? (
+          sortedPosts.map(post => (
+            <article class="border-b border-border/30 pb-8 last:border-0">
+              <a
+                href={localizePath(getWeeklyPath(post.id, post.filePath), locale)}
+                class="card-link-press inline-block text-xl leading-tight font-medium tracking-tight transition hover:text-accent active:opacity-60"
+              >
+                {post.data.issueNumber ? `#${post.data.issueNumber} ` : ""}{post.data.title}
+              </a>
+              <div class="mt-2 flex flex-wrap items-center gap-2.5 text-xs text-foreground/60">
+                <Datetime {...post.data} {locale} />
+              </div>
+              <p class="mt-2 max-w-3xl text-sm leading-relaxed text-gray-600 dark:text-gray-400 line-clamp-2">
+                {post.data.description}
+              </p>
+            </article>
+          ))
+        ) : (
+          <p class="text-center text-sm text-foreground/40 py-12">暂无内容</p>
+        )
+      }
+    </div>
+  </main>
+</Layout>

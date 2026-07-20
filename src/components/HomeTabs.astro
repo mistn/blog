@@ -1,5 +1,4 @@
 ---
-import { SITE } from "@/config";
 import { getLocaleFromPath, localizePath, normalizePath, ui } from "@/i18n";
 
 const { pathname } = Astro.url;
@@ -8,11 +7,28 @@ const copy = ui[locale];
 const currentPath = normalizePath(pathname);
 const getHref = (path: string) => localizePath(path, locale);
 const isActive = (path: string) => currentPath === normalizePath(getHref(path));
+const isChildActive = (paths: string[]) =>
+  paths.some(
+    p => currentPath === normalizePath(getHref(p)) || currentPath.startsWith(normalizePath(getHref(p)) + "/")
+  );
 
 const tabClass =
-  "home-tab relative inline-flex items-center px-0.5 py-1 text-lg font-medium text-foreground/65 transition hover:text-foreground after:absolute after:-bottom-0.5 after:left-1/2 after:h-[2px] after:w-0 after:-translate-x-1/2 after:rounded-full after:bg-accent after:transition-all after:duration-200 after:content-['']";
+  "home-tab inline-flex items-center px-0.5 py-1 text-lg font-medium text-foreground/65 transition hover:text-foreground";
 const activeTabClass =
-  "font-semibold text-gray-900 dark:text-gray-100 after:w-6";
+  "font-semibold text-gray-900 dark:text-gray-100";
+
+const underlineClass =
+  "relative after:absolute after:-bottom-0.5 after:left-1/2 after:h-[2px] after:w-0 after:-translate-x-1/2 after:rounded-full after:bg-accent after:transition-all after:duration-200 after:content-['']";
+const activeUnderlineClass =
+  "after:w-6";
+
+const subTabClass =
+  "inline-flex items-center px-0.5 py-1.5 text-lg font-medium text-foreground/65 transition hover:text-foreground whitespace-nowrap";
+const activeSubClass =
+  "font-semibold text-gray-900 dark:text-gray-100";
+
+const articlesChildren = ["/archives", "/weekly"];
+const aboutChildren = ["/about", "/tools"];
 ---
 
 <nav
@@ -21,44 +37,92 @@ const activeTabClass =
 >
   <a href={getHref("/")}
     data-path={getHref("/")}
-    class:list={[tabClass, { [activeTabClass]: isActive("/") }]}
+    class:list={[tabClass, underlineClass, { [activeTabClass]: isActive("/"), [activeUnderlineClass]: isActive("/") }]}
   >
     {copy.nav.home}
   </a>
-  {
-    SITE.showArchives && (
-      <a href={getHref("/archives")}
+
+  <div class="relative group" data-dropdown="articles">
+    <button
+      data-dropdown-trigger
+      class:list={[
+        tabClass,
+        "cursor-pointer",
+      ]}
+    >
+      <span data-underline class:list={[underlineClass, { [activeTabClass]: !isActive("/") && isChildActive(articlesChildren), [activeUnderlineClass]: !isActive("/") && isChildActive(articlesChildren) }]}>
+        {copy.nav.articles}
+      </span>
+      <svg class="ml-1 size-3.5 transition-transform duration-200 group-hover:rotate-180" data-chevron viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <div
+      data-dropdown-menu
+      class="absolute left-0 top-full pt-3 flex flex-col opacity-0 invisible -translate-y-1 scale-y-0 origin-top transition-all duration-200 z-50 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 group-hover:scale-y-100"
+    >
+      <a
+        href={getHref("/archives")}
         data-path={getHref("/archives")}
-        class:list={[tabClass, { [activeTabClass]: isActive("/archives") }]}
+        class:list={[subTabClass, { [activeSubClass]: isActive("/archives") }]}
       >
         {copy.nav.archives}
       </a>
-    )
-  }
+      <a
+        href={getHref("/weekly")}
+        data-path={getHref("/weekly")}
+        class:list={[subTabClass, { [activeSubClass]: isChildActive(["/weekly"]) }]}
+      >
+        {copy.nav.weekly}
+      </a>
+    </div>
+  </div>
+
   <a href={getHref("/anime")}
     data-path={getHref("/anime")}
-    class:list={[tabClass, { [activeTabClass]: isActive("/anime") }]}
+    class:list={[tabClass, underlineClass, { [activeTabClass]: isActive("/anime"), [activeUnderlineClass]: isActive("/anime") }]}
   >
     {copy.nav.anime}
   </a>
-  <a href={getHref("/tools")}
-    data-path={getHref("/tools")}
-    class:list={[tabClass, { [activeTabClass]: isActive("/tools") }]}
-  >
-    {copy.nav.tools}
-  </a>
+
   <a href={getHref("/friends")}
     data-path={getHref("/friends")}
-    class:list={[tabClass, { [activeTabClass]: isActive("/friends") }]}
+    class:list={[tabClass, underlineClass, { [activeTabClass]: isActive("/friends"), [activeUnderlineClass]: isActive("/friends") }]}
   >
     {copy.nav.friends}
   </a>
-  <a href={getHref("/about")}
-    data-path={getHref("/about")}
-    class:list={[tabClass, { [activeTabClass]: isActive("/about") }]}
-  >
-    {copy.nav.about}
-  </a>
+
+  <div class="relative group" data-dropdown="about">
+    <button
+      data-dropdown-trigger
+      class:list={[
+        tabClass,
+        "cursor-pointer",
+      ]}
+    >
+      <span data-underline class:list={[underlineClass, { [activeTabClass]: !isActive("/") && isChildActive(aboutChildren), [activeUnderlineClass]: !isActive("/") && isChildActive(aboutChildren) }]}>
+        {copy.nav.about}
+      </span>
+      <svg class="ml-1 size-3.5 transition-transform duration-200 group-hover:rotate-180" data-chevron viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+    <div
+      data-dropdown-menu
+      class="absolute left-0 top-full pt-3 flex flex-col opacity-0 invisible -translate-y-1 scale-y-0 origin-top transition-all duration-200 z-50 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 group-hover:scale-y-100"
+    >
+      <a
+        href={getHref("/about")}
+        data-path={getHref("/about")}
+        class:list={[subTabClass, { [activeSubClass]: isActive("/about") }]}
+      >
+        {copy.nav.aboutMe}
+      </a>
+      <a
+        href={getHref("/tools")}
+        data-path={getHref("/tools")}
+        class:list={[subTabClass, { [activeSubClass]: isActive("/tools") }]}
+      >
+        {copy.nav.tools}
+      </a>
+    </div>
+  </div>
 </nav>
 
 <script is:inline>
@@ -79,6 +143,28 @@ const activeTabClass =
       ACTIVE_HOME_TAB_CLASSES.forEach(className => {
         tab.classList.toggle(className, isActive);
       });
+      tab.classList.toggle("after:w-6", isActive);
+    });
+
+    document.querySelectorAll("[data-dropdown]").forEach(dropdown => {
+      const underline = dropdown.querySelector("[data-underline]");
+      const children = dropdown.querySelectorAll("[data-path]");
+      let anyChildActive = false;
+      children.forEach(child => {
+        const targetPath = normalizeHomeTabPath(child.getAttribute("data-path"));
+        if (targetPath === currentPath || currentPath.startsWith(targetPath + "/")) {
+          anyChildActive = true;
+        }
+      });
+      if (underline) {
+        if (anyChildActive) {
+          underline.classList.add("after:w-6");
+          ACTIVE_HOME_TAB_CLASSES.forEach(c => underline.classList.add(c));
+        } else {
+          underline.classList.remove("after:w-6");
+          ACTIVE_HOME_TAB_CLASSES.forEach(c => underline.classList.remove(c));
+        }
+      }
     });
   }
 
