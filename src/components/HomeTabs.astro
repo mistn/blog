@@ -13,9 +13,9 @@ const isChildActive = (paths: string[]) =>
   );
 
 const tabClass =
-  "home-tab inline-flex items-center px-2 py-1 text-lg font-medium text-foreground/85 relative cursor-pointer";
+  "home-tab inline-flex items-center px-2 py-1 text-lg font-semibold text-foreground/85 relative cursor-pointer";
 const activeTabClass =
-  "font-semibold text-gray-900 dark:text-gray-100";
+  "text-foreground";
 
 const underlineClass =
   "after:absolute after:-bottom-0.5 after:left-0 after:h-[2px] after:w-0 after:bg-black dark:after:bg-white after:transition-all after:duration-200 after:content-['']";
@@ -157,7 +157,7 @@ const aboutChildren = ["/about", "/tools"];
 
 <script is:inline>
   const ACTIVE_UNDERLINE = "after:w-6";
-  const ACTIVE_CLASSES = ["font-semibold", "text-gray-900", "dark:text-gray-100"];
+  const ACTIVE_CLASSES = ["text-foreground"];
 
   function normalizePath(path) {
     if (!path) return "/";

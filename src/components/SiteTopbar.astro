@@ -182,11 +182,11 @@ const isPathActive = (path: string) => currentPath.startsWith(normalizePath(getH
         class="fixed top-0 right-0 h-full w-[35vw] min-w-[140px] max-w-[200px] bg-background border-l border-black dark:border-white z-50 translate-x-full transition-transform duration-300 ease-in-out"
         aria-hidden="true"
       >
-        <nav class="h-full overflow-y-auto pb-24 pt-6">
+        <nav class="h-full overflow-y-auto pb-24 pt-10">
           <a
             href={getHref("/")}
             class:list={[
-              "block px-4 py-3 text-base text-left transition-colors",
+              "block px-4 py-3.5 text-base text-left transition-colors",
               isActive("/")
                 ? "bg-black text-white dark:bg-white dark:text-black"
                 : "text-foreground/85 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black",
@@ -201,7 +201,7 @@ const isPathActive = (path: string) => currentPath.startsWith(normalizePath(getH
               <a
                 href={getHref("/archives")}
                 class:list={[
-                  "block px-4 py-2 text-base text-left transition-colors",
+                  "block px-4 py-2.5 text-base text-left transition-colors",
                   isActive("/archives")
                     ? "bg-black text-white dark:bg-white dark:text-black"
                     : "text-foreground/85 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black",
@@ -215,7 +215,7 @@ const isPathActive = (path: string) => currentPath.startsWith(normalizePath(getH
           <a
             href={getHref("/weekly")}
             class:list={[
-              "block px-4 py-2 text-base text-left transition-colors",
+              "block px-4 py-2.5 text-base text-left transition-colors",
               isActive("/weekly") || isPathActive("/weekly")
                 ? "bg-black text-white dark:bg-white dark:text-black"
                 : "text-foreground/85 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black",
@@ -228,7 +228,7 @@ const isPathActive = (path: string) => currentPath.startsWith(normalizePath(getH
           <a
             href={getHref("/anime")}
             class:list={[
-              "block px-4 py-2 text-base text-left transition-colors",
+              "block px-4 py-2.5 text-base text-left transition-colors",
               isActive("/anime")
                 ? "bg-black text-white dark:bg-white dark:text-black"
                 : "text-foreground/85 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black",
@@ -241,7 +241,7 @@ const isPathActive = (path: string) => currentPath.startsWith(normalizePath(getH
           <a
             href={getHref("/friends")}
             class:list={[
-              "block px-4 py-2 text-base text-left transition-colors",
+              "block px-4 py-2.5 text-base text-left transition-colors",
               isActive("/friends")
                 ? "bg-black text-white dark:bg-white dark:text-black"
                 : "text-foreground/85 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black",
@@ -256,7 +256,7 @@ const isPathActive = (path: string) => currentPath.startsWith(normalizePath(getH
           <a
             href={getHref("/about")}
             class:list={[
-              "block px-4 py-2 text-base text-left transition-colors",
+              "block px-4 py-2.5 text-base text-left transition-colors",
               isActive("/about")
                 ? "bg-black text-white dark:bg-white dark:text-black"
                 : "text-foreground/85 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black",
@@ -268,7 +268,7 @@ const isPathActive = (path: string) => currentPath.startsWith(normalizePath(getH
           <a
             href={getHref("/tools")}
             class:list={[
-              "block px-4 py-2 text-base text-left transition-colors",
+              "block px-4 py-2.5 text-base text-left transition-colors",
               isActive("/tools")
                 ? "bg-black text-white dark:bg-white dark:text-black"
                 : "text-foreground/85 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black",
