@@ -36,37 +36,40 @@ function getPages(): (number | "...")[] {
 }
 
 const pages = getPages();
+const linkClass = "inline-flex items-center justify-center h-8 min-w-[2rem] px-2 text-sm text-foreground/60 transition hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black";
+const activeClass = "bg-black text-white dark:bg-white dark:text-black";
+const disabledClass = "text-foreground/20 pointer-events-none";
+const navBtnClass = "inline-flex items-center justify-center h-8 w-8 text-lg text-foreground/45 transition hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black";
+const navDisabledClass = "text-foreground/20";
 ---
 
 {
   lastPage > 1 && (
-    <nav class="mt-auto mb-4 flex items-center justify-center gap-1.5 text-sm" role="navigation" aria-label="Pagination Navigation">
+    <nav class="mt-8 mb-4 flex items-center justify-center gap-1" role="navigation" aria-label="Pagination Navigation">
       {prevUrl ? (
-        <a href={prevUrl} class="flex h-7 w-7 items-center justify-center text-[22px] text-foreground/45 transition-colors hover:text-foreground rounded-lg leading-none -translate-y-[2px]" aria-label={copy.actions.previousPageLabel}>
+        <a href={prevUrl} class={navBtnClass} aria-label={copy.actions.previousPageLabel}>
           ‹
         </a>
       ) : (
-        <span class="flex h-7 w-7 items-center justify-center text-[22px] text-foreground/20 leading-none -translate-y-[2px]">‹</span>
+        <span class={[navBtnClass, navDisabledClass].join(" ")}>‹</span>
       )}
 
       {pages.map(p =>
         p === "..." ? (
-          <span class="flex h-7 w-7 items-center justify-center text-foreground/30">⋯</span>
+          <span class="inline-flex items-center justify-center h-8 min-w-[2rem] text-sm text-foreground/30">⋯</span>
         ) : p === currentPage ? (
-          <span class="flex h-7 w-7 items-center justify-center rounded-lg bg-muted/60 font-semibold text-foreground">{p}</span>
+          <span class={[linkClass, activeClass].join(" ")}>{p}</span>
         ) : (
-          <a href={buildPageUrl(p)} class="flex h-7 w-7 items-center justify-center rounded-lg text-foreground/45 transition-colors hover:text-foreground">{p}</a>
+          <a href={buildPageUrl(p)} class={linkClass}>{p}</a>
         )
       )}
 
       {nextUrl ? (
-        <a href={nextUrl} class="flex h-7 w-7 items-center justify-center text-[22px] text-foreground/45 transition-colors hover:text-foreground rounded-lg leading-none -translate-y-[2px]" aria-label={copy.actions.nextPageLabel}>
-          <span class="inline-block [transform:scaleX(-1)]">‹</span>
+        <a href={nextUrl} class={navBtnClass} aria-label={copy.actions.nextPageLabel}>
+          ›
         </a>
       ) : (
-        <span class="flex h-7 w-7 items-center justify-center text-[22px] text-foreground/20 leading-none -translate-y-[2px]">
-          <span class="inline-block [transform:scaleX(-1)]">‹</span>
-        </span>
+        <span class={[navBtnClass, navDisabledClass].join(" ")}>›</span>
       )}
     </nav>
   )
