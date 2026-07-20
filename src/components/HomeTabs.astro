@@ -13,19 +13,19 @@ const isChildActive = (paths: string[]) =>
   );
 
 const tabClass =
-  "home-tab inline-flex items-center px-0.5 py-1 text-lg font-medium text-foreground/65 transition hover:text-foreground";
+  "home-tab inline-flex items-center px-2 py-1 text-lg font-medium text-foreground/85 relative cursor-pointer";
 const activeTabClass =
   "font-semibold text-gray-900 dark:text-gray-100";
 
 const underlineClass =
-  "relative after:absolute after:-bottom-0.5 after:left-1/2 after:h-[2px] after:w-0 after:-translate-x-1/2 after:rounded-full after:bg-accent after:transition-all after:duration-200 after:content-['']";
+  "after:absolute after:-bottom-0.5 after:left-0 after:h-[2px] after:w-0 after:bg-black dark:after:bg-white after:transition-all after:duration-200 after:content-['']";
 const activeUnderlineClass =
-  "after:w-6";
+  "after:w-full";
 
 const subTabClass =
-  "inline-flex items-center px-0.5 py-1.5 text-lg font-medium text-foreground/65 transition hover:text-foreground whitespace-nowrap";
+  "flex items-center px-4 py-2 text-sm text-foreground/85 transition whitespace-nowrap w-full hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black";
 const activeSubClass =
-  "font-semibold text-gray-900 dark:text-gray-100";
+  "bg-black text-white dark:bg-white dark:text-black";
 
 const articlesChildren = ["/archives", "/weekly"];
 const aboutChildren = ["/about", "/tools"];
@@ -33,7 +33,7 @@ const aboutChildren = ["/about", "/tools"];
 
 <nav
   data-home-tabs
-  class="flex min-w-0 flex-wrap items-center gap-x-6 gap-y-2 text-sm"
+  class="flex min-w-0 items-center gap-x-6 whitespace-nowrap text-sm"
 >
   <a href={getHref("/")}
     data-path={getHref("/")}
@@ -47,32 +47,34 @@ const aboutChildren = ["/about", "/tools"];
       data-dropdown-trigger
       class:list={[
         tabClass,
+        underlineClass,
         "cursor-pointer",
+        { [activeTabClass]: !isActive("/") && isChildActive(articlesChildren), [activeUnderlineClass]: !isActive("/") && isChildActive(articlesChildren) },
       ]}
     >
-      <span data-underline class:list={[underlineClass, { [activeTabClass]: !isActive("/") && isChildActive(articlesChildren), [activeUnderlineClass]: !isActive("/") && isChildActive(articlesChildren) }]}>
-        {copy.nav.articles}
-      </span>
+      {copy.nav.articles}
       <svg class="ml-1 size-3.5 transition-transform duration-200 group-hover:rotate-180" data-chevron viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
     </button>
     <div
       data-dropdown-menu
-      class="absolute left-0 top-full pt-3 flex flex-col opacity-0 invisible -translate-y-1 scale-y-0 origin-top transition-all duration-200 z-50 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 group-hover:scale-y-100"
+      class="absolute left-1/2 -translate-x-1/2 top-full pt-3 opacity-0 invisible -translate-y-1 scale-y-0 origin-top transition-all duration-200 z-50 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 group-hover:scale-y-100"
     >
-      <a
-        href={getHref("/archives")}
-        data-path={getHref("/archives")}
-        class:list={[subTabClass, { [activeSubClass]: isActive("/archives") }]}
-      >
-        {copy.nav.archives}
-      </a>
-      <a
-        href={getHref("/weekly")}
-        data-path={getHref("/weekly")}
-        class:list={[subTabClass, { [activeSubClass]: isChildActive(["/weekly"]) }]}
-      >
-        {copy.nav.weekly}
-      </a>
+      <div class="min-w-max border border-black dark:border-white bg-background py-1">
+        <a
+          href={getHref("/archives")}
+          data-path={getHref("/archives")}
+          class:list={[subTabClass, { [activeSubClass]: isActive("/archives") }]}
+        >
+          {copy.nav.archives}
+        </a>
+        <a
+          href={getHref("/weekly")}
+          data-path={getHref("/weekly")}
+          class:list={[subTabClass, { [activeSubClass]: isChildActive(["/weekly"]) }]}
+        >
+          {copy.nav.weekly}
+        </a>
+      </div>
     </div>
   </div>
 
@@ -95,75 +97,96 @@ const aboutChildren = ["/about", "/tools"];
       data-dropdown-trigger
       class:list={[
         tabClass,
+        underlineClass,
         "cursor-pointer",
+        { [activeTabClass]: !isActive("/") && isChildActive(aboutChildren), [activeUnderlineClass]: !isActive("/") && isChildActive(aboutChildren) },
       ]}
     >
-      <span data-underline class:list={[underlineClass, { [activeTabClass]: !isActive("/") && isChildActive(aboutChildren), [activeUnderlineClass]: !isActive("/") && isChildActive(aboutChildren) }]}>
-        {copy.nav.about}
-      </span>
+      {copy.nav.about}
       <svg class="ml-1 size-3.5 transition-transform duration-200 group-hover:rotate-180" data-chevron viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
     </button>
     <div
       data-dropdown-menu
-      class="absolute left-0 top-full pt-3 flex flex-col opacity-0 invisible -translate-y-1 scale-y-0 origin-top transition-all duration-200 z-50 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 group-hover:scale-y-100"
+      class="absolute left-1/2 -translate-x-1/2 top-full pt-3 opacity-0 invisible -translate-y-1 scale-y-0 origin-top transition-all duration-200 z-50 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 group-hover:scale-y-100"
     >
-      <a
-        href={getHref("/about")}
-        data-path={getHref("/about")}
-        class:list={[subTabClass, { [activeSubClass]: isActive("/about") }]}
-      >
-        {copy.nav.aboutMe}
-      </a>
-      <a
-        href={getHref("/tools")}
-        data-path={getHref("/tools")}
-        class:list={[subTabClass, { [activeSubClass]: isActive("/tools") }]}
-      >
-        {copy.nav.tools}
-      </a>
+      <div class="min-w-max border border-black dark:border-white bg-background py-1">
+        <a
+          href={getHref("/about")}
+          data-path={getHref("/about")}
+          class:list={[subTabClass, { [activeSubClass]: isActive("/about") }]}
+        >
+          {copy.nav.aboutMe}
+        </a>
+        <a
+          href={getHref("/tools")}
+          data-path={getHref("/tools")}
+          class:list={[subTabClass, { [activeSubClass]: isActive("/tools") }]}
+        >
+          {copy.nav.tools}
+        </a>
+      </div>
     </div>
   </div>
 </nav>
 
-<script is:inline>
-  const ACTIVE_HOME_TAB_CLASSES = ["font-semibold", "text-gray-900", "dark:text-gray-100"];
+<style is:global>
+  .home-tab {
+    background-image: linear-gradient(to right, #000, #000);
+    background-repeat: no-repeat;
+    background-size: 0% 100%;
+    background-position: 0 0;
+    transition: background-size 0.2s ease-out, color 0.2s ease-out;
+  }
+  .home-tab:hover {
+    background-size: 100% 100%;
+    color: #fff;
+  }
+  .home-tab:hover [data-chevron] {
+    color: #fff;
+  }
+  [data-theme="dark"] .home-tab {
+    background-image: linear-gradient(to right, #fff, #fff);
+  }
+  [data-theme="dark"] .home-tab:hover {
+    color: #000;
+  }
+  [data-theme="dark"] .home-tab:hover [data-chevron] {
+    color: #000;
+  }
+</style>
 
-  function normalizeHomeTabPath(path) {
+<script is:inline>
+  const ACTIVE_UNDERLINE = "after:w-6";
+  const ACTIVE_CLASSES = ["font-semibold", "text-gray-900", "dark:text-gray-100"];
+
+  function normalizePath(path) {
     if (!path) return "/";
     return path.endsWith("/") && path !== "/" ? path.slice(0, -1) : path;
   }
 
   function syncHomeTabs() {
-    const currentPath = normalizeHomeTabPath(window.location.pathname);
+    const currentPath = normalizePath(window.location.pathname);
 
     document.querySelectorAll("[data-home-tabs] [data-path]").forEach(tab => {
-      const targetPath = normalizeHomeTabPath(tab.getAttribute("data-path"));
-      const isActive = targetPath === currentPath;
-
-      ACTIVE_HOME_TAB_CLASSES.forEach(className => {
-        tab.classList.toggle(className, isActive);
-      });
-      tab.classList.toggle("after:w-6", isActive);
+      const target = normalizePath(tab.getAttribute("data-path"));
+      const isActive = target === currentPath;
+      ACTIVE_CLASSES.forEach(c => tab.classList.toggle(c, isActive));
+      tab.classList.toggle(ACTIVE_UNDERLINE, isActive);
     });
 
     document.querySelectorAll("[data-dropdown]").forEach(dropdown => {
-      const underline = dropdown.querySelector("[data-underline]");
+      const btn = dropdown.querySelector("[data-dropdown-trigger]");
       const children = dropdown.querySelectorAll("[data-path]");
-      let anyChildActive = false;
+      let anyActive = false;
       children.forEach(child => {
-        const targetPath = normalizeHomeTabPath(child.getAttribute("data-path"));
-        if (targetPath === currentPath || currentPath.startsWith(targetPath + "/")) {
-          anyChildActive = true;
+        const target = normalizePath(child.getAttribute("data-path"));
+        if (target === currentPath || currentPath.startsWith(target + "/")) {
+          anyActive = true;
         }
       });
-      if (underline) {
-        if (anyChildActive) {
-          underline.classList.add("after:w-6");
-          ACTIVE_HOME_TAB_CLASSES.forEach(c => underline.classList.add(c));
-        } else {
-          underline.classList.remove("after:w-6");
-          ACTIVE_HOME_TAB_CLASSES.forEach(c => underline.classList.remove(c));
-        }
+      if (btn) {
+        ACTIVE_CLASSES.forEach(c => btn.classList.toggle(c, anyActive));
+        btn.classList.toggle(ACTIVE_UNDERLINE, anyActive);
       }
     });
   }

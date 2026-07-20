@@ -176,38 +176,35 @@ const isPathActive = (path: string) => currentPath.startsWith(normalizePath(getH
         </div>     <!-- end right column -->
       </div>       <!-- end topbar row -->
 
-      <!-- ===== Mobile Dropdown Card ===== -->
+      <!-- ===== Mobile Sidebar (slides from right) ===== -->
       <div
         id="mobile-dropdown"
-        class="hidden absolute top-full right-0 mt-2 w-64 rounded-xl border border-border/40 shadow-xl z-50 origin-top-right"
+        class="fixed top-0 right-0 h-full w-[35vw] min-w-[140px] max-w-[200px] bg-background border-l border-black dark:border-white z-50 translate-x-full transition-transform duration-300 ease-in-out"
         aria-hidden="true"
       >
-        <nav class="py-2">
+        <nav class="h-full overflow-y-auto pb-24 pt-6">
           <a
             href={getHref("/")}
             class:list={[
-              "block px-4 py-4 text-sm text-left transition-colors",
+              "block px-4 py-3 text-base text-left transition-colors",
               isActive("/")
-                ? "font-semibold text-foreground"
-                : "font-medium text-foreground/65 hover:text-foreground",
+                ? "bg-black text-white dark:bg-white dark:text-black"
+                : "text-foreground/85 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black",
             ]}
             data-menu-link
           >
             {copy.nav.home}
           </a>
-          <div class="mx-4 border-b border-border/40" aria-hidden="true"></div>
-          <div class="px-4 py-3 text-xs font-semibold text-foreground/40 uppercase tracking-wider">
-            {copy.nav.articles}
-          </div>
+
           {
             SITE.showArchives && (
               <a
                 href={getHref("/archives")}
                 class:list={[
-                  "block pl-8 pr-4 py-3 text-sm text-left transition-colors",
+                  "block px-4 py-2 text-base text-left transition-colors",
                   isActive("/archives")
-                    ? "font-semibold text-foreground"
-                    : "font-medium text-foreground/65 hover:text-foreground",
+                    ? "bg-black text-white dark:bg-white dark:text-black"
+                    : "text-foreground/85 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black",
                 ]}
                 data-menu-link
               >
@@ -218,52 +215,51 @@ const isPathActive = (path: string) => currentPath.startsWith(normalizePath(getH
           <a
             href={getHref("/weekly")}
             class:list={[
-              "block pl-8 pr-4 py-3 text-sm text-left transition-colors",
+              "block px-4 py-2 text-base text-left transition-colors",
               isActive("/weekly") || isPathActive("/weekly")
-                ? "font-semibold text-foreground"
-                : "font-medium text-foreground/65 hover:text-foreground",
+                ? "bg-black text-white dark:bg-white dark:text-black"
+                : "text-foreground/85 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black",
             ]}
             data-menu-link
           >
             {copy.nav.weekly}
           </a>
-          <div class="mx-4 border-b border-border/40" aria-hidden="true"></div>
+
           <a
             href={getHref("/anime")}
             class:list={[
-              "block px-4 py-4 text-sm text-left transition-colors",
+              "block px-4 py-2 text-base text-left transition-colors",
               isActive("/anime")
-                ? "font-semibold text-foreground"
-                : "font-medium text-foreground/65 hover:text-foreground",
+                ? "bg-black text-white dark:bg-white dark:text-black"
+                : "text-foreground/85 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black",
             ]}
             data-menu-link
           >
             {copy.nav.anime}
           </a>
-          <div class="mx-4 border-b border-border/40" aria-hidden="true"></div>
+
           <a
             href={getHref("/friends")}
             class:list={[
-              "block px-4 py-4 text-sm text-left transition-colors",
+              "block px-4 py-2 text-base text-left transition-colors",
               isActive("/friends")
-                ? "font-semibold text-foreground"
-                : "font-medium text-foreground/65 hover:text-foreground",
+                ? "bg-black text-white dark:bg-white dark:text-black"
+                : "text-foreground/85 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black",
             ]}
             data-menu-link
           >
             {copy.nav.friends}
           </a>
-          <div class="mx-4 border-b border-border/40" aria-hidden="true"></div>
-          <div class="px-4 py-3 text-xs font-semibold text-foreground/40 uppercase tracking-wider">
-            {copy.nav.about}
-          </div>
+
+          <div class="mt-6"></div>
+
           <a
             href={getHref("/about")}
             class:list={[
-              "block pl-8 pr-4 py-3 text-sm text-left transition-colors",
+              "block px-4 py-2 text-base text-left transition-colors",
               isActive("/about")
-                ? "font-semibold text-foreground"
-                : "font-medium text-foreground/65 hover:text-foreground",
+                ? "bg-black text-white dark:bg-white dark:text-black"
+                : "text-foreground/85 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black",
             ]}
             data-menu-link
           >
@@ -272,51 +268,37 @@ const isPathActive = (path: string) => currentPath.startsWith(normalizePath(getH
           <a
             href={getHref("/tools")}
             class:list={[
-              "block pl-8 pr-4 py-3 text-sm text-left transition-colors",
+              "block px-4 py-2 text-base text-left transition-colors",
               isActive("/tools")
-                ? "font-semibold text-foreground"
-                : "font-medium text-foreground/65 hover:text-foreground",
+                ? "bg-black text-white dark:bg-white dark:text-black"
+                : "text-foreground/85 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black",
             ]}
             data-menu-link
           >
             {copy.nav.tools}
           </a>
+
+          <div class="mt-8 flex items-center justify-center gap-6 px-4">
+            <a
+              href="/rss.xml"
+              class="text-foreground/50 hover:text-foreground transition-colors"
+              title="RSS"
+              aria-label="RSS"
+            >
+              <IconRss class="size-4" />
+            </a>
+            <a
+              href={languageHref}
+              data-locale-target={alternateLocale}
+              data-astro-reload
+              class="text-foreground/50 hover:text-foreground transition-colors"
+              title={copy.nav.languageLabel}
+              aria-label={copy.nav.languageLabel}
+            >
+              <IconLanguage class="size-4" />
+            </a>
+          </div>
         </nav>
-
-        <div class="border-t border-border/40" aria-hidden="true"></div>
-
-        <div class="flex items-center justify-center gap-8 py-4 px-4">
-          {
-            emailLink && emailAddress && (
-              <a
-                href={emailLink.href}
-                class="text-foreground/50 hover:text-foreground transition-colors"
-                title={emailLabel}
-                aria-label={emailLabel}
-              >
-                <IconMail class="size-5" />
-              </a>
-            )
-          }
-          <a
-            href="/rss.xml"
-            class="text-foreground/50 hover:text-foreground transition-colors"
-            title="RSS"
-            aria-label="RSS"
-          >
-            <IconRss class="size-5" />
-          </a>
-          <a
-            href={languageHref}
-            data-locale-target={alternateLocale}
-            data-astro-reload
-            class="text-foreground/50 hover:text-foreground transition-colors"
-            title={copy.nav.languageLabel}
-            aria-label={copy.nav.languageLabel}
-          >
-            <IconLanguage class="size-5" />
-          </a>
-        </div>
       </div>
     </div>
 </section>
@@ -330,7 +312,7 @@ const isPathActive = (path: string) => currentPath.startsWith(normalizePath(getH
 ></div>
 
 <script is:inline>
-  function getDropdown() { return document.getElementById("mobile-dropdown"); }
+  function getSidebar() { return document.getElementById("mobile-dropdown"); }
   function getOverlay() { return document.getElementById("mobile-overlay"); }
   function getToggle() { return document.getElementById("menu-toggle"); }
 
@@ -339,43 +321,57 @@ const isPathActive = (path: string) => currentPath.startsWith(normalizePath(getH
     return toggle && toggle.getAttribute("aria-expanded") === "true";
   }
 
+  function preventScroll(e) { e.preventDefault(); }
+
   function openMenu() {
-    var dd = getDropdown();
+    var sb = getSidebar();
     var overlay = getOverlay();
     var toggle = getToggle();
-    if (!dd || !overlay || !toggle) return;
+    if (!sb || !overlay || !toggle) return;
+    document.body.style.overflow = "hidden";
+    overlay.addEventListener("wheel", preventScroll, { passive: false });
+    overlay.addEventListener("touchmove", preventScroll, { passive: false });
     overlay.classList.remove("hidden");
-    dd.classList.remove("hidden");
+    sb.classList.remove("translate-x-full");
     requestAnimationFrame(function () {
       overlay.classList.remove("opacity-0");
+      sb.classList.add("translate-x-0");
     });
-    dd.setAttribute("aria-hidden", "false");
+    sb.setAttribute("aria-hidden", "false");
     overlay.setAttribute("aria-hidden", "false");
     toggle.setAttribute("aria-expanded", "true");
   }
 
   function closeMenu() {
-    var dd = getDropdown();
+    var sb = getSidebar();
     var overlay = getOverlay();
-    var toggle = getToggle();
-    if (!dd || !overlay) return;
+    if (!sb || !overlay) return;
+    document.body.style.overflow = "";
+    overlay.removeEventListener("wheel", preventScroll);
+    overlay.removeEventListener("touchmove", preventScroll);
     overlay.classList.add("opacity-0");
-    dd.classList.add("hidden");
-    dd.setAttribute("aria-hidden", "true");
-    overlay.addEventListener("transitionend", function handler() {
+    sb.classList.remove("translate-x-0");
+    sb.classList.add("translate-x-full");
+    sb.addEventListener("transitionend", function handler() {
       overlay.classList.add("hidden");
-      overlay.removeEventListener("transitionend", handler);
+      sb.removeEventListener("transitionend", handler);
     }, { once: true });
+    sb.setAttribute("aria-hidden", "true");
     overlay.setAttribute("aria-hidden", "true");
+    var toggle = getToggle();
     if (toggle) toggle.setAttribute("aria-expanded", "false");
   }
 
   function closeMenuSilent() {
-    var dd = getDropdown();
+    var sb = getSidebar();
     var overlay = getOverlay();
-    if (!dd || !overlay) return;
-    dd.classList.add("hidden");
-    dd.setAttribute("aria-hidden", "true");
+    if (!sb || !overlay) return;
+    document.body.style.overflow = "";
+    overlay.removeEventListener("wheel", preventScroll);
+    overlay.removeEventListener("touchmove", preventScroll);
+    sb.classList.add("translate-x-full");
+    sb.classList.remove("translate-x-0");
+    sb.setAttribute("aria-hidden", "true");
     overlay.classList.add("hidden", "opacity-0");
     overlay.setAttribute("aria-hidden", "true");
     var toggle = getToggle();
@@ -385,7 +381,7 @@ const isPathActive = (path: string) => currentPath.startsWith(normalizePath(getH
   document.addEventListener("click", function (e) {
     var target = /** @type {HTMLElement} */ (e.target);
 
-    if (target.closest("#menu-toggle")) {
+    if (target.closest("#menu-toggle") || target.closest("#sidebar-close")) {
       if (isMenuOpen()) {
         closeMenu();
       } else {
@@ -407,8 +403,8 @@ const isPathActive = (path: string) => currentPath.startsWith(normalizePath(getH
 
   document.addEventListener("keydown", function (e) {
     if (e.key === "Escape") {
-      var dd = getDropdown();
-      if (dd && !dd.classList.contains("hidden")) {
+      var sb = getSidebar();
+      if (sb && !sb.classList.contains("translate-x-full")) {
         closeMenu();
       }
     }
@@ -420,19 +416,7 @@ const isPathActive = (path: string) => currentPath.startsWith(normalizePath(getH
 </script>
 
 <style>
-  #mobile-dropdown {
-    background: var(--background);
-  }
-
-  [data-theme="dark"] #mobile-dropdown {
-    border-color: color-mix(in srgb, var(--border) 60%, transparent);
-  }
-
   #mobile-overlay {
-    background: color-mix(in srgb, var(--background) 75%, transparent);
-  }
-
-  [data-theme="dark"] #mobile-overlay {
-    background: color-mix(in srgb, black 40%, transparent);
+    background: rgba(0, 0, 0, 0.5);
   }
 </style>
