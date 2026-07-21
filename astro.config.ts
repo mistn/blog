@@ -46,13 +46,8 @@ export default defineConfig({
     rehypePlugins: [rehypeKatex, rehypeWrapTables, rehypeLazyImages],
   },
   vite: {
-    // Keystatic 在 SSR bundle 中用 import.meta.env 读取这些变量，
-    // 但 Vite 不会自动内联未加前缀的自定义变量。用 define 强制替换。
-    define: {
-      "import.meta.env.KEYSTATIC_GITHUB_CLIENT_ID": JSON.stringify(process.env.KEYSTATIC_GITHUB_CLIENT_ID),
-      "import.meta.env.KEYSTATIC_GITHUB_CLIENT_SECRET": JSON.stringify(process.env.KEYSTATIC_GITHUB_CLIENT_SECRET),
-      "import.meta.env.KEYSTATIC_SECRET": JSON.stringify(process.env.KEYSTATIC_SECRET),
-    },
+    // Keystatic 需要 import.meta.env.KEYSTATIC_* 变量
+    envPrefix: ["PUBLIC_", "VITE_", "KEYSTATIC_"],
     resolve: {
       // 强制所有模块使用同一个 React 实例，解决 Keystatic 内部 React 实例冲突
       dedupe: ["react", "react-dom"],
