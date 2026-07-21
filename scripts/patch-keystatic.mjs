@@ -67,22 +67,37 @@ function patchAstro(target) {
   return true;
 }
 
+// Patch the Node.js runtime file (this is what runs on Vercel/Node)
+const coreNodeTarget = path.resolve(
+  __dirname,
+  "../node_modules/@keystatic/core/dist/keystatic-core-api-generic.node.js"
+);
+
+// Patch the generic file (used by browser/web environments)
 const coreTarget = path.resolve(
   __dirname,
   "../node_modules/@keystatic/core/dist/keystatic-core-api-generic.js"
 );
 
+// Patch the Astro API handler
 const astroTarget = path.resolve(
   __dirname,
   "../node_modules/@keystatic/astro/dist/keystatic-astro-api.js"
 );
 
-if (!fs.existsSync(coreTarget) && !fs.existsSync(astroTarget)) {
+if (
+  !fs.existsSync(coreNodeTarget) &&
+  !fs.existsSync(coreTarget) &&
+  !fs.existsSync(astroTarget)
+) {
   console.log("Keystatic files not found, skipping patch");
   process.exit(0);
 }
 
 let patched = false;
+if (fs.existsSync(coreNodeTarget)) {
+  patched = patchCore(coreNodeTarget) || patched;
+}
 if (fs.existsSync(coreTarget)) {
   patched = patchCore(coreTarget) || patched;
 }
