@@ -36,6 +36,7 @@ export const friendLinks: FriendLink[] = [
     name: "huizhi's Aside",
     href: "https://blog.huizhi.ink/",
     description: "也许只是些碎碎念吧。",
+    avatar: "https://github.com/huizhiLLL.png",
     color: "#0b84c6",
   },
   {
