@@ -111,18 +111,18 @@ const aboutChildren = ["/about", "/tools"];
     >
       <div class="min-w-max border border-black dark:border-white bg-background py-1">
         <a
-          href={getHref("/about")}
-          data-path={getHref("/about")}
-          class:list={[subTabClass, { [activeSubClass]: isActive("/about") }]}
-        >
-          {copy.nav.aboutMe}
-        </a>
-        <a
           href={getHref("/tools")}
           data-path={getHref("/tools")}
           class:list={[subTabClass, { [activeSubClass]: isActive("/tools") }]}
         >
           {copy.nav.tools}
+        </a>
+        <a
+          href={getHref("/about")}
+          data-path={getHref("/about")}
+          class:list={[subTabClass, { [activeSubClass]: isActive("/about") }]}
+        >
+          {copy.nav.aboutMe}
         </a>
       </div>
     </div>
