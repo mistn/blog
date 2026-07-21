@@ -26,7 +26,7 @@ pnpm anime:sync
 | `KEYSTATIC_SECRET` | 生产 | 任意随机字符串，用作加密密钥 |
 
 > GitHub OAuth App 创建：`Settings > Developer settings > OAuth Apps`，
-> Callback URL 填 `https://你的域名/keystatic/github/callback`
+> Callback URL 填 `https://你的域名/api/keystatic/github/oauth/callback`
 
 ### UptimeRobot 监控
 
