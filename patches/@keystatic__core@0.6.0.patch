@@ -1,5 +1,5 @@
 diff --git a/dist/keystatic-core-api-generic.js b/dist/keystatic-core-api-generic.js
-index aabdb1a49688d48a681ca4e06fb68ee7ca1e0869..ca48ad347ae783a8c7aacd9c4b13276652ac39ed 100644
+index aabdb1a49688d48a681ca4e06fb68ee7ca1e0869..7e0707ccd8710f4151ef434b5f56f40f828fa3b7 100644
 --- a/dist/keystatic-core-api-generic.js
 +++ b/dist/keystatic-core-api-generic.js
 @@ -218,6 +218,7 @@ async function githubOauthCallback(req, config) {
@@ -10,20 +10,26 @@ index aabdb1a49688d48a681ca4e06fb68ee7ca1e0869..ca48ad347ae783a8c7aacd9c4b132766
    const tokenRes = await fetch(url, {
      method: 'POST',
      headers: {
-@@ -225,6 +226,8 @@ async function githubOauthCallback(req, config) {
+@@ -225,9 +226,11 @@ async function githubOauthCallback(req, config) {
      }
    });
    if (!tokenRes.ok) {
 +    const ghBody = await tokenRes.text();
-+    console.error('GitHub token exchange failed:', tokenRes.status, ghBody);
      return {
        status: 401,
-       body: 'Authorization failed'
-@@ -235,6 +238,7 @@ async function githubOauthCallback(req, config) {
-   try {
-     tokenData = tokenDataResultType.create(_tokenData);
+-      body: 'Authorization failed'
++      headers: { 'Content-Type': 'text/plain; charset=utf-8' },
++      body: `[PATCH-OK] GitHub rejected: ${tokenRes.status}\nclient_id=${config.clientId}\n${ghBody}`
+     };
+   }
+   const _tokenData = await tokenRes.json();
+@@ -237,7 +240,8 @@ async function githubOauthCallback(req, config) {
    } catch {
-+    console.error('GitHub token schema validation failed:', JSON.stringify(_tokenData));
      return {
        status: 401,
-       body: 'Authorization failed'
+-      body: 'Authorization failed'
++      headers: { 'Content-Type': 'text/plain; charset=utf-8' },
++      body: `[PATCH-OK] Schema validation failed. GitHub returned:\n${JSON.stringify(_tokenData, null, 2)}`
+     };
+   }
+   const headers = await getTokenCookies(tokenData, config);
