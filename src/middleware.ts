@@ -31,8 +31,8 @@ export const onRequest = defineMiddleware(async (context, next) => {
 
   const [user, pass] = atob(encoded).split(":");
 
-  const adminUser = import.meta.env.ADMIN_USER || "admin";
-  const adminPass = import.meta.env.ADMIN_PASS;
+  const adminUser = process.env.ADMIN_USER || "admin";
+  const adminPass = process.env.ADMIN_PASS;
   if (!adminPass) {
     return next();
   }
