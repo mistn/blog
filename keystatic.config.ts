@@ -35,6 +35,7 @@ export default config({
         }),
         draft: fields.checkbox({ label: "草稿" }),
         featured: fields.checkbox({ label: "精选" }),
+        author: fields.text({ label: "作者", defaultValue: "miuo" }),
         // 正文内容（markdown body）
         content: fields.mdx({
           label: "正文",
