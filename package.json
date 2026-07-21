@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro check && astro build && pagefind --site .vercel/output/static && node ./scripts/copy-pagefind.mjs",
+    "postinstall": "node ./scripts/patch-keystatic.mjs",
     "anime:sync": "node ./scripts/sync-anime.mjs",
     "preview": "astro preview",
     "sync": "astro sync",
