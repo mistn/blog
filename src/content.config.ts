@@ -12,7 +12,11 @@ const blog = defineCollection({
       author: z.string().default(SITE.author),
       pubDatetime: z.date(),
       modDatetime: z.date().optional().nullable(),
-      title: z.string(),
+      // 兼容普通字符串和 Keystatic 的 slug 对象 { name, slug }
+      title: z.union([
+        z.string(),
+        z.object({ name: z.string(), slug: z.string() }),
+      ]).transform(v => (typeof v === "string" ? v : v.name)),
       featured: z.boolean().optional(),
       draft: z.boolean().optional(),
       tags: z.array(z.string()).default(["others"]),
@@ -33,7 +37,11 @@ const weekly = defineCollection({
       author: z.string().default(SITE.author),
       pubDatetime: z.date(),
       modDatetime: z.date().optional().nullable(),
-      title: z.string(),
+      // 兼容普通字符串和 Keystatic 的 slug 对象 { name, slug }
+      title: z.union([
+        z.string(),
+        z.object({ name: z.string(), slug: z.string() }),
+      ]).transform(v => (typeof v === "string" ? v : v.name)),
       draft: z.boolean().optional(),
       tags: z.array(z.string()).default(["others"]),
       description: z.string(),

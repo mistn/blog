@@ -5,6 +5,7 @@ import IconSearch from "@/assets/icons/IconSearch.svg";
 import IconSunHigh from "@/assets/icons/IconSunHigh.svg";
 import IconLanguage from "@/assets/icons/IconLanguage.svg";
 import IconRss from "@/assets/icons/IconRss.svg";
+import IconUser from "@/assets/icons/IconUser.svg";
 import HomeTabs from "@/components/HomeTabs.astro";
 import LinkButton from "@/components/LinkButton.astro";
 import { SOCIALS } from "@/constants";
@@ -79,28 +80,6 @@ const isPathActive = (path: string) => currentPath.startsWith(normalizePath(getH
               <span class="sr-only">{copy.nav.search}</span>
             </LinkButton>
 
-            <a
-              href="/rss.xml"
-              class="focus-outline flex size-10 items-center justify-center rounded-full text-foreground/68 transition hover:text-accent"
-              title="RSS"
-              aria-label="RSS"
-            >
-              <IconRss class="size-5" />
-              <span class="sr-only">RSS</span>
-            </a>
-
-            <a
-              href={languageHref}
-              data-locale-target={alternateLocale}
-              data-astro-reload
-              class="group inline-flex size-10 items-center justify-center rounded-full text-foreground/68 transition focus-outline hover:text-accent"
-              title={copy.nav.languageLabel}
-              aria-label={copy.nav.languageLabel}
-            >
-              <IconLanguage class="size-5" />
-              <span class="sr-only">{copy.nav.languageLabel}</span>
-            </a>
-
             {
               SITE.lightAndDarkMode && (
                 <button
@@ -121,6 +100,24 @@ const isPathActive = (path: string) => currentPath.startsWith(normalizePath(getH
                 </button>
               )
             }
+
+            <a
+              href="/rss.xml"
+              class="focus-outline flex size-10 items-center justify-center rounded-full text-foreground/68 transition hover:text-accent"
+              title="RSS"
+              aria-label="RSS"
+            >
+              <IconRss class="size-5" />
+            </a>
+
+            <a
+              href="/keystatic"
+              class="focus-outline flex size-10 items-center justify-center rounded-full text-foreground/68 transition hover:text-accent"
+              title="管理后台"
+              aria-label="管理后台"
+            >
+              <IconUser class="size-5" />
+            </a>
           </div>
 
           <!-- Mobile: search + theme + menu -->

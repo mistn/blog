@@ -3,6 +3,8 @@ import tailwindcss from "@tailwindcss/vite";
 import sitemap from "@astrojs/sitemap";
 import vercel from "@astrojs/vercel";
 import mdx from "@astrojs/mdx";
+import react from "@astrojs/react";
+import keystatic from "@keystatic/astro";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import remarkToc from "remark-toc";
@@ -19,8 +21,8 @@ import { SITE } from "./src/config";
 export default defineConfig({
   site: SITE.website,
   output: "static",
-  // Vercel adapter - auto-detected when deployed to Vercel
-  // Can be removed if using Cloudflare Pages instead
+  // Vercel adapter —— 部署到 Vercel 时自动检测
+  // 如果改用 Cloudflare Pages 可以移除
   adapter: vercel(),
   integrations: [
     expressiveCode(),
@@ -28,6 +30,8 @@ export default defineConfig({
       filter: page => SITE.showArchives || !page.endsWith("/archives"),
     }),
     mdx(),
+    react(),
+    keystatic(),
   ],
   markdown: {
     syntaxHighlight: false,
@@ -42,12 +46,18 @@ export default defineConfig({
     rehypePlugins: [rehypeKatex, rehypeWrapTables, rehypeLazyImages],
   },
   vite: {
+    resolve: {
+      // 强制所有模块使用同一个 React 实例，解决 Keystatic 内部 React 实例冲突
+      dedupe: ["react", "react-dom"],
+    },
     // eslint-disable-next-line
     // @ts-ignore
     // This will be fixed in Astro 6 with Vite 7 support
     // See: https://github.com/withastro/astro/issues/14030
     plugins: [tailwindcss()],
     optimizeDeps: {
+      // 强制预打包 React 和 Yjs，确保 Keystatic 和项目共用同一个实例
+      include: ["react", "react-dom", "react/jsx-runtime", "react/jsx-dev-runtime"],
       exclude: ["@resvg/resvg-js"],
     },
   },
