@@ -6,7 +6,13 @@ export default config({
   storage:
     process.env.NODE_ENV === "development"
       ? { kind: "local" }
-      : { kind: "github", repo: "mistn/blog" as const },
+      : ({
+          kind: "github",
+          repo: "mistn/blog",
+          clientId: process.env.KEYSTATIC_GITHUB_CLIENT_ID!,
+          clientSecret: process.env.KEYSTATIC_GITHUB_CLIENT_SECRET!,
+          secret: process.env.KEYSTATIC_SECRET!,
+        } satisfies Record<string, unknown> as any),
 
   collections: {
     // 博客文章集合
