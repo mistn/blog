@@ -13,6 +13,13 @@ export const onRequest = defineMiddleware(async (context, next) => {
     return next();
   }
 
+  // 未设密码则跳过 Basic Auth
+  const adminUser = process.env.ADMIN_USER || "admin";
+  const adminPass = process.env.ADMIN_PASS;
+  if (!adminPass) {
+    return next();
+  }
+
   const auth = context.request.headers.get("authorization");
   if (!auth) {
     return new Response(null, {
@@ -30,12 +37,6 @@ export const onRequest = defineMiddleware(async (context, next) => {
   }
 
   const [user, pass] = atob(encoded).split(":");
-
-  const adminUser = process.env.ADMIN_USER || "admin";
-  const adminPass = process.env.ADMIN_PASS;
-  if (!adminPass) {
-    return next();
-  }
 
   if (user !== adminUser || pass !== adminPass) {
     return new Response(null, {
