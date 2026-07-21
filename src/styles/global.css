@@ -72,7 +72,7 @@ html[data-theme="dark"] {
   * {
     @apply border-border outline-accent/75;
     scrollbar-width: auto;
-    scrollbar-color: var(--color-muted) transparent;
+    scrollbar-color: var(--color-muted) var(--background);
   }
   html {
     @apply overflow-x-clip overflow-y-scroll scroll-smooth;
