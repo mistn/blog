@@ -275,7 +275,20 @@ const isPathActive = (path: string) => currentPath.startsWith(normalizePath(getH
             {copy.nav.tools}
           </a>
 
-          <div class="mt-8 flex items-center justify-center gap-6 px-4">
+          <hr class="mx-4 my-3 border-t border-black/10 dark:border-white/10" />
+
+          <a
+            href="/keystatic"
+            class:list={[
+              "block px-4 py-2.5 text-base text-left transition-colors",
+              "text-foreground/50 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black",
+            ]}
+            data-menu-link
+          >
+            管理后台
+          </a>
+
+          <div class="mt-6 flex items-center justify-center gap-6 px-4">
             <a
               href="/rss.xml"
               class="text-foreground/50 hover:text-foreground transition-colors"
