@@ -2,18 +2,14 @@ import { defineMiddleware } from "astro/middleware";
 
 export const onRequest = defineMiddleware(async (context, next) => {
   const url = new URL(context.request.url);
-  if (
-    !url.pathname.startsWith("/keystatic") &&
-    !url.pathname.startsWith("/api/keystatic")
-  ) {
+
+  // 只保护管理后台前台页面，API 路由由 Keystatic 自己的 GitHub OAuth 鉴权
+  if (!url.pathname.startsWith("/keystatic")) {
     return next();
   }
 
-  // GitHub OAuth 回调无需 Basic Auth，否则会拦截第二次
-  if (
-    url.pathname === "/keystatic/github/callback" ||
-    url.pathname === "/api/keystatic/github/oauth/callback"
-  ) {
+  // GitHub OAuth 回调无需 Basic Auth
+  if (url.pathname === "/keystatic/github/callback") {
     return next();
   }
 
