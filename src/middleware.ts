@@ -1,15 +1,15 @@
-// Vercel Edge Middleware — 保护 /keystatic 管理后台
-// 本地 dev 不生效（localhost 只有自己能访问）；部署到 Vercel 后自动运行
-export default function middleware(request: Request) {
-  const url = new URL(request.url);
+import { defineMiddleware } from "astro/middleware";
+
+export const onRequest = defineMiddleware(async (context, next) => {
+  const url = new URL(context.request.url);
   if (
     !url.pathname.startsWith("/keystatic") &&
     !url.pathname.startsWith("/api/keystatic")
   ) {
-    return;
+    return next();
   }
 
-  const auth = request.headers.get("authorization");
+  const auth = context.request.headers.get("authorization");
   if (!auth) {
     return new Response(null, {
       status: 401,
@@ -27,11 +27,10 @@ export default function middleware(request: Request) {
 
   const [user, pass] = atob(encoded).split(":");
 
-  const adminUser = process.env.ADMIN_USER || "admin";
-  const adminPass = process.env.ADMIN_PASS;
+  const adminUser = import.meta.env.ADMIN_USER || "admin";
+  const adminPass = import.meta.env.ADMIN_PASS;
   if (!adminPass) {
-    // 未设置密码则放行（但会在控制台报 warning）
-    return;
+    return next();
   }
 
   if (user !== adminUser || pass !== adminPass) {
@@ -40,4 +39,6 @@ export default function middleware(request: Request) {
       headers: { "WWW-Authenticate": 'Basic realm="管理后台"' },
     });
   }
-}
+
+  return next();
+});
