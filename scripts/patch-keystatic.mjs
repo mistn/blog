@@ -91,6 +91,16 @@ function patchOAuth(target) {
     changed = true;
   }
 
+  // 3c. Add scope to GitHub OAuth login URL
+  // Keystatic v0.6.0 doesn't request any scopes, so the token has no permissions
+  if (!content.includes("url.searchParams.set('scope'")) {
+    content = content.replace(
+      /(url\.searchParams\.set\('redirect_uri', `\$\{reqUrl\.origin\}\/api\/keystatic\/github\/oauth\/callback`\);)/,
+      "$1\n  url.searchParams.set('scope', 'public_repo');"
+    );
+    changed = true;
+  }
+
   if (changed) {
     fs.writeFileSync(target, content);
   }
