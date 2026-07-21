@@ -10,7 +10,10 @@ export const onRequest = defineMiddleware(async (context, next) => {
   }
 
   // GitHub OAuth 回调无需 Basic Auth，否则会拦截第二次
-  if (url.pathname === "/keystatic/github/callback") {
+  if (
+    url.pathname === "/keystatic/github/callback" ||
+    url.pathname === "/api/keystatic/github/oauth/callback"
+  ) {
     return next();
   }
 
