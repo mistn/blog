@@ -30,6 +30,7 @@ export const ui = {
       language: "EN",
       languageLabel: "Switch to English",
       email: "发送邮件",
+      login: "登录",
     },
     pages: {
       postsTitle: "文章",
@@ -145,6 +146,7 @@ export const ui = {
       language: "中",
       languageLabel: "Switch to Chinese",
       email: "Send an email",
+      login: "Login",
     },
     pages: {
       postsTitle: "Posts",
