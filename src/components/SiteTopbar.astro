@@ -347,6 +347,9 @@ const isPathActive = (path: string) => currentPath.startsWith(normalizePath(getH
     var toggle = getToggle();
     if (!sb || !overlay || !toggle) return;
     document.body.style.overflow = "hidden";
+    document.body.style.position = "fixed";
+    document.body.style.width = "100%";
+    document.addEventListener("touchmove", preventScroll, { passive: false });
     overlay.addEventListener("wheel", preventScroll, { passive: false });
     overlay.addEventListener("touchmove", preventScroll, { passive: false });
     overlay.classList.remove("hidden");
@@ -365,6 +368,9 @@ const isPathActive = (path: string) => currentPath.startsWith(normalizePath(getH
     var overlay = getOverlay();
     if (!sb || !overlay) return;
     document.body.style.overflow = "";
+    document.body.style.position = "";
+    document.body.style.width = "";
+    document.removeEventListener("touchmove", preventScroll);
     overlay.removeEventListener("wheel", preventScroll);
     overlay.removeEventListener("touchmove", preventScroll);
     overlay.classList.add("opacity-0");
@@ -385,6 +391,9 @@ const isPathActive = (path: string) => currentPath.startsWith(normalizePath(getH
     var overlay = getOverlay();
     if (!sb || !overlay) return;
     document.body.style.overflow = "";
+    document.body.style.position = "";
+    document.body.style.width = "";
+    document.removeEventListener("touchmove", preventScroll);
     overlay.removeEventListener("wheel", preventScroll);
     overlay.removeEventListener("touchmove", preventScroll);
     sb.classList.add("translate-x-full");
