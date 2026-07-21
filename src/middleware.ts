@@ -3,18 +3,12 @@ import { defineMiddleware } from "astro/middleware";
 export const onRequest = defineMiddleware(async (context, next) => {
   const url = new URL(context.request.url);
 
-  // 只保护管理后台前台页面，API 路由由 Keystatic 自己的 GitHub OAuth 鉴权
-  if (!url.pathname.startsWith("/keystatic")) {
-    return next();
-  }
-
-  // 登录页面本身不需要鉴权
-  if (url.pathname === "/keystatic/login") {
-    return next();
-  }
-
-  // GitHub OAuth 回调无需鉴权
-  if (url.pathname === "/keystatic/github/callback") {
+  // 登录页和 API 路由不需要鉴权
+  if (
+    url.pathname === "/login" ||
+    url.pathname === "/keystatic/github/callback" ||
+    !url.pathname.startsWith("/keystatic")
+  ) {
     return next();
   }
 
@@ -30,7 +24,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
   const expected = btoa(`${adminUser}:${adminPass}`);
 
   if (token !== expected) {
-    return context.redirect("/keystatic/login");
+    return context.redirect("/login");
   }
 
   return next();
