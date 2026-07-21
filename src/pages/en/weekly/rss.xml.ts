@@ -58,8 +58,8 @@ export async function GET() {
   const feed = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>${escapeXml(SITE.title)} — Weekly</title>
-    <description>${escapeXml(SITE.desc)}</description>
+    <title>${escapeXml(SITE.title)} — Weekly (separate feed)</title>
+    <description>miuo's weekly newsletter RSS feed, separate from main blog posts</description>
     <link>${escapeXml(siteUrl)}/en/weekly</link>
     <atom:link href="${escapeXml(siteUrl)}/en/weekly/rss.xml" rel="self" type="application/rss+xml"/>
     ${items}
