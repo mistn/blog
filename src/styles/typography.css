@@ -160,6 +160,11 @@
     pre {
       @apply focus-visible:border-transparent focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-dashed;
       line-height: 1.6;
+      background: var(--muted);
+    }
+
+    [data-theme="dark"] pre {
+      background: var(--muted);
     }
 
     pre * {

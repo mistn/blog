@@ -9,5 +9,6 @@ export default {
   frames: {
     showCopyToClipboardButton: true,
   },
+  emitExternalStylesheet: false,
   plugins: [pluginCollapsibleSections()],
 }
