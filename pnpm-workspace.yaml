@@ -1,0 +1,2 @@
+patchedDependencies:
+  '@keystatic/core@0.6.0': patches/@keystatic__core@0.6.0.patch

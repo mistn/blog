@@ -1,0 +1,12 @@
+diff --git a/dist/keystatic-core-api-generic.js b/dist/keystatic-core-api-generic.js
+index aabdb1a49688d48a681ca4e06fb68ee7ca1e0869..bed2a73a26a360b1d6e2329ed64c3b04b3103b31 100644
+--- a/dist/keystatic-core-api-generic.js
++++ b/dist/keystatic-core-api-generic.js
+@@ -218,6 +218,7 @@ async function githubOauthCallback(req, config) {
+   url.searchParams.set('client_id', config.clientId);
+   url.searchParams.set('client_secret', config.clientSecret);
+   url.searchParams.set('code', code);
++  url.searchParams.set('redirect_uri', `${new URL(req.url).origin}/api/keystatic/github/oauth/callback`);
+   const tokenRes = await fetch(url, {
+     method: 'POST',
+     headers: {
