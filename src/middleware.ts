@@ -13,7 +13,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
   if (!auth) {
     return new Response(null, {
       status: 401,
-      headers: { "WWW-Authenticate": 'Basic realm="管理后台"' },
+      headers: { "WWW-Authenticate": 'Basic realm="Admin"' },
     });
   }
 
@@ -21,7 +21,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
   if (scheme !== "Basic" || !encoded) {
     return new Response(null, {
       status: 401,
-      headers: { "WWW-Authenticate": 'Basic realm="管理后台"' },
+      headers: { "WWW-Authenticate": 'Basic realm="Admin"' },
     });
   }
 
@@ -36,7 +36,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
   if (user !== adminUser || pass !== adminPass) {
     return new Response(null, {
       status: 401,
-      headers: { "WWW-Authenticate": 'Basic realm="管理后台"' },
+      headers: { "WWW-Authenticate": 'Basic realm="Admin"' },
     });
   }
 
