@@ -6,7 +6,7 @@ settings:
 
 patchedDependencies:
   '@keystatic/core@0.6.0':
-    hash: 1685b67629f7a15b2a903690b20722a29836cdd43e1fee4ec8c0e186c1027f7c
+    hash: c92794c810b848289c33c8c196fdd53fa22b504f59da130ce736d49d81f4412e
     path: patches/@keystatic__core@0.6.0.patch
 
 importers:
@@ -36,10 +36,10 @@ importers:
         version: 0.8.0(react-aria@3.50.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react-stately@3.48.0(react@19.2.7))(react@19.2.7)
       '@keystatic/astro':
         specifier: ^5.2.0
-        version: 5.2.0(@keystatic/core@0.6.0(patch_hash=1685b67629f7a15b2a903690b20722a29836cdd43e1fee4ec8c0e186c1027f7c)(@keystar/ui@0.8.0(react-aria@3.50.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react-stately@3.48.0(react@19.2.7))(react@19.2.7))(react-aria@3.50.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react-stately@3.48.0(react@19.2.7))(react@19.2.7))(astro@5.16.6(@vercel/functions@3.7.2)(idb-keyval@6.3.0)(jiti@2.6.1)(lightningcss@1.33.0)(rollup@4.62.2)(typescript@5.9.3)(yaml@2.7.1))(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+        version: 5.2.0(@keystatic/core@0.6.0(patch_hash=c92794c810b848289c33c8c196fdd53fa22b504f59da130ce736d49d81f4412e)(@keystar/ui@0.8.0(react-aria@3.50.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react-stately@3.48.0(react@19.2.7))(react@19.2.7))(react-aria@3.50.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react-stately@3.48.0(react@19.2.7))(react@19.2.7))(astro@5.16.6(@vercel/functions@3.7.2)(idb-keyval@6.3.0)(jiti@2.6.1)(lightningcss@1.33.0)(rollup@4.62.2)(typescript@5.9.3)(yaml@2.7.1))(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@keystatic/core':
         specifier: ^0.6.0
-        version: 0.6.0(patch_hash=1685b67629f7a15b2a903690b20722a29836cdd43e1fee4ec8c0e186c1027f7c)(@keystar/ui@0.8.0(react-aria@3.50.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react-stately@3.48.0(react@19.2.7))(react@19.2.7))(react-aria@3.50.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react-stately@3.48.0(react@19.2.7))(react@19.2.7)
+        version: 0.6.0(patch_hash=c92794c810b848289c33c8c196fdd53fa22b504f59da130ce736d49d81f4412e)(@keystar/ui@0.8.0(react-aria@3.50.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react-stately@3.48.0(react@19.2.7))(react@19.2.7))(react-aria@3.50.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react-stately@3.48.0(react@19.2.7))(react@19.2.7)
       '@resvg/resvg-js':
         specifier: ^2.6.2
         version: 2.6.2
@@ -5777,17 +5777,17 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@keystatic/astro@5.2.0(@keystatic/core@0.6.0(patch_hash=1685b67629f7a15b2a903690b20722a29836cdd43e1fee4ec8c0e186c1027f7c)(@keystar/ui@0.8.0(react-aria@3.50.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react-stately@3.48.0(react@19.2.7))(react@19.2.7))(react-aria@3.50.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react-stately@3.48.0(react@19.2.7))(react@19.2.7))(astro@5.16.6(@vercel/functions@3.7.2)(idb-keyval@6.3.0)(jiti@2.6.1)(lightningcss@1.33.0)(rollup@4.62.2)(typescript@5.9.3)(yaml@2.7.1))(react-dom@19.2.7(react@19.2.7))(react@19.2.7)':
+  '@keystatic/astro@5.2.0(@keystatic/core@0.6.0(patch_hash=c92794c810b848289c33c8c196fdd53fa22b504f59da130ce736d49d81f4412e)(@keystar/ui@0.8.0(react-aria@3.50.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react-stately@3.48.0(react@19.2.7))(react@19.2.7))(react-aria@3.50.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react-stately@3.48.0(react@19.2.7))(react@19.2.7))(astro@5.16.6(@vercel/functions@3.7.2)(idb-keyval@6.3.0)(jiti@2.6.1)(lightningcss@1.33.0)(rollup@4.62.2)(typescript@5.9.3)(yaml@2.7.1))(react-dom@19.2.7(react@19.2.7))(react@19.2.7)':
     dependencies:
       '@babel/runtime': 7.29.7
-      '@keystatic/core': 0.6.0(patch_hash=1685b67629f7a15b2a903690b20722a29836cdd43e1fee4ec8c0e186c1027f7c)(@keystar/ui@0.8.0(react-aria@3.50.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react-stately@3.48.0(react@19.2.7))(react@19.2.7))(react-aria@3.50.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react-stately@3.48.0(react@19.2.7))(react@19.2.7)
+      '@keystatic/core': 0.6.0(patch_hash=c92794c810b848289c33c8c196fdd53fa22b504f59da130ce736d49d81f4412e)(@keystar/ui@0.8.0(react-aria@3.50.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react-stately@3.48.0(react@19.2.7))(react@19.2.7))(react-aria@3.50.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react-stately@3.48.0(react@19.2.7))(react@19.2.7)
       '@types/react': 19.2.17
       astro: 5.16.6(@vercel/functions@3.7.2)(idb-keyval@6.3.0)(jiti@2.6.1)(lightningcss@1.33.0)(rollup@4.62.2)(typescript@5.9.3)(yaml@2.7.1)
       react: 19.2.7
       react-dom: 19.2.7(react@19.2.7)
       set-cookie-parser: 2.7.2
 
-  '@keystatic/core@0.6.0(patch_hash=1685b67629f7a15b2a903690b20722a29836cdd43e1fee4ec8c0e186c1027f7c)(@keystar/ui@0.8.0(react-aria@3.50.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react-stately@3.48.0(react@19.2.7))(react@19.2.7))(react-aria@3.50.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react-stately@3.48.0(react@19.2.7))(react@19.2.7)':
+  '@keystatic/core@0.6.0(patch_hash=c92794c810b848289c33c8c196fdd53fa22b504f59da130ce736d49d81f4412e)(@keystar/ui@0.8.0(react-aria@3.50.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react-stately@3.48.0(react@19.2.7))(react@19.2.7))(react-aria@3.50.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react-stately@3.48.0(react@19.2.7))(react@19.2.7)':
     dependencies:
       '@babel/runtime': 7.29.7
       '@braintree/sanitize-url': 6.0.4
