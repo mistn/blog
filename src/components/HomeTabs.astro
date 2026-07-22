@@ -129,31 +129,6 @@ const aboutChildren = ["/about", "/tools"];
   </div>
 </nav>
 
-<style is:global>
-  .home-tab {
-    background-image: linear-gradient(to right, #000, #000);
-    background-repeat: no-repeat;
-    background-size: 0% 100%;
-    background-position: 0 0;
-    transition: background-size 0.2s ease-out, color 0.2s ease-out;
-  }
-  .home-tab:hover {
-    background-size: 100% 100%;
-    color: #fff;
-  }
-  .home-tab:hover [data-chevron] {
-    color: #fff;
-  }
-  [data-theme="dark"] .home-tab {
-    background-image: linear-gradient(to right, #fff, #fff);
-  }
-  [data-theme="dark"] .home-tab:hover {
-    color: #000;
-  }
-  [data-theme="dark"] .home-tab:hover [data-chevron] {
-    color: #000;
-  }
-</style>
 
 <script is:inline>
   const ACTIVE_UNDERLINE = "after:w-full";
