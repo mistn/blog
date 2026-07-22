@@ -166,6 +166,42 @@ const aboutChildren = ["/about", "/tools"];
     });
   }
 
+  function toggleDropdown(e) {
+    var btn = e.currentTarget;
+    var dropdown = btn.closest("[data-dropdown]");
+    if (!dropdown) return;
+    var isOpen = dropdown.getAttribute("data-open") === "true";
+    // Close all dropdowns first
+    document.querySelectorAll("[data-dropdown]").forEach(function (d) {
+      d.removeAttribute("data-open");
+    });
+    if (!isOpen) {
+      dropdown.setAttribute("data-open", "true");
+    } else {
+      btn.blur();
+    }
+  }
+
+  document.querySelectorAll("[data-dropdown-trigger]").forEach(function (btn) {
+    btn.addEventListener("click", toggleDropdown);
+  });
+
+  document.addEventListener("click", function (e) {
+    if (!e.target.closest("[data-dropdown]")) {
+      document.querySelectorAll("[data-dropdown]").forEach(function (d) {
+        d.removeAttribute("data-open");
+      });
+    }
+  });
+
   document.addEventListener("astro:page-load", syncHomeTabs);
   syncHomeTabs();
 </script>
+
+<style>
+  [data-dropdown][data-open="true"] [data-dropdown-menu] {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: scaleY(1) !important;
+  }
+</style>
