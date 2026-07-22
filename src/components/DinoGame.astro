@@ -1,0 +1,268 @@
+<div id="game-wrap" class="relative mx-auto select-none" style="max-width:400px">
+  <canvas id="dino-canvas" width="600" height="200" class="block w-full cursor-pointer" style="height:auto"></canvas>
+  <img id="game-char" src="/avatar.avif" alt="" class="absolute pointer-events-none" style="will-change:transform;width:19px;height:19px;left:40px;top:91px" />
+</div>
+
+<script>
+// @ts-nocheck
+(function () {
+  var wrap = document.getElementById("game-wrap");
+  var canvas = document.getElementById("dino-canvas");
+  var charEl = document.getElementById("game-char");
+  if (!canvas || !charEl) return;
+  var ctx = canvas.getContext("2d");
+  var W = 600, H = 200, GY = 165;
+
+  // Character sizing
+  var CHAR = 28;
+  var PW = 28, PH = 28;
+  var PX = 60;
+  charEl.style.borderRadius = "50%";
+
+  var g, anim, scale = 1;
+  var colors = { fg: "#535353", ac: "#2f628f" };
+
+  function calcScale() {
+    scale = canvas.offsetWidth / W;
+  }
+
+  function updateColors() {
+    var root = document.documentElement;
+    var f = getComputedStyle(root).getPropertyValue("--foreground").trim();
+    var a = getComputedStyle(root).getPropertyValue("--accent").trim();
+    if (f) colors.fg = f;
+    if (a) colors.ac = a;
+  }
+
+  function reset() {
+    g = {
+      p: { y: GY - PH, vy: 0, duck: false },
+      obs: [], items: [],
+      go: 0, score: 0, speed: 6, jump: false, over: false, tick: 0, shield: 0,
+      high: +(localStorage.getItem("dino-high") || 0),
+    };
+    charEl.style.transform = "translateY(0) scale(1) rotate(0deg)";
+  }
+
+  function jump() {
+    if (g.over) { reset(); return; }
+    if (!g.jump) { g.jump = true; g.p.vy = -11; }
+  }
+
+  function duck(d) {
+    if (g.over) return;
+    g.p.duck = d;
+  }
+
+  function drawHeart(o) {
+    var pulse = Math.sin(g.tick * 0.08 + o.x * 0.1) * 0.15 + 1;
+    var cx = o.x + 8, cy = o.y + 8, s = 8 * pulse;
+    ctx.fillStyle = "#e74c3c";
+    ctx.beginPath();
+    ctx.moveTo(cx, cy + s * 0.3);
+    ctx.bezierCurveTo(cx - s * 0.8, cy - s * 0.4, cx - s * 0.4, cy - s, cx, cy - s * 0.3);
+    ctx.bezierCurveTo(cx + s * 0.4, cy - s, cx + s * 0.8, cy - s * 0.4, cx, cy + s * 0.3);
+    ctx.fill();
+    ctx.fillStyle = "#e74c3c22";
+    ctx.beginPath();
+    ctx.arc(cx, cy, s * 1.6, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  function drawBird(o) {
+    ctx.fillStyle = colors.fg;
+    var wu = Math.sin(g.tick * 0.15 + o.x) * 0.4 + 0.6;
+    ctx.beginPath();
+    ctx.moveTo(o.x, o.y + 4);
+    ctx.lineTo(o.x - 6, o.y - 2 - wu * 3);
+    ctx.lineTo(o.x - 3, o.y + 4);
+    ctx.lineTo(o.x - 6, o.y + 10 - wu * 3);
+    ctx.closePath();
+    ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(o.x, o.y + 4);
+    ctx.lineTo(o.x + 6, o.y - 2 - wu * 3);
+    ctx.lineTo(o.x + 3, o.y + 4);
+    ctx.lineTo(o.x + 6, o.y + 10 - wu * 3);
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  function drawCactus(o) {
+    ctx.fillStyle = colors.fg;
+    ctx.fillRect(o.x, o.y, o.w, o.h);
+    if (o.arm) {
+      ctx.fillRect(o.x - 3, o.y + 3, 3, 3);
+      ctx.fillRect(o.x + o.w, o.y + 8, 3, 3);
+    }
+  }
+
+  function drawGround() {
+    ctx.fillStyle = colors.fg;
+    ctx.fillRect(0, GY, W, 2);
+    for (var i = 0; i < 18; i++) {
+      var dx = ((i * 32 - g.go) % 640 + 640) % 640;
+      if (dx < W) ctx.fillRect(dx, GY + 6, 3, 3);
+    }
+  }
+
+  function spawn() {
+    var r = Math.random();
+    if (r < 0.07 && g.shield === 0) {
+      g.items.push({ x: W, y: GY - 30, w: 16, h: 16, type: "shield" });
+    } else if (r < 0.45 && g.tick > 60) {
+      g.obs.push({ x: W, y: GY - 22 - Math.random() * 18, w: 16, h: 10, type: "bird" });
+    } else {
+      var ch = 18 + Math.random() * 14 | 0;
+      g.obs.push({ x: W, y: GY - ch, w: 9, h: ch, arm: Math.random() > 0.5, type: "cactus" });
+    }
+  }
+
+  function check(a, b) {
+    return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
+  }
+
+  function update() {
+    if (g.over) return;
+    g.tick++;
+
+    var p = g.p;
+    var s = p.duck ? 0.6 : 1;
+    var cw = PW * s, ch = PH * s;
+    var cx = PX + (PW - cw) / 2;
+    var cy = p.y + PH - ch;
+
+    if (g.jump) {
+      p.y += p.vy;
+      p.vy += 0.55;
+      if (p.y >= GY - PH) { p.y = GY - PH; g.jump = false; p.vy = 0; }
+    }
+
+    g.go = (g.go + g.speed) % 640;
+
+    if (g.obs.length === 0 && g.tick > 40) spawn();
+    else if (g.obs.length > 0) {
+      var last = g.obs[g.obs.length - 1];
+      if (last.x < W - 260 - Math.random() * 220) spawn();
+    }
+
+    if (g.items.length === 0 && g.tick > 80 && Math.random() < 0.004) {
+      g.items.push({ x: W, y: GY - 32, w: 16, h: 16, type: "shield" });
+    }
+
+    for (var i1 = g.items.length - 1; i1 >= 0; i1--) {
+      g.items[i1].x -= g.speed;
+      if (g.items[i1].x + g.items[i1].w < 0) g.items.splice(i1, 1);
+    }
+
+    for (var i2 = g.items.length - 1; i2 >= 0; i2--) {
+      var it = g.items[i2];
+      if (check({ x: cx + 2, y: cy + 2, w: cw - 4, h: ch - 4 }, { x: it.x, y: it.y, w: it.w, h: it.h })) {
+        if (it.type === "shield") g.shield = 1;
+        g.items.splice(i2, 1);
+      }
+    }
+
+    for (var i3 = g.obs.length - 1; i3 >= 0; i3--) {
+      g.obs[i3].x -= g.speed;
+      if (g.obs[i3].x + g.obs[i3].w < 0) { g.obs.splice(i3, 1); g.score++; }
+    }
+
+    g.speed = 6 + Math.floor(g.score / 8) * 0.5;
+
+    var phx = { x: cx + 2, y: cy + 2, w: cw - 4, h: ch - 4 };
+    for (var j = 0; j < g.obs.length; j++) {
+      var o = g.obs[j];
+      var ohx = { x: o.x + 2, y: o.y + 2, w: o.w - 4, h: o.h - 4 };
+      if (check(phx, ohx)) {
+        if (g.shield > 0) {
+          g.shield = 0;
+          g.obs.splice(j, 1);
+          break;
+        }
+        g.over = true;
+        if (g.score > g.high) { g.high = g.score; localStorage.setItem("dino-high", g.high); }
+        break;
+      }
+    }
+
+    // Update character emoji position
+    updateChar(p);
+  }
+
+  function updateChar(p) {
+    var s = p.duck ? 0.6 : 1;
+    var rot = p.duck ? 0 : Math.sin(g.tick * 0.1) * 3;
+    var bounce = p.jump ? 0 : Math.abs(Math.sin(g.tick * 0.12)) * 2;
+    var ch = CHAR * s;
+    var y = p.y + PH - ch;
+    charEl.style.left = (PX + (PW - PW * s) / 2) * scale + "px";
+    charEl.style.top = (y + bounce) * scale + "px";
+    charEl.style.width = ch * scale + "px";
+    charEl.style.height = ch * scale + "px";
+    charEl.style.transform = "rotate(" + rot + "deg)";
+    charEl.style.transformOrigin = "";
+
+    if (g.shield > 0) {
+      var sh = Math.sin(g.tick * 0.08) * 0.4 + 1;
+      charEl.style.filter = "drop-shadow(0 0 " + (4 * sh) + "px " + colors.ac + ")";
+    } else {
+      charEl.style.filter = "none";
+    }
+  }
+
+  function draw() {
+    updateColors();
+    ctx.clearRect(0, 0, W, H);
+
+    // Ground
+    drawGround();
+
+    // Obstacles
+    for (var i = 0; i < g.obs.length; i++) {
+      if (g.obs[i].type === "bird") drawBird(g.obs[i]);
+      else drawCactus(g.obs[i]);
+    }
+
+    // Items
+    for (var i2 = 0; i2 < g.items.length; i2++) {
+      if (g.items[i2].type === "shield") drawHeart(g.items[i2]);
+    }
+
+    // Score
+    ctx.fillStyle = colors.fg;
+    ctx.font = "14px monospace";
+    ctx.textAlign = "right";
+    ctx.fillText("HI " + g.high + " " + String(g.score).padStart(4, "0"), W - 10, 24);
+
+    // Game over
+    if (g.over) {
+      ctx.textAlign = "center";
+      ctx.font = "bold 16px monospace";
+      ctx.fillText("GAME OVER", W / 2, 88);
+      ctx.font = "12px monospace";
+      ctx.fillText("Space / Click to restart", W / 2, 105);
+    }
+  }
+
+  function loop() { calcScale(); update(); draw(); anim = requestAnimationFrame(loop); }
+
+  // Events
+  canvas.addEventListener("click", function (e) { e.stopPropagation(); jump(); });
+  window.addEventListener("resize", calcScale);
+  document.addEventListener("keydown", function (e) {
+    if (!document.contains(canvas)) return;
+    if (e.code === "Space" || e.code === "ArrowUp") { e.preventDefault(); jump(); }
+    if (e.code === "ArrowDown") { e.preventDefault(); duck(true); }
+  });
+  document.addEventListener("keyup", function (e) {
+    if (e.code === "ArrowDown") duck(false);
+  });
+
+  var obs = new MutationObserver(updateColors);
+  obs.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+
+  reset();
+  loop();
+})();
+</script>
