@@ -30,7 +30,7 @@ const pageDesc = copy.pages.homeDesc;
     id="main-content"
     data-layout="index"
     data-post-memory-scope="list"
-    class="mx-auto w-full max-w-4xl px-5 sm:px-6 pt-4 pb-10 md:pt-6 md:pb-14"
+    class="mx-auto w-full max-w-4xl px-5 sm:px-6 pt-3 pb-6 md:pt-4 md:pb-8"
   >
     <section class="overflow-hidden">
       <h1 class="sr-only">Latest Posts</h1>
@@ -42,7 +42,7 @@ const pageDesc = copy.pages.homeDesc;
                 listPosts.map(post => {
 
                   return (
-                  <article class="py-8 md:py-12" data-post-item>
+                  <article class="py-5 md:py-7" data-post-item>
                     <a
                       href={localizePath(getPath(post.id, post.filePath), locale)}
                       data-post-link

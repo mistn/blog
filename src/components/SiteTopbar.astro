@@ -39,18 +39,18 @@ const isPathActive = (path: string) => currentPath.startsWith(normalizePath(getH
 ---
 
 <!-- ===== Header ===== -->
-<header class="relative z-[70]">
+<header class="relative z-30">
 <!-- ===== Topbar ===== -->
 <section
   class:list={[
-    "mx-auto w-full max-w-4xl px-5 sm:px-6 lg:py-8 border-b border-dashed border-gray-300 dark:border-gray-600",
-    compactMobile ? "py-4" : "py-6",
+    "mx-auto w-full max-w-4xl px-5 sm:px-6 border-b border-dashed border-gray-300 dark:border-gray-600",
+    compactMobile ? "py-4" : "pt-6 pb-4",
   ]}
 >
     <div
       class:list={[
         "font-app relative",
-        compactMobile ? "pb-3" : "pb-4",
+        compactMobile ? "pb-2" : "pb-3",
       ]}
     >
       <div class="flex items-center justify-between lg:grid lg:grid-cols-3">
@@ -172,14 +172,17 @@ const isPathActive = (path: string) => currentPath.startsWith(normalizePath(getH
           </div>   <!-- end mobile icons -->
         </div>     <!-- end right column -->
       </div>       <!-- end topbar row -->
+    </div>         <!-- end inner wrapper -->
+  </section>       <!-- end section -->
+</header>          <!-- end header -->
 
-      <!-- ===== Mobile Sidebar (slides from right) ===== -->
-      <div
-        id="mobile-dropdown"
-        class="fixed top-0 right-0 h-full w-[35vw] min-w-[140px] max-w-[200px] bg-background border-l border-black dark:border-white z-50 translate-x-full transition-transform duration-300 ease-in-out"
-        aria-hidden="true"
-      >
-        <nav class="h-full overflow-y-auto pb-24 pt-10">
+<!-- ===== Mobile Sidebar (slides from right) ===== -->
+<div
+  id="mobile-dropdown"
+  class="fixed top-0 right-0 h-full w-[35vw] min-w-[140px] max-w-[200px] bg-background border-l border-black dark:border-white z-50 translate-x-full transition-transform duration-300 ease-in-out"
+  aria-hidden="true"
+>
+  <nav class="h-full overflow-y-auto pb-24 pt-10">
           <a
             href={getHref("/")}
             class:list={[
@@ -318,9 +321,6 @@ const isPathActive = (path: string) => currentPath.startsWith(normalizePath(getH
           </div>
         </nav>
       </div>
-    </div>
-</section>
-</header>
 
 <!-- ===== Mobile Menu Overlay ===== -->
 <div
