@@ -1,5 +1,4 @@
 ---
-import IconHash from "@/assets/icons/IconHash.svg";
 import { getLocaleFromPath, localizePath, type Locale } from "@/i18n";
 
 type Props = {
@@ -7,6 +6,7 @@ type Props = {
   tagName: string;
   size?: "sm" | "lg";
   locale?: Locale;
+  count?: number;
 };
 
 const {
@@ -14,10 +14,11 @@ const {
   tagName,
   size = "lg",
   locale = getLocaleFromPath(Astro.url.pathname),
+  count,
 } = Astro.props;
 ---
 
-<li>
+<li class="relative">
   <a
     href={localizePath(`/tags/${tag}/`, locale)}
     class:list={[
@@ -28,13 +29,11 @@ const {
       { "px-0.5 py-1 text-base": size === "lg" },
     ]}
   >
-    <IconHash
-      class:list={[
-        "text-foreground/36 transition-colors group-hover:text-accent/70 group-focus-visible:text-accent/70",
-        { "size-4": size === "lg" },
-        { "size-3.5": size === "sm" },
-      ]}
-    />
     {tagName}
   </a>
+  {count !== undefined && count > 1 && (
+    <span class="absolute -top-2 -right-3 flex min-w-4 items-center justify-center px-1 text-[10px] leading-none text-foreground/45">
+      {count}
+    </span>
+  )}
 </li>

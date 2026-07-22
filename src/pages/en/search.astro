@@ -4,15 +4,26 @@ import Main from "@/layouts/Main.astro";
 import Layout from "@/layouts/Layout.astro";
 import { SITE } from "@/config";
 import { ui } from "@/i18n";
+import { getCollection } from "astro:content";
+import Tag from "@/components/Tag.astro";
+import getUniqueTags from "@/utils/getUniqueTags";
 
 const locale = "en";
 const copy = ui[locale];
 const backUrl = SITE.showBackButton ? `${Astro.url.pathname}` : "/";
+
+const posts = await getCollection("blog");
+const tags = getUniqueTags(posts);
 ---
 
 <Layout title={`${copy.pages.searchTitle} | ${SITE.title}`} description={copy.pages.searchDesc} {locale}>
   <Main pageTitle={copy.pages.searchTitle} pageDesc={copy.pages.searchDesc}>
     <div id="pagefind-search" class="mt-8" transition:persist data-backurl={backUrl}></div>
+    <div id="pagefind-tags" class="mt-8">
+      <ul class="flex flex-wrap gap-2.5">
+        {tags.map(({ tag, tagName, count }) => <Tag {tag} {tagName} {count} size="sm" locale="en" />)}
+      </ul>
+    </div>
   </Main>
 </Layout>
 
@@ -113,6 +124,19 @@ const backUrl = SITE.showBackButton ? `${Astro.url.pathname}` : "/";
         toggleClearButton();
         searchInput.addEventListener("input", toggleClearButton);
       }
+
+      // Toggle tags visibility based on search input
+      const tagsContainer = document.getElementById("pagefind-tags");
+
+      function toggleTags() {
+        if (tagsContainer) {
+          tagsContainer.style.display = searchInput.value.length > 0 ? "none" : "block";
+        }
+      }
+
+      toggleTags();
+      searchInput.addEventListener("input", toggleTags);
+      clearButton?.addEventListener("click", toggleTags);
 
       searchInput?.addEventListener("input", resetSearchParam);
       clearButton?.addEventListener("click", resetSearchParam);
