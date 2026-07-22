@@ -180,7 +180,6 @@ const isPathActive = (path: string) => currentPath.startsWith(normalizePath(getH
 <div
   id="mobile-dropdown"
   class="fixed top-0 right-0 h-full w-[35vw] min-w-[140px] max-w-[200px] bg-background border-l border-black dark:border-white z-50 translate-x-full transition-transform duration-300 ease-in-out"
-  aria-hidden="true"
 >
   <nav class="h-full overflow-y-auto pb-24 pt-10">
           <a
@@ -326,7 +325,6 @@ const isPathActive = (path: string) => currentPath.startsWith(normalizePath(getH
 <div
   id="mobile-overlay"
   class="fixed inset-0 z-40 hidden opacity-0 transition-opacity duration-200 ease-out"
-  aria-hidden="true"
 ></div>
 
 <script is:inline>
@@ -358,6 +356,8 @@ const isPathActive = (path: string) => currentPath.startsWith(normalizePath(getH
       overlay.classList.remove("opacity-0");
       sb.classList.add("translate-x-0");
     });
+    sb.removeAttribute("inert");
+    overlay.removeAttribute("inert");
     sb.setAttribute("aria-hidden", "false");
     overlay.setAttribute("aria-hidden", "false");
     toggle.setAttribute("aria-expanded", "true");
@@ -381,7 +381,9 @@ const isPathActive = (path: string) => currentPath.startsWith(normalizePath(getH
       sb.removeEventListener("transitionend", handler);
     }, { once: true });
     sb.setAttribute("aria-hidden", "true");
+    sb.setAttribute("inert", "");
     overlay.setAttribute("aria-hidden", "true");
+    overlay.setAttribute("inert", "");
     var toggle = getToggle();
     if (toggle) toggle.setAttribute("aria-expanded", "false");
   }
@@ -399,8 +401,10 @@ const isPathActive = (path: string) => currentPath.startsWith(normalizePath(getH
     sb.classList.add("translate-x-full");
     sb.classList.remove("translate-x-0");
     sb.setAttribute("aria-hidden", "true");
+    sb.setAttribute("inert", "");
     overlay.classList.add("hidden", "opacity-0");
     overlay.setAttribute("aria-hidden", "true");
+    overlay.setAttribute("inert", "");
     var toggle = getToggle();
     if (toggle) toggle.setAttribute("aria-expanded", "false");
   }
@@ -440,6 +444,14 @@ const isPathActive = (path: string) => currentPath.startsWith(normalizePath(getH
   document.addEventListener("astro:before-swap", function () {
     closeMenuSilent();
   });
+
+  // Initialize hidden state — avoid static aria-hidden on elements with focusable children
+  (function initHidden() {
+    var sb = getSidebar();
+    var overlay = getOverlay();
+    if (sb) { sb.setAttribute("aria-hidden", "true"); sb.setAttribute("inert", ""); }
+    if (overlay) { overlay.setAttribute("aria-hidden", "true"); overlay.setAttribute("inert", ""); }
+  })();
 </script>
 
 <style>
