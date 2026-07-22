@@ -52,6 +52,11 @@
   function duck(d) {
     if (g.over) return;
     g.p.duck = d;
+    if (d && g.jump) {
+      g.p.y = GY - PH;
+      g.jump = false;
+      g.p.vy = 0;
+    }
   }
 
   function drawHeart(o) {
@@ -133,6 +138,7 @@
     var cy = p.y + PH - ch;
 
     if (g.jump) {
+      if (g.p.duck) p.vy = Math.max(p.vy + 1, 12);
       p.y += p.vy;
       p.vy += 0.55;
       if (p.y >= GY - PH) { p.y = GY - PH; g.jump = false; p.vy = 0; }
@@ -253,7 +259,11 @@
   document.addEventListener("keydown", function (e) {
     if (!document.contains(canvas)) return;
     if (e.code === "Space" || e.code === "ArrowUp") { e.preventDefault(); jump(); }
-    if (e.code === "ArrowDown") { e.preventDefault(); duck(true); }
+    if (e.code === "ArrowDown") {
+      e.preventDefault();
+      g.p.duck = true;
+      if (g.jump) { g.p.vy = Math.max(g.p.vy + 5, 15); }
+    }
   });
   document.addEventListener("keyup", function (e) {
     if (e.code === "ArrowDown") duck(false);
