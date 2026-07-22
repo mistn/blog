@@ -166,27 +166,25 @@ const aboutChildren = ["/about", "/tools"];
     });
   }
 
-  function toggleDropdown(e) {
-    var btn = e.currentTarget;
-    var dropdown = btn.closest("[data-dropdown]");
-    if (!dropdown) return;
-    var isOpen = dropdown.getAttribute("data-open") === "true";
-    // Close all dropdowns first
-    document.querySelectorAll("[data-dropdown]").forEach(function (d) {
-      d.removeAttribute("data-open");
-    });
-    if (!isOpen) {
-      dropdown.setAttribute("data-open", "true");
-    } else {
-      btn.blur();
-    }
-  }
-
-  document.querySelectorAll("[data-dropdown-trigger]").forEach(function (btn) {
-    btn.addEventListener("click", toggleDropdown);
-  });
-
   document.addEventListener("click", function (e) {
+    var btn = e.target.closest("[data-dropdown-trigger]");
+    if (btn) {
+      e.stopPropagation();
+      var dropdown = btn.closest("[data-dropdown]");
+      if (!dropdown) return;
+      var isOpen = dropdown.getAttribute("data-open") === "true";
+      // Close all dropdowns first
+      document.querySelectorAll("[data-dropdown]").forEach(function (d) {
+        d.removeAttribute("data-open");
+      });
+      if (!isOpen) {
+        dropdown.setAttribute("data-open", "true");
+      } else {
+        setTimeout(function () { btn.blur(); }, 0);
+      }
+      return;
+    }
+    // Close if clicking outside any dropdown
     if (!e.target.closest("[data-dropdown]")) {
       document.querySelectorAll("[data-dropdown]").forEach(function (d) {
         d.removeAttribute("data-open");
@@ -194,7 +192,10 @@ const aboutChildren = ["/about", "/tools"];
     }
   });
 
-  document.addEventListener("astro:page-load", syncHomeTabs);
+  // Re-bind on page loads (Astro view transitions)
+  document.addEventListener("astro:page-load", function () {
+    syncHomeTabs();
+  });
   syncHomeTabs();
 </script>
 
