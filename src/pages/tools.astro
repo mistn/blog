@@ -41,60 +41,32 @@ const pageDescription = copy.pages.toolsDesc;
       <section class="mt-12">
         <h2 class="text-lg font-semibold text-foreground mb-6">更多工具</h2>
         <div class="grid gap-3 sm:grid-cols-2">
-          <a href="https://ss.miuo.me" target="_blank" rel="noopener" class="group relative rounded-xl border border-border/50 p-4 transition-all duration-300 hover:border-border/80 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-foreground/[0.04]">
-            <div class="flex items-start justify-between gap-2">
-              <div class="min-w-0">
-                <div class="flex items-center gap-2">
-                  <span class="inline-block size-1.5 rounded-full bg-blue-500 transition-all duration-300 group-hover:scale-150 group-hover:shadow-[0_0_8px] group-hover:shadow-blue-500/40"></span>
-                  <h3 class="text-sm font-medium text-foreground truncate">服务器探针</h3>
-                </div>
-                <p class="text-xs text-foreground/40 mt-1 ml-[1.125rem]">CPU / 内存 / 流量</p>
-              </div>
-              <span class="shrink-0 text-foreground/15 group-hover:text-foreground/50 transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
-                <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"/></svg>
-              </span>
+          <a href="https://ss.miuo.me" target="_blank" rel="noopener" class="group flex items-center gap-3 rounded-xl border border-dashed border-gray-300 dark:border-gray-600 p-3.5 text-left transition-all duration-200 ease-out active:scale-[0.98] active:bg-gray-50 dark:active:bg-gray-800/50 md:hover:-translate-y-1 md:hover:bg-gray-50/60 dark:md:hover:bg-gray-800/30 md:hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] dark:md:hover:shadow-[0_8px_30px_rgba(0,0,0,0.2)]">
+            <img src="https://ss.miuo.me/favicon.ico" alt="Server Probe icon" class="h-10 w-10 shrink-0 rounded-lg object-cover ring-1 ring-border/30 transition-transform duration-500 ease-out group-hover:scale-105" loading="lazy" />
+            <div class="min-w-0 flex flex-col justify-center">
+              <h3 class="line-clamp-1 text-sm font-semibold leading-snug text-foreground transition-colors duration-300 group-hover:text-accent">服务器探针</h3>
+              <p class="mt-1 line-clamp-1 text-xs leading-snug text-foreground/40">CPU / 内存 / 流量</p>
             </div>
           </a>
-          <a href="https://spotify.miuo.me/?gname=All&token=19b6fb61-e46f-483c-8514-2aab0f51b579" target="_blank" rel="noopener" class="group relative rounded-xl border border-border/50 p-4 transition-all duration-300 hover:border-border/80 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-foreground/[0.04]">
-            <div class="flex items-start justify-between gap-2">
-              <div class="min-w-0">
-                <div class="flex items-center gap-2">
-                  <span class="inline-block size-1.5 rounded-full bg-green-500 transition-all duration-300 group-hover:scale-150 group-hover:shadow-[0_0_8px] group-hover:shadow-green-500/40"></span>
-                  <h3 class="text-sm font-medium text-foreground truncate">听歌记录</h3>
-                </div>
-                <p class="text-xs text-foreground/40 mt-1 ml-[1.125rem]">最近在听什么</p>
-              </div>
-              <span class="shrink-0 text-foreground/15 group-hover:text-foreground/50 transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
-                <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"/></svg>
-              </span>
+          <a href="https://spotify.miuo.me/?gname=All&token=19b6fb61-e46f-483c-8514-2aab0f51b579" target="_blank" rel="noopener" class="group flex items-center gap-3 rounded-xl border border-dashed border-gray-300 dark:border-gray-600 p-3.5 text-left transition-all duration-200 ease-out active:scale-[0.98] active:bg-gray-50 dark:active:bg-gray-800/50 md:hover:-translate-y-1 md:hover:bg-gray-50/60 dark:md:hover:bg-gray-800/30 md:hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] dark:md:hover:shadow-[0_8px_30px_rgba(0,0,0,0.2)]">
+            <img src="https://spotify.miuo.me/favicon.ico" alt="Spotify icon" class="h-10 w-10 shrink-0 rounded-lg object-cover ring-1 ring-border/30 transition-transform duration-500 ease-out group-hover:scale-105" loading="lazy" />
+            <div class="min-w-0 flex flex-col justify-center">
+              <h3 class="line-clamp-1 text-sm font-semibold leading-snug text-foreground transition-colors duration-300 group-hover:text-accent">听歌记录</h3>
+              <p class="mt-1 line-clamp-1 text-xs leading-snug text-foreground/40">最近在听什么</p>
             </div>
           </a>
-          <a href="https://acg.2731515.xyz" target="_blank" rel="noopener" class="group relative rounded-xl border border-border/50 p-4 transition-all duration-300 hover:border-border/80 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-foreground/[0.04]">
-            <div class="flex items-start justify-between gap-2">
-              <div class="min-w-0">
-                <div class="flex items-center gap-2">
-                  <span class="inline-block size-1.5 rounded-full bg-sky-400 transition-all duration-300 group-hover:scale-150 group-hover:shadow-[0_0_8px] group-hover:shadow-sky-400/40"></span>
-                  <h3 class="text-sm font-medium text-foreground truncate">壁纸站</h3>
-                </div>
-                <p class="text-xs text-foreground/40 mt-1 ml-[1.125rem]">高质量动漫壁纸</p>
-              </div>
-              <span class="shrink-0 text-foreground/15 group-hover:text-foreground/50 transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
-                <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"/></svg>
-              </span>
+          <a href="https://acg.2731515.xyz" target="_blank" rel="noopener" class="group flex items-center gap-3 rounded-xl border border-dashed border-gray-300 dark:border-gray-600 p-3.5 text-left transition-all duration-200 ease-out active:scale-[0.98] active:bg-gray-50 dark:active:bg-gray-800/50 md:hover:-translate-y-1 md:hover:bg-gray-50/60 dark:md:hover:bg-gray-800/30 md:hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] dark:md:hover:shadow-[0_8px_30px_rgba(0,0,0,0.2)]">
+            <img src="https://acg.2731515.xyz/assets/favicon.ico" alt="Wallpaper icon" class="h-10 w-10 shrink-0 rounded-lg object-cover ring-1 ring-border/30 transition-transform duration-500 ease-out group-hover:scale-105" loading="lazy" />
+            <div class="min-w-0 flex flex-col justify-center">
+              <h3 class="line-clamp-1 text-sm font-semibold leading-snug text-foreground transition-colors duration-300 group-hover:text-accent">壁纸站</h3>
+              <p class="mt-1 line-clamp-1 text-xs leading-snug text-foreground/40">高质量动漫壁纸</p>
             </div>
           </a>
-          <a href="https://mail.2731515.xyz" target="_blank" rel="noopener" class="group relative rounded-xl border border-border/50 p-4 transition-all duration-300 hover:border-border/80 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-foreground/[0.04]">
-            <div class="flex items-start justify-between gap-2">
-              <div class="min-w-0">
-                <div class="flex items-center gap-2">
-                  <span class="inline-block size-1.5 rounded-full bg-amber-500 transition-all duration-300 group-hover:scale-150 group-hover:shadow-[0_0_8px] group-hover:shadow-amber-500/40"></span>
-                  <h3 class="text-sm font-medium text-foreground truncate">临时邮箱</h3>
-                </div>
-                <p class="text-xs text-foreground/40 mt-1 ml-[1.125rem]">一次性收件箱</p>
-              </div>
-              <span class="shrink-0 text-foreground/15 group-hover:text-foreground/50 transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
-                <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"/></svg>
-              </span>
+          <a href="https://mail.2731515.xyz" target="_blank" rel="noopener" class="group flex items-center gap-3 rounded-xl border border-dashed border-gray-300 dark:border-gray-600 p-3.5 text-left transition-all duration-200 ease-out active:scale-[0.98] active:bg-gray-50 dark:active:bg-gray-800/50 md:hover:-translate-y-1 md:hover:bg-gray-50/60 dark:md:hover:bg-gray-800/30 md:hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] dark:md:hover:shadow-[0_8px_30px_rgba(0,0,0,0.2)]">
+            <img src="/mail-favicon.svg" alt="Temp Mail icon" class="h-10 w-10 shrink-0 rounded-lg object-cover ring-1 ring-border/30 transition-transform duration-500 ease-out group-hover:scale-105" loading="lazy" />
+            <div class="min-w-0 flex flex-col justify-center">
+              <h3 class="line-clamp-1 text-sm font-semibold leading-snug text-foreground transition-colors duration-300 group-hover:text-accent">临时邮箱</h3>
+              <p class="mt-1 line-clamp-1 text-xs leading-snug text-foreground/40">一次性收件箱</p>
             </div>
           </a>
         </div>
@@ -249,7 +221,7 @@ const pageDescription = copy.pages.toolsDesc;
       const { dates } = getDateRanges();
 
       return `
-        <div class="rounded-xl border border-border/50 p-4 transition hover:border-border/80">
+        <div class="rounded-xl border border-dashed border-gray-300 dark:border-gray-600 p-4 transition hover:bg-gray-50/60 dark:hover:bg-gray-800/30 hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] dark:hover:shadow-[0_8px_30px_rgba(0,0,0,0.2)]">
           <div class="flex items-start justify-between gap-2">
             <div class="min-w-0">
               <h3 class="text-sm font-medium text-foreground truncate">${escapeHtml(m.friendly_name)}</h3>

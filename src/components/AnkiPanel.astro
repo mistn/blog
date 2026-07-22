@@ -25,7 +25,7 @@ const labels = {
 >
   <h2 class="text-lg font-semibold text-foreground mb-6">{title}</h2>
   <div id="anki-panel">
-    <div class="rounded-2xl border border-border/40 bg-background/50 backdrop-blur-sm p-4 sm:p-5">
+    <div class="rounded-xl border border-dashed border-gray-300 dark:border-gray-600 p-4 sm:p-5">
       <div class="flex items-center justify-center py-10 text-sm text-foreground/40 gap-2">
         <svg class="size-5 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
         {loadingText}
@@ -57,7 +57,7 @@ const labels = {
       if (data.error) throw new Error(data.error);
       renderAnki(data);
     } catch (err) {
-      panel.innerHTML = `<div class="rounded-2xl border border-border/40 bg-background/50 p-4 sm:p-5"><div class="text-center py-8 text-sm text-red-500">${escapeHtml((err as Error).message || String(err))}</div></div>`;
+      panel.innerHTML = `<div class="rounded-xl border border-dashed border-gray-300 dark:border-gray-600 p-4 sm:p-5"><div class="text-center py-8 text-sm text-red-500">${escapeHtml((err as Error).message || String(err))}</div></div>`;
     }
   }
 
@@ -75,7 +75,7 @@ const labels = {
       : '---';
 
     panel.innerHTML = `
-      <div class="rounded-2xl border border-border/40 bg-background/50 backdrop-blur-sm p-3.5 sm:p-4 transition-all duration-300 hover:border-border/60 hover:shadow-lg hover:shadow-foreground/[0.03]">
+      <div class="rounded-xl border border-dashed border-gray-300 dark:border-gray-600 p-3.5 sm:p-4 transition-all duration-200 ease-out hover:bg-gray-50/60 dark:hover:bg-gray-800/30 hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] dark:hover:shadow-[0_8px_30px_rgba(0,0,0,0.2)]">
         <div class="flex items-center justify-between mb-4">
           <div class="flex items-center gap-2">
             <span class="inline-flex size-2 rounded-full bg-emerald-400 shadow-[0_0_6px] shadow-emerald-400/30"></span>
