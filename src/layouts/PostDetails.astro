@@ -190,16 +190,21 @@ const nextPost =
 
               <EditPost class="sm:hidden mt-8" {hideEditPost} {post} {locale} />
 
-              <ArtalkComments
-                pageKey={getPath(post.id, post.filePath)}
-                pageTitle={title}
-              />
+              <div class="mt-10 text-xs text-gray-400 dark:text-gray-500 leading-relaxed">
+                {
+                  locale === "en" ? (
+                    <>This work is licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" class="hover:text-gray-600 dark:hover:text-gray-300 underline underline-offset-2 decoration-dashed">CC BY-NC-SA 4.0</a>. Please provide attribution when reprinting.</>
+                  ) : (
+                    <>本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" class="hover:text-gray-600 dark:hover:text-gray-300 underline underline-offset-2 decoration-dashed">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</>
+                  )
+                }
+              </div>
 
               <div
                 data-pagefind-ignore
                 data-article-enter
                 style="--article-enter-delay: 112ms;"
-                class="mt-16 flex flex-col gap-4 sm:flex-row"
+                class="mt-10 flex flex-col gap-3 sm:flex-row"
               >
                 {
                   prevPost && (
@@ -208,13 +213,19 @@ const nextPost =
                         getPath(prevPost.id, prevPost.filePath),
                         locale
                       )}
-                      class="group flex flex-1 items-center gap-3 rounded-xl border border-gray-100 p-4 transition-all duration-300 hover:border-gray-300 hover:bg-gray-50/50 dark:border-gray-800 dark:hover:border-gray-700 dark:hover:bg-gray-900/30"
+                      class="group flex flex-1 items-center gap-1.5 text-base text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors duration-300 no-underline"
                     >
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="shrink-0 text-gray-300 transition-all duration-300 group-hover:-translate-x-1 group-hover:text-gray-500 dark:text-gray-600 dark:group-hover:text-gray-400"><path d="m15 18-6-6 6-6"/></svg>
-                      <div class="min-w-0">
-                        <span class="block text-xs text-gray-400">{copy.actions.previousPost}</span>
-                        <span class="mt-0.5 block text-sm font-medium text-gray-700 line-clamp-1 dark:text-gray-200">{prevPost.title}</span>
-                      </div>
+                      <span class="inline-flex items-center">
+                        <span class="w-0 group-hover:w-[0.55em] transition-all duration-300 overflow-hidden inline-flex items-center">
+                          <svg class="shrink-0 w-[0.55em]" viewBox="0 0 12 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 18l-6-6 6-6"/>
+                          </svg>
+                        </span>
+                        <svg class="shrink-0 w-[0.55em]" viewBox="0 0 12 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M9 18l-6-6 6-6"/>
+                        </svg>
+                      </span>
+                      <span class="line-clamp-1">{prevPost.title}</span>
                     </a>
                   )
                 }
@@ -225,17 +236,28 @@ const nextPost =
                         getPath(nextPost.id, nextPost.filePath),
                         locale
                       )}
-                      class="group flex flex-1 items-center justify-end gap-3 rounded-xl border border-gray-100 p-4 text-right transition-all duration-300 hover:border-gray-300 hover:bg-gray-50/50 dark:border-gray-800 dark:hover:border-gray-700 dark:hover:bg-gray-900/30"
+                      class="group flex flex-1 items-center justify-end gap-1.5 text-base text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors duration-300 no-underline"
                     >
-                      <div class="min-w-0">
-                        <span class="block text-xs text-gray-400">{copy.actions.nextPost}</span>
-                        <span class="mt-0.5 block text-sm font-medium text-gray-700 line-clamp-1 dark:text-gray-200">{nextPost.title}</span>
-                      </div>
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="shrink-0 text-gray-300 transition-all duration-300 group-hover:translate-x-1 group-hover:text-gray-500 dark:text-gray-600 dark:group-hover:text-gray-400"><path d="m9 18 6-6-6-6"/></svg>
+                      <span class="line-clamp-1">{nextPost.title}</span>
+                      <span class="inline-flex items-center">
+                        <svg class="shrink-0 w-[0.55em]" viewBox="0 0 12 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <path d="M3 6l6 6-6 6"/>
+                        </svg>
+                        <span class="w-0 group-hover:w-[0.55em] transition-all duration-300 overflow-hidden inline-flex items-center">
+                          <svg class="shrink-0 w-[0.55em]" viewBox="0 0 12 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 6l6 6-6 6"/>
+                          </svg>
+                        </span>
+                      </span>
                     </a>
                   )
                 }
               </div>
+
+              <ArtalkComments
+                pageKey={getPath(post.id, post.filePath)}
+                pageTitle={title}
+              />
             </article>
           </div>
         </div>

@@ -12,27 +12,39 @@ const displayYear = currentYear;
 ---
 
 <footer
-  class:list={["app-layout mt-auto", className]}
+  class:list={["app-layout mt-auto border-t border-dashed border-gray-300 dark:border-gray-600", className]}
   {...attrs}
 >
   <div
     class:list={[
-      "pt-6 md:pt-10 pb-4",
+      "pt-4 md:pt-6 pb-4",
       "flex justify-center",
     ]}
   >
     <div
-      class="my-2 flex flex-col items-center text-sm whitespace-nowrap text-gray-500 dark:text-gray-400 sm:flex-row"
+      class="my-2 flex flex-col items-center text-sm whitespace-nowrap text-gray-500 dark:text-gray-400"
     >
-      <span>&#169; {displayYear} {SITE.author}</span>
-      <a
-        class="mt-1 hover:text-gray-600 dark:hover:text-gray-300 sm:ml-3 sm:mt-0"
-        href="https://icp.gov.moe/?keyword=20260260"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        萌ICP备20260260号
-      </a>
+      <div class="flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
+        <span>&#169; {displayYear} {SITE.author}</span>
+        <span class="hidden sm:inline text-gray-300 dark:text-gray-600">|</span>
+        <a
+          href="https://creativecommons.org/licenses/by-nc-sa/4.0/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="hover:text-gray-600 dark:hover:text-gray-300"
+        >
+          CC BY-NC-SA 4.0
+        </a>
+        <span class="hidden sm:inline text-gray-300 dark:text-gray-600">|</span>
+        <a
+          class="hover:text-gray-600 dark:hover:text-gray-300"
+          href="https://icp.gov.moe/?keyword=20260260"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          萌ICP备20260260号
+        </a>
+      </div>
     </div>
   </div>
 </footer>
