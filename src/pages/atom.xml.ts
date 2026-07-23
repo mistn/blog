@@ -1,6 +1,8 @@
 import { getCollection, type CollectionEntry } from "astro:content";
 import { getPath } from "@/utils/getPath";
+import { getWeeklyPath } from "@/utils/getWeeklyPath";
 import getSortedPosts from "@/utils/getSortedPosts";
+import getSortedWeekly from "@/utils/getSortedWeekly";
 import { SITE } from "@/config";
 import { marked } from "marked";
 
@@ -17,7 +19,7 @@ function formatDate(date: Date): string {
   return date.toISOString();
 }
 
-async function renderBody(post: CollectionEntry<"blog">): Promise<string> {
+async function renderBody(post: CollectionEntry<"blog"> | CollectionEntry<"weekly">): Promise<string> {
   if (!post.body) return "";
 
   if (post.filePath?.endsWith(".mdx")) return "";
@@ -30,16 +32,27 @@ async function renderBody(post: CollectionEntry<"blog">): Promise<string> {
 }
 
 export async function GET() {
-  const posts = await getCollection("blog");
-  const sortedPosts = getSortedPosts(posts);
+  const blogPosts = await getCollection("blog");
+  const weeklyPosts = await getCollection("weekly");
+
+  const sortedBlog = getSortedPosts(blogPosts);
+  const sortedWeekly = getSortedWeekly(weeklyPosts);
+
+  const allPosts = [...sortedBlog, ...sortedWeekly].sort(
+    (a, b) =>
+      new Date(b.data.pubDatetime).getTime() -
+      new Date(a.data.pubDatetime).getTime()
+  );
+
   const siteUrl = SITE.website.replace(/\/$/, "");
   const now = new Date().toISOString();
 
   const entries = (
     await Promise.all(
-      sortedPosts.map(async (post) => {
+      allPosts.map(async (post) => {
         const { data } = post;
-        const path = getPath(post.id, post.filePath);
+        const isWeekly = "issueNumber" in data;
+        const path = isWeekly ? getWeeklyPath(post.id, post.filePath) : getPath(post.id, post.filePath);
         const url = `${siteUrl}${path}`;
         const pubDate = new Date(data.pubDatetime);
         const modDate = data.modDatetime ? new Date(data.modDatetime) : pubDate;

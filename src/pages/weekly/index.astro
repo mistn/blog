@@ -8,7 +8,6 @@ import getSortedWeekly from "@/utils/getSortedWeekly";
 import { getWeeklyPath } from "@/utils/getWeeklyPath";
 import { SITE } from "@/config";
 import { getLocaleFromPath, localizePath, ui } from "@/i18n";
-import IconRss from "@/assets/icons/IconRss.svg";
 
 const locale = getLocaleFromPath(Astro.url.pathname);
 const copy = ui[locale];
@@ -22,12 +21,7 @@ const pageDesc = copy.pages.weeklyDesc;
   <SiteTopbar />
   <main class="mx-auto w-full max-w-4xl px-4 sm:px-6 pt-8 pb-10 md:pt-12 md:pb-14">
     <header class="mb-10">
-      <div class="flex items-center gap-3">
-        <h1 class="text-4xl font-extrabold tracking-tight text-foreground">{pageTitle}</h1>
-        <a href={localizePath("/weekly/rss.xml", locale)} class="text-foreground/40 hover:text-accent transition-colors" title="RSS" aria-label="RSS">
-          <IconRss class="size-5" />
-        </a>
-      </div>
+      <h1 class="text-4xl font-extrabold tracking-tight text-foreground">{pageTitle}</h1>
     </header>
 
     <div class="space-y-8">
