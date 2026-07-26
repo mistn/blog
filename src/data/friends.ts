@@ -101,4 +101,10 @@ export const friendLinks: FriendLink[] = [
     avatar: "https://blog.zuodev.top/file/picture/User.jpg",
     description: "记录生活、分享技术。",
   },
+  {
+    name: "E猫的猫窝",
+    href: "https://emaostudio.online",
+    avatar: "https://emaostudio.online/avatar.jpg",
+    description: "vibe coding、AIGC、游戏和世界观脑洞记录处",
+  },
 ];
