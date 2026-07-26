@@ -294,17 +294,14 @@ const isPathActive = (path: string) => currentPath.startsWith(normalizePath(getH
             <span>{copy.nav.login}</span>
           </a>
 
-          <div class="mt-6 flex items-center justify-center gap-6 px-4">
-            <a
-              href="/rss.xml"
-              class="text-foreground/50 hover:text-foreground transition-colors"
-              title="RSS"
-              aria-label="RSS"
-            >
-              <IconRss class="size-4" />
-            </a>
-
-          </div>
+          <a
+            href="/rss.xml"
+            class="flex items-center gap-2.5 px-4 py-2.5 text-base text-left text-foreground/85 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors"
+            data-menu-link
+          >
+            <IconRss class="size-4 shrink-0" />
+            <span>{copy.sidebar.rss}</span>
+          </a>
         </nav>
       </div>
 
