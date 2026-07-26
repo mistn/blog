@@ -3,11 +3,9 @@ import IconMoon from "@/assets/icons/IconMoon.svg";
 import IconSearch from "@/assets/icons/IconSearch.svg";
 import IconArchive from "@/assets/icons/IconArchive.svg";
 import IconSunHigh from "@/assets/icons/IconSunHigh.svg";
-import IconLanguage from "@/assets/icons/IconLanguage.svg";
 import LinkButton from "./LinkButton.astro";
 import { SITE } from "@/config";
 import {
-  getAlternateLocale,
   getLocaleFromPath,
   localizePath,
   normalizePath,
@@ -17,8 +15,6 @@ import {
 const { pathname } = Astro.url;
 const locale = getLocaleFromPath(pathname);
 const copy = ui[locale];
-const alternateLocale = getAlternateLocale(locale);
-const languageHref = localizePath(pathname, alternateLocale);
 const currentPath =
   pathname.endsWith("/") && pathname !== "/" ? pathname.slice(0, -1) : pathname;
 const isActive = (path: string) =>
@@ -82,17 +78,7 @@ const isActive = (path: string) =>
         <IconSearch />
         <span class="sr-only">{copy.nav.search}</span>
       </LinkButton>
-      <a
-        href={languageHref}
-        data-locale-target={alternateLocale}
-        data-astro-reload
-        class="group inline-flex items-center gap-1 focus-outline p-3 hover:text-accent sm:p-1.5"
-        title={copy.nav.languageLabel}
-        aria-label={copy.nav.languageLabel}
-      >
-        <IconLanguage />
-        <span class="sr-only">{copy.nav.languageLabel}</span>
-      </a>
+
       {
         SITE.lightAndDarkMode && (
           <button

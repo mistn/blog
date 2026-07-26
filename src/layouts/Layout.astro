@@ -4,7 +4,7 @@ import { SITE } from "@/config";
 const PUBLIC_GOOGLE_SITE_VERIFICATION = process.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
 import Footer from "@/components/Footer.astro";
 import BackToTopButton from "@/components/BackToTopButton.astro";
-import { getLocaleFromPath, localizePath, ui, type Locale } from "@/i18n";
+import { getLocaleFromPath, ui, type Locale } from "@/i18n";
 import "@/styles/global.css";
 
 type StructuredDataType = "BlogPosting" | "CollectionPage" | "WebPage";
@@ -43,8 +43,6 @@ const {
 
 const socialImageURL = new URL(ogImage, Astro.url);
 const canonicalHref = canonicalURL.toString();
-const zhURL = new URL(localizePath(Astro.url.pathname, "zh"), Astro.site);
-const enURL = new URL(localizePath(Astro.url.pathname, "en"), Astro.site);
 const ogType = structuredDataType === "BlogPosting" ? "article" : "website";
 const person = {
   "@type": "Person",
@@ -72,7 +70,7 @@ const baseStructuredData =
         description: `${description}`,
         url: canonicalHref,
         image: `${socialImageURL}`,
-        inLanguage: locale === "en" ? "en" : "zh-CN",
+        inLanguage: "zh-CN",
         isPartOf: {
           "@type": "WebSite",
           name: SITE.title,
@@ -89,7 +87,7 @@ const resolvedStructuredData = structuredData
 <!doctype html>
 <html
   dir={SITE.dir}
-  lang={locale === "en" ? "en" : "zh-CN"}
+  lang="zh-CN"
   class={`${scrollSmooth && "scroll-smooth"}`}
 >
   <head>
@@ -101,9 +99,6 @@ const resolvedStructuredData = structuredData
     <slot name="head" />
     <script defer src="https://cloud.umami.is/script.js" data-website-id="63f34637-df53-4bc9-9a3f-d0908d2931b3"></script>
     <link rel="canonical" href={canonicalURL} />
-    <link rel="alternate" hreflang="zh-CN" href={zhURL} />
-    <link rel="alternate" hreflang="en" href={enURL} />
-    <link rel="alternate" hreflang="x-default" href={zhURL} />
     <meta name="generator" content={Astro.generator} />
 
     <!-- General Meta Tags -->
@@ -170,64 +165,7 @@ const resolvedStructuredData = structuredData
       )
     }
 
-    <script is:inline>
-      (function () {
-        const LOCALE_STORAGE_KEY = "preferred-locale";
-        const EN_PREFIX = "/en";
-        const pathname = window.location.pathname;
-        const isEnglishPath =
-          pathname === EN_PREFIX || pathname.startsWith(`${EN_PREFIX}/`);
 
-        function getStoredLocale() {
-          try {
-            return localStorage.getItem(LOCALE_STORAGE_KEY);
-          } catch {
-            return null;
-          }
-        }
-
-        function setStoredLocale(locale) {
-          try {
-            localStorage.setItem(LOCALE_STORAGE_KEY, locale);
-          } catch {
-            // Ignore storage restrictions and fall back to browser language.
-          }
-        }
-
-        function toEnglishPath(path) {
-          if (path === "/") return "/en/";
-          if (path === "/404.html") return "/en/404/";
-          return `${EN_PREFIX}${path}`;
-        }
-
-        if (isEnglishPath) {
-          setStoredLocale("en");
-        } else {
-          const storedLocale = getStoredLocale();
-          const shouldUseEnglish = storedLocale === "en";
-
-          if (shouldUseEnglish) {
-            window.location.replace(
-              `${toEnglishPath(pathname)}${window.location.search}${window.location.hash}`
-            );
-          }
-        }
-
-        document.addEventListener("click", event => {
-          const target =
-            event.target instanceof Element
-              ? event.target.closest("[data-locale-target]")
-              : null;
-
-          if (!(target instanceof HTMLElement)) return;
-
-          const targetLocale = target.dataset.localeTarget;
-          if (targetLocale === "zh" || targetLocale === "en") {
-            setStoredLocale(targetLocale);
-          }
-        });
-      })();
-    </script>
 
     <script is:inline>
       (function () {

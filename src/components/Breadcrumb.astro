@@ -7,10 +7,7 @@ const currentUrlPath = Astro.url.pathname.replace(/\/+$/, "");
 const locale = getLocaleFromPath(Astro.url.pathname);
 const copy = ui[locale];
 
-// Get url array from path (strip locale prefix for en pages)
-const pathWithoutLocale = locale === "en"
-  ? currentUrlPath.replace(/^\/en/, "") || "/"
-  : currentUrlPath;
+const pathWithoutLocale = currentUrlPath;
 const breadcrumbList = pathWithoutLocale.split("/").slice(1);
 
 // if breadcrumb is Home > Posts > 1 <etc>

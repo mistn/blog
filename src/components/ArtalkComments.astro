@@ -9,29 +9,16 @@ type Props = {
 const { pageKey, pageTitle } = Astro.props;
 const locale = getLocaleFromPath(Astro.url.pathname);
 const copy = ui[locale];
-const artalkIsEnglish = locale === "en";
-const artalkText =
-  artalkIsEnglish
-    ? {
-        counter: "{count} comments",
-        email: "Email",
-        link: "Website",
-        nick: "Name",
-        noComment: "No comments yet",
-        placeholder: "Type something...",
-        send: "Post",
-        sendBtn: "Post",
-      }
-    : {
-        counter: "{count} 条评论",
-        email: "邮箱",
-        link: "网址",
-        nick: "昵称",
-        noComment: "「此时无声胜有声」",
-        placeholder: "键入内容...",
-        send: "发送",
-        sendBtn: "发送",
-      };
+const artalkText = {
+  counter: "{count} 条评论",
+  email: "邮箱",
+  link: "网址",
+  nick: "昵称",
+  noComment: "「此时无声胜有声」",
+  placeholder: "键入内容...",
+  send: "发送",
+  sendBtn: "发送",
+};
 
 const server = "https://artalkk.miuo.me";
 const siteName = "blogs";
@@ -59,7 +46,6 @@ const containerId = `artalk-comments-${pageKey.replace(/[^a-zA-Z0-9_-]/g, "-")}`
   is:inline
   data-astro-rerun
   define:vars={{
-    artalkIsEnglish,
     artalkText,
     containerId,
     pageKey,
@@ -72,16 +58,6 @@ const containerId = `artalk-comments-${pageKey.replace(/[^a-zA-Z0-9_-]/g, "-")}`
     "https://cdnjs.cloudflare.com/ajax/libs/artalk/2.9.1/Artalk.css";
   const ARTALK_JS_URL = "https://esm.sh/artalk@2.9.1";
   const ARTALK_MOUNT_RETRY_LIMIT = 12;
-  const ARTALK_EN_REPLACEMENTS = [
-    ["昵称", "Name"],
-    ["邮箱", "Email"],
-    ["网址", "Website"],
-    ["键入内容...", "Type something..."],
-    ["发送", "Post"],
-    ["条评论", "comments"],
-    ["「此时无声胜有声」", "No comments yet"],
-  ];
-
   function isDarkTheme() {
     return document.documentElement.getAttribute("data-theme") === "dark";
   }
@@ -133,61 +109,10 @@ const containerId = `artalk-comments-${pageKey.replace(/[^a-zA-Z0-9_-]/g, "-")}`
         preferRemoteConf: false,
         sendBtn: artalkText.sendBtn,
       });
-
-      setupArtalkTextFallback(el);
     } catch {
       el.closest("section")?.classList.add("hidden");
       document.getElementById("artalk-comments-title")?.classList.add("hidden");
     }
-  }
-
-  function replaceTextValue(value) {
-    return ARTALK_EN_REPLACEMENTS.reduce(
-      (text, [from, to]) => text.replaceAll(from, to),
-      value
-    );
-  }
-
-  function localizeArtalkDom(root) {
-    if (!artalkIsEnglish) return;
-
-    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
-    const textNodes = [];
-
-    while (walker.nextNode()) {
-      textNodes.push(walker.currentNode);
-    }
-
-    textNodes.forEach((node) => {
-      const nextText = replaceTextValue(node.nodeValue ?? "");
-      if (nextText !== node.nodeValue) node.nodeValue = nextText;
-    });
-
-    root.querySelectorAll("input, textarea, button").forEach((node) => {
-      ["placeholder", "aria-label", "title", "value"].forEach((attr) => {
-        const value = node.getAttribute(attr);
-        if (!value) return;
-
-        const nextValue = replaceTextValue(value);
-        if (nextValue !== value) node.setAttribute(attr, nextValue);
-      });
-    });
-  }
-
-  function setupArtalkTextFallback(root) {
-    if (!artalkIsEnglish) return;
-
-    localizeArtalkDom(root);
-
-    window.__artalkTextObserver?.disconnect();
-    window.__artalkTextObserver = new MutationObserver(() => {
-      localizeArtalkDom(root);
-    });
-    window.__artalkTextObserver.observe(root, {
-      childList: true,
-      subtree: true,
-      characterData: true,
-    });
   }
 
   function scheduleArtalkMount(retryCount = 0) {

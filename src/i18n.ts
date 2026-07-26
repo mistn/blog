@@ -1,13 +1,8 @@
-export const locales = ["zh", "en"] as const;
+export const locales = ["zh"] as const;
 
 export type Locale = (typeof locales)[number];
 
 export const defaultLocale: Locale = "zh";
-
-export const localeLabels: Record<Locale, string> = {
-  zh: "中文",
-  en: "English",
-};
 
 export const ui = {
   zh: {
@@ -27,8 +22,6 @@ export const ui = {
       search: "搜索",
       skipToContent: "跳到正文",
       theme: "切换浅色/深色模式",
-      language: "EN",
-      languageLabel: "Switch to English",
       email: "发送邮件",
       login: "登录",
     },
@@ -126,136 +119,10 @@ export const ui = {
       "十二月",
     ],
   },
-  en: {
-    site: {
-      desc: "Notes, essays, experiments, and the bits worth keeping around.",
-    },
-    nav: {
-      home: "Home",
-      articles: "Articles",
-      archives: "Archive",
-      weekly: "Weekly",
-      anime: "Anime",
-      tools: "Tools",
-      friends: "Friends",
-      about: "About",
-      aboutMe: "About Me",
-      search: "Search",
-      skipToContent: "Skip to content",
-      theme: "Toggle light and dark mode",
-      language: "中",
-      languageLabel: "Switch to Chinese",
-      email: "Send an email",
-      login: "Login",
-    },
-    pages: {
-      postsTitle: "Posts",
-      homeDesc:
-        "miuo's personal tech blog with notes and tutorials on VPS operations, self-hosting services, developer tooling, privacy protection, and workflow optimization.",
-      postsDesc:
-        "All the articles I have posted, covering VPS operations, self-hosting tutorials, dev tooling guides, and workflow optimization tips.",
-      tagsTitle: "Tags",
-      tagsDesc:
-        "Browse articles by tag to quickly find technical topics and tutorials that interest you.",
-      tagTitle: "Tag: ",
-      tagDescPrefix: 'All posts tagged "',
-      tagDescSuffix: '".',
-      archivesTitle: "Archive",
-      archivesEyebrow: "Archive",
-      archivesDesc:
-        "Browse all published articles on miuo's blog in chronological order, organized by year and month for easy reference.",
-      searchTitle: "Search",
-      searchDesc:
-        "Search articles, notes and tutorials on this site to quickly find what you need.",
-      animeTitle: "Anime List",
-      animeFullTitle: "Anime List | miuo",
-      animeDesc:
-        "Completed anime from the AniList normal list, viewable by year or as a full list.",
-      animeEyebrow: "Anime Archive",
-      toolsTitle: "Tools",
-      toolsFullTitle: "Tools | miuo",
-      toolsDesc: "Experimental projects and little gadgets.",
-      friendsTitle: "Friends",
-      friendsDesc:
-        "Browse miuo's collection of personal indie blog friend links. Apply for a link exchange via the comment section or by email.",
-      friendsEyebrow: "Link Exchange",
-      weeklyTitle: "Weekly",
-      weeklyDesc: "Regular notes and sharing.",
-      aboutTitle: "About",
-      aboutEyebrow: "About",
-      aboutDesc:
-        "Learn about miuo — personal profile, list of self-hosted services, and contact information.",
-      notFoundTitle: "Page Not Found",
-      notFoundCta: "Go back home",
-      notFoundDesc:
-        "The page you are looking for does not exist. Return to miuo's blog homepage for more technical articles.",
-    },
-    sidebar: {
-      notebook: "Notebook",
-      recent: "Recent",
-      rss: "RSS Feed",
-    },
-    actions: {
-      goBack: "Go back",
-      backToTop: "Back to top",
-      editPage: "Edit page",
-      comments: "Comments",
-      previousPost: "Previous Post",
-      nextPost: "Next Post",
-      copy: "Copy",
-      copied: "Copied",
-      copyPostLink: "Copy article link",
-      postLinkCopied: "Link copied",
-      updated: "Updated:",
-      previousPage: "Prev",
-      nextPage: "Next",
-      previousPageLabel: "Go to previous page",
-      nextPageLabel: "Go to next page",
-      tocTitle: "Table of contents",
-      tocToggle: "Open table of contents",
-      tocClose: "Close table of contents",
-    },
-    anime: {
-      unknownYear: "Unknown year",
-      countUnit: "items",
-      dataFrom: "Data from",
-      updatedAt: "Updated",
-      viewMode: "View",
-      viewAll: "All",
-      viewByYear: "By year",
-      empty: "No anime data has been synced yet.",
-      emptyHelp:
-        "Run the sync script to fetch miuo55's AniList data and keep completed items from the normal list.",
-      itemListName: "Anime List",
-    },
-    dev: {
-      searchWarning:
-        "DEV mode warning: build the project at least once to see search results during development.",
-    },
-    months: [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
-    ],
-  },
 } as const;
 
-export function getLocaleFromPath(pathname: string): Locale {
-  return /^\/en(?:\/|$)/.test(pathname) ? "en" : defaultLocale;
-}
-
-export function stripLocaleFromPath(pathname: string) {
-  const withoutLocale = pathname.replace(/^\/en(?=\/|$)/, "") || "/";
-  return withoutLocale.startsWith("/") ? withoutLocale : `/${withoutLocale}`;
+export function getLocaleFromPath(_pathname: string): Locale {
+  return defaultLocale;
 }
 
 export function normalizePath(pathname: string) {
@@ -264,16 +131,10 @@ export function normalizePath(pathname: string) {
     : pathname;
 }
 
-export function localizePath(pathname: string, locale: Locale) {
-  const basePath = stripLocaleFromPath(pathname);
-  if (locale === defaultLocale) return basePath;
-  return basePath === "/" ? `/${locale}/` : `/${locale}${basePath}`;
+export function localizePath(pathname: string, _locale?: Locale) {
+  return normalizePath(pathname);
 }
 
-export function getAlternateLocale(locale: Locale): Locale {
-  return locale === "en" ? "zh" : "en";
-}
-
-export function getDateLocale(locale: Locale) {
-  return locale === "en" ? "en-US" : "zh-CN";
+export function getDateLocale(_locale?: Locale) {
+  return "zh-CN";
 }

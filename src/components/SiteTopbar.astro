@@ -3,7 +3,6 @@ import IconMail from "@/assets/icons/IconMail.svg";
 import IconMoon from "@/assets/icons/IconMoon.svg";
 import IconSearch from "@/assets/icons/IconSearch.svg";
 import IconSunHigh from "@/assets/icons/IconSunHigh.svg";
-import IconLanguage from "@/assets/icons/IconLanguage.svg";
 import IconRss from "@/assets/icons/IconRss.svg";
 import IconUser from "@/assets/icons/IconUser.svg";
 import HomeTabs from "@/components/HomeTabs.astro";
@@ -11,7 +10,6 @@ import LinkButton from "@/components/LinkButton.astro";
 import { SOCIALS } from "@/constants";
 import { SITE } from "@/config";
 import {
-  getAlternateLocale,
   getLocaleFromPath,
   localizePath,
   normalizePath,
@@ -26,8 +24,6 @@ const { compactMobile = false } = Astro.props;
 
 const locale = getLocaleFromPath(Astro.url.pathname);
 const copy = ui[locale];
-const alternateLocale = getAlternateLocale(locale);
-const languageHref = localizePath(Astro.url.pathname, alternateLocale);
 const emailLink = SOCIALS.find(social => social.href.startsWith("mailto:"));
 const emailAddress = emailLink?.href.replace("mailto:", "");
 const emailLabel = `${copy.nav.email} ${SITE.title}`;
@@ -307,16 +303,7 @@ const isPathActive = (path: string) => currentPath.startsWith(normalizePath(getH
             >
               <IconRss class="size-4" />
             </a>
-            <a
-              href={languageHref}
-              data-locale-target={alternateLocale}
-              data-astro-reload
-              class="text-foreground/50 hover:text-foreground transition-colors"
-              title={copy.nav.languageLabel}
-              aria-label={copy.nav.languageLabel}
-            >
-              <IconLanguage class="size-4" />
-            </a>
+
           </div>
         </nav>
       </div>
