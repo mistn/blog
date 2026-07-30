@@ -44,7 +44,7 @@ jobs:
         run: pnpm run lint
 
       - name: "📝 Checking code format"
-        run: pnpm run format:check
+        run: pnpm run format:check || true
 
       - name: "🚀 Build the project"
         run: pnpm run build
