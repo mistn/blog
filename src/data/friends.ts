@@ -107,4 +107,10 @@ export const friendLinks: FriendLink[] = [
     avatar: "https://emaostudio.online/avatar.jpg",
     description: "vibe coding、AIGC、游戏和世界观脑洞记录处",
   },
+  {
+    name: "爱吃可比克的鲸鱼",
+    href: "https://zxs24719.codeberg.page/",
+    avatar: "https://zxs24719.codeberg.page/avatar.jpg",
+    description: "爱吃可比克的鲸鱼",
+  },
 ];
