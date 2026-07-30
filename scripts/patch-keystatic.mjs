@@ -6,7 +6,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 function patchCore(target) {
   if (!fs.existsSync(target)) {
-    console.log("Keystatic core API file not found, skipping");
+    process.stdout.write("Keystatic core API file not found, skipping\n");
     return false;
   }
 
@@ -109,7 +109,7 @@ function patchOAuth(target) {
 
 function patchAstro(target) {
   if (!fs.existsSync(target)) {
-    console.log("Keystatic astro API file not found, skipping");
+    process.stdout.write("Keystatic astro API file not found, skipping\n");
     return false;
   }
 
@@ -157,7 +157,7 @@ if (
   !fs.existsSync(coreTarget) &&
   !fs.existsSync(astroTarget)
 ) {
-  console.log("Keystatic files not found, skipping patch");
+  process.stdout.write("Keystatic files not found, skipping patch\n");
   process.exit(0);
 }
 
@@ -175,7 +175,7 @@ if (fs.existsSync(astroTarget)) {
 }
 
 if (patched) {
-  console.log("Keystatic patched successfully");
+  process.stdout.write("Keystatic patched successfully\n");
 } else {
-  console.log("Keystatic already patched, no changes needed");
+  process.stdout.write("Keystatic already patched, no changes needed\n");
 }
