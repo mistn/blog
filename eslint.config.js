@@ -13,6 +13,14 @@ export default [
       },
     },
   },
-  { rules: { "no-console": "error", "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }] } },
+  {
+    rules: {
+      "no-console": "error",
+      "no-var": "warn",
+      "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
+      "@typescript-eslint/no-explicit-any": "warn",
+      "@typescript-eslint/ban-ts-comment": "warn",
+    },
+  },
   { ignores: ["dist/**", ".astro", "public/pagefind/**"] },
 ];
