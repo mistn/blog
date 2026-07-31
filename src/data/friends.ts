@@ -113,4 +113,10 @@ export const friendLinks: FriendLink[] = [
     avatar: "https://zxs24719.codeberg.page/avatar.jpg",
     description: "爱吃可比克的鲸鱼",
   },
+  {
+    name: "Viki 写东西的地方",
+    href: "https://blog.viki.moe",
+    avatar: "https://blog.viki.moe/avatar.png",
+    description: "生活需要记录。",
+  },
 ];
