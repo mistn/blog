@@ -115,28 +115,38 @@ const containerId = `artalk-comments-${pageKey.replace(/[^a-zA-Z0-9_-]/g, "-")}`
     }
   }
 
-  function scheduleArtalkMount(retryCount = 0) {
+  function scheduleArtalkMount() {
     if (window.__artalkMounting) return;
 
-    const el = document.getElementById(containerId);
-
-    if (!el) {
-      if (retryCount >= ARTALK_MOUNT_RETRY_LIMIT) return;
-
-      requestAnimationFrame(() => {
-        scheduleArtalkMount(retryCount + 1);
-      });
-      return;
-    }
-
     window.__artalkMounting = true;
-    void mountArtalk().then(() => {
-      requestAnimationFrame(() => {
-        syncArtalkTheme();
-      });
-    }).finally(() => {
-      window.__artalkMounting = false;
-    });
+
+    let retryCount = 0;
+    const tryMount = () => {
+      const el = document.getElementById(containerId);
+
+      if (!el) {
+        if (retryCount >= ARTALK_MOUNT_RETRY_LIMIT) {
+          window.__artalkMounting = false;
+          return;
+        }
+
+        retryCount += 1;
+        requestAnimationFrame(tryMount);
+        return;
+      }
+
+      void mountArtalk()
+        .then(() => {
+          requestAnimationFrame(() => {
+            syncArtalkTheme();
+          });
+        })
+        .finally(() => {
+          window.__artalkMounting = false;
+        });
+    };
+
+    tryMount();
   }
 
   function syncArtalkTheme() {
