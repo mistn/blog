@@ -1,5 +1,5 @@
 ---
-author: miuo
+author: miuchan
 pubDatetime: 2026-07-23T00:00:00+08:00
 title: VMISS LA TRI Basic 1C1G Benchmark
 featured: false

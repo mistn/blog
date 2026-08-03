@@ -15,7 +15,7 @@ async function fetchAnkiStats() {
   const token = import.meta.env.GITHUB_TOKEN;
   const headers: Record<string, string> = {
     Accept: "application/vnd.github.v3+json",
-    "User-Agent": "miuo-blog",
+    "User-Agent": "miuchan-blog",
   };
   if (token) headers.Authorization = `Bearer ${token}`;
 

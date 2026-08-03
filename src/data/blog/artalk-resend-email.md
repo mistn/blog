@@ -1,5 +1,5 @@
 ---
-author: miuo
+author: miuchan
 pubDatetime: 2026-06-29T00:00:00+08:00
 title: 为 Artalk 接入 Resend 发信服务与自定义模板方案
 featured: false
@@ -179,7 +179,7 @@ description: 使用 Resend 为 Artalk 评论系统配置邮件通知，并自定
         </div>
         <div class="footer">
             <p>本邮件为系统自动发送，请勿直接回复。</p>
-            <p>Copyright © 2026 <a href="https://miuo.me" target="_blank">miuo</a></p>
+            <p>Copyright © 2026 <a href="https://miuchan.com" target="_blank">miuchan</a></p>
         </div>
     </div>
 </body>

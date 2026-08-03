@@ -1,5 +1,5 @@
 ---
-author: miuo
+author: miuchan
 pubDatetime: 2026-04-01T00:00:00+08:00
 modDatetime: 2026-04-01T00:00:00+08:00
 title: 部署 OpenList 聚合网盘

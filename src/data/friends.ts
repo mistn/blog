@@ -11,10 +11,10 @@ export type FriendLink = {
 export const defaultFriendAvatar = "/friend-default-avatar.avif";
 
 export const siteProfile = {
-  name: "miuo",
-  href: "https://miuo.me/",
+  name: "miuchan",
+  href: "https://miuchan.com/",
   description: "Notes, essays, experiments, and the bits worth keeping around.",
-  avatar: "https://miuo.me/avatar.avif",
+  avatar: "https://miuchan.com/avatar.avif",
 };
 
 export const friendLinks: FriendLink[] = [

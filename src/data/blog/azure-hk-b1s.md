@@ -1,5 +1,5 @@
 ---
-author: miuo
+author: miuchan
 pubDatetime: 2026-06-14T00:00:00+08:00
 title: Azure HK B1s 1C1G Benchmark
 featured: false

@@ -1,5 +1,5 @@
 ---
-author: miuo
+author: miuchan
 pubDatetime: 2026-06-11T00:00:00+08:00
 modDatetime: 2026-06-11T00:00:00+08:00
 title: 从零开始的 VPS 生活

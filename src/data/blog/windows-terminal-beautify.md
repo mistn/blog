@@ -1,5 +1,5 @@
 ---
-author: miuo
+author: miuchan
 pubDatetime: 2026-07-04T00:00:00+08:00
 modDatetime: 2026-07-04T00:00:00+08:00
 title: Windows 终端美化
