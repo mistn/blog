@@ -9,31 +9,22 @@ type Props = {
 const { pageKey, pageTitle } = Astro.props;
 const locale = getLocaleFromPath(Astro.url.pathname);
 const copy = ui[locale];
-const artalkText = {
-  counter: "{count} 条评论",
-  email: "邮箱",
-  link: "网址",
-  nick: "昵称",
-  noComment: "「此时无声胜有声」",
-  placeholder: "键入内容...",
-  send: "发送",
-  sendBtn: "发送",
-};
-
-const server = "https://artalk.miuchan.com";
-const siteName = "blogs";
-const containerId = `artalk-comments-${pageKey.replace(/[^a-zA-Z0-9_-]/g, "-")}`;
 ---
 
 <section
   class="mt-10 pt-8"
   data-pagefind-ignore
+  data-artalk-root
+  data-artalk-server="https://artalk.miuchan.com"
+  data-artalk-site="blogs"
+  data-artalk-page-key={pageKey}
+  data-artalk-page-title={pageTitle}
   aria-label={copy.actions.comments}
 >
   <h2 id="artalk-comments-title" class="text-[1.65rem] font-medium tracking-tight">
     {copy.actions.comments}
   </h2>
-  <div id={containerId} class="mt-5 min-h-28"></div>
+  <div class="artalk-container mt-5 min-h-28"></div>
 </section>
 
 <style>
@@ -42,142 +33,98 @@ const containerId = `artalk-comments-${pageKey.replace(/[^a-zA-Z0-9_-]/g, "-")}`
   }
 </style>
 
-<script
-  is:inline
-  data-astro-rerun
-  define:vars={{
-    artalkText,
-    containerId,
-    pageKey,
-    pageTitle,
-    server,
-    siteName,
-  }}
->
-  const ARTALK_CSS_URL =
-    "https://unpkg.com/artalk@2.10.0/dist/Artalk.css";
-  const ARTALK_JS_URL = "https://esm.sh/artalk@2.10.0";
-  const ARTALK_MOUNT_RETRY_LIMIT = 12;
-  function isDarkTheme() {
-    return document.documentElement.getAttribute("data-theme") === "dark";
-  }
+<script is:inline>
+  (function () {
+    const CSS_URL = "https://unpkg.com/artalk@2.10.0/dist/Artalk.css";
+    const JS_URL = "https://esm.sh/artalk@2.10.0";
 
-  function ensureArtalkStyle() {
-    if (document.querySelector('link[data-artalk-style="true"]')) return;
-
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = ARTALK_CSS_URL;
-    link.dataset.artalkStyle = "true";
-    document.head.appendChild(link);
-  }
-
-  async function mountArtalk() {
-    const el = document.getElementById(containerId);
-    if (!el) return;
-
-    ensureArtalkStyle();
-
-    if (window.__artalk?.destroy) {
-      window.__artalk.destroy();
-    }
-
-    window.__artalkTextObserver?.disconnect();
-    el.innerHTML = "";
-
-    try {
-      const { default: Artalk } = await import(ARTALK_JS_URL);
-
-      window.__artalk = Artalk.init({
-        el,
-        server,
-        site: siteName,
-        pageKey,
-        pageTitle,
-        darkMode: isDarkTheme(),
-        locale: {
-          counter: artalkText.counter,
-          email: artalkText.email,
-          link: artalkText.link,
-          nick: artalkText.nick,
-          noComment: artalkText.noComment,
-          placeholder: artalkText.placeholder,
-          send: artalkText.send,
-        },
-        noComment: artalkText.noComment,
-        placeholder: artalkText.placeholder,
-        preferRemoteConf: false,
-        sendBtn: artalkText.sendBtn,
-      });
-    } catch {
-      el.closest("section")?.classList.add("hidden");
-      document.getElementById("artalk-comments-title")?.classList.add("hidden");
-    }
-  }
-
-  function scheduleArtalkMount() {
-    if (window.__artalkMounting) return;
-
-    window.__artalkMounting = true;
-
-    let retryCount = 0;
-    const tryMount = () => {
-      const el = document.getElementById(containerId);
-
-      if (!el) {
-        if (retryCount >= ARTALK_MOUNT_RETRY_LIMIT) {
-          window.__artalkMounting = false;
-          return;
-        }
-
-        retryCount += 1;
-        requestAnimationFrame(tryMount);
-        return;
-      }
-
-      void mountArtalk()
-        .then(() => {
-          requestAnimationFrame(() => {
-            syncArtalkTheme();
-          });
-        })
-        .finally(() => {
-          window.__artalkMounting = false;
-        });
+    const TEXT = {
+      counter: "{count} 条评论",
+      email: "邮箱",
+      link: "网址",
+      nick: "昵称",
+      noComment: "「此时无声胜有声」",
+      placeholder: "键入内容...",
+      send: "发送",
+      sendBtn: "发送",
     };
 
-    tryMount();
-  }
-
-  function syncArtalkTheme() {
-    if (window.__artalk?.setDarkMode) {
-      window.__artalk.setDarkMode(isDarkTheme());
+    function isDarkTheme() {
+      return document.documentElement.getAttribute("data-theme") === "dark";
     }
-  }
 
-  if (window.__artalkPageLoadHandler) {
-    document.removeEventListener(
-      "astro:page-load",
-      window.__artalkPageLoadHandler
-    );
-    document.removeEventListener(
-      "astro:after-swap",
-      window.__artalkPageLoadHandler
-    );
-  }
+    function ensureStyle() {
+      if (document.querySelector('link[data-artalk-style]')) return;
+      const link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.href = CSS_URL;
+      link.dataset.artalkStyle = "";
+      document.head.appendChild(link);
+    }
 
-  if (window.__artalkThemeHandler) {
-    document.removeEventListener("theme-change", window.__artalkThemeHandler);
-  }
+    let current = null;
 
-  window.__artalkPageLoadHandler = () => {
-    scheduleArtalkMount();
-  };
-  window.__artalkThemeHandler = syncArtalkTheme;
+    function readConfig() {
+      const root = document.querySelector('[data-artalk-root]');
+      if (!root) return null;
+      return {
+        server: root.dataset.artalkServer,
+        site: root.dataset.artalkSite,
+        pageKey: root.dataset.artalkPageKey,
+        pageTitle: root.dataset.artalkPageTitle,
+      };
+    }
 
-  document.addEventListener("astro:page-load", window.__artalkPageLoadHandler);
-  document.addEventListener("astro:after-swap", window.__artalkPageLoadHandler);
-  document.addEventListener("theme-change", window.__artalkThemeHandler);
+    async function mount() {
+      const root = document.querySelector('[data-artalk-root]');
+      if (!root) return;
+      const el = /** @type {HTMLElement|null} */ (root.querySelector(".artalk-container"));
+      if (!el) return;
 
-  scheduleArtalkMount();
+      const conf = readConfig();
+      if (!conf) return;
+
+      ensureStyle();
+
+      if (current?.destroy) current.destroy();
+      current = null;
+      el.innerHTML = "";
+
+      try {
+        const { default: Artalk } = await import(JS_URL);
+        current = Artalk.init({
+          el,
+          server: conf.server,
+          site: conf.site,
+          pageKey: conf.pageKey,
+          pageTitle: conf.pageTitle,
+          darkMode: isDarkTheme(),
+          locale: {
+            counter: TEXT.counter,
+            email: TEXT.email,
+            link: TEXT.link,
+            nick: TEXT.nick,
+            noComment: TEXT.noComment,
+            placeholder: TEXT.placeholder,
+            send: TEXT.send,
+          },
+          noComment: TEXT.noComment,
+          placeholder: TEXT.placeholder,
+          preferRemoteConf: false,
+          sendBtn: TEXT.sendBtn,
+        });
+      } catch {
+        root.classList.add("hidden");
+        const titleEl = document.getElementById("artalk-comments-title");
+        if (titleEl) titleEl.classList.add("hidden");
+      }
+    }
+
+    mount();
+
+    document.addEventListener("astro:after-swap", mount);
+    document.addEventListener("theme-change", () => {
+      if (current?.setDarkMode) current.setDarkMode(isDarkTheme());
+    });
+  })();
 </script>
