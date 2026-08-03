@@ -54,7 +54,7 @@ jobs:
       - name: Summarize data snapshot
         shell: bash
         run: |
-          node -e "const fs=require('node:fs'); const data=JSON.parse(fs.readFileSync('src/data/anime.generated.json','utf8')); const years=[...(data.groups||[])].map(group=>group.year).filter(Boolean); const latest=years.length?Math.max(...years):'n/a'; const lines=['## Anime Sync Summary', '', '- Username: '+(data.source?.userName||'unknown'), '- Updated at: '+(data.generatedAt||'unknown'), '- Total titles: '+Number(data.total||0), '- Custom list: '+(data.source?.customListName||'unknown'), '- Latest season year: '+latest, '- Changed in this run: ${{ steps.changes.outputs.changed }}']; fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, lines.join('\n') + '\n');"
+          node -e "const fs=require('node:fs'); const data=JSON.parse(fs.readFileSync('src/data/anime.generated.json','utf8')); const years=data.items.map(item=>item.year).filter(Boolean); const latest=years.length?Math.max(...years):'n/a'; const lines=['## Anime Sync Summary', '', '- Username: '+(data.username||'unknown'), '- Updated at: '+(data.updatedAt||'unknown'), '- Total titles: '+Number(data.items?.length||0), '- Latest season year: '+latest, '- Changed in this run: ${{ steps.changes.outputs.changed }}']; fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, lines.join('\n') + '\n');"
 
       - name: No changes detected
         if: steps.changes.outputs.changed != 'true'

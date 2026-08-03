@@ -97,7 +97,7 @@ export const ui = {
       viewByYear: "按年份",
       empty: "这里还没有同步到追番数据。",
       emptyHelp:
-        "运行脚本会抓取 miuo55 的 AniList 数据，并保留 normal 列表里状态为 COMPLETED 的动画。",
+        "运行脚本会抓取 miuchanya 的 AniList 数据，并保留 normal 列表里状态为 COMPLETED 的动画。",
       itemListName: "追番列表",
     },
     dev: {

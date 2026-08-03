@@ -38,7 +38,7 @@ pnpm anime:sync
 
 | 变量 | 默认值 | 说明 |
 |------|--------|------|
-| `ANILIST_USER_NAME` | `miuo55`（硬编码在脚本中） | AniList 用户名 |
+| `ANILIST_USER_NAME` | `miuchanya`（硬编码在脚本中） | AniList 用户名 |
 | `ANILIST_USER_ID` | | AniList 用户 ID，优先于用户名 |
 
 ### 可选
