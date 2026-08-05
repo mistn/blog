@@ -1,5 +1,5 @@
----
-author: miuchan
+﻿---
+author: miuarc
 pubDatetime: 2026-04-03T00:00:00+08:00
 modDatetime: 2026-04-03T00:00:00+08:00
 title: Obsidian LiveSync 部署和插件推荐

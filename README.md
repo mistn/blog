@@ -1,4 +1,4 @@
-# miuchan's blog
+# miuarc's blog
 
 Astro v5 个人博客。Keystatic 在线管理后台 + 中英双语。
 

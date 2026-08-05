@@ -1,5 +1,5 @@
----
-author: miuchan
+﻿---
+author: miuarc
 pubDatetime: 2026-06-29T00:00:00+08:00
 title: 为 Artalk 接入 Resend 发信服务与自定义模板方案
 featured: false

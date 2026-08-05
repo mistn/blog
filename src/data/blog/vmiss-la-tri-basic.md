@@ -1,5 +1,5 @@
----
-author: miuchan
+﻿---
+author: miuarc
 pubDatetime: 2026-07-23T00:00:00+08:00
 title: VMISS LA TRI Basic 1C1G Benchmark
 featured: false
@@ -14,22 +14,22 @@ description: VMISS 洛杉矶三网优化 Basic 1 核 1G 性能基准测试：硬
 :::: tabs
 ::: tab-item 💻基本信息
 
-![image](https://img.miuchan.com/file/s/2b0RvP02.webp)
+![image](https://img.miuarc.com/file/s/2b0RvP02.webp)
 
 :::
 ::: tab-item 🎬IP质量
 
-![image](https://img.miuchan.com/file/s/J8i8qO3j.webp)
+![image](https://img.miuarc.com/file/s/J8i8qO3j.webp)
 
 :::
 ::: tab-item 🌐网络质量
 
-![image](https://img.miuchan.com/file/s/a3zwZBac.webp)
+![image](https://img.miuarc.com/file/s/a3zwZBac.webp)
 
 :::
 ::: tab-item 📍回程路由
 
-![image](https://img.miuchan.com/file/s/pVSidCLJ.webp)
+![image](https://img.miuarc.com/file/s/pVSidCLJ.webp)
 
 :::
 ::::

@@ -1,5 +1,5 @@
----
-author: miuchan
+﻿---
+author: miuarc
 pubDatetime: 2026-05-10T00:00:00+08:00
 modDatetime: 2026-05-11T00:00:00+08:00
 title: 用 Rclone 自动备份小狼毫配置到 WebDAV
@@ -460,7 +460,7 @@ patch:
 
   preset_color_schemes/purity_of_form_custom:
     name: "uo"
-    author: "miuchan"
+    author: "miuarc"
 
     # 小狼毫颜色是 BGR，不是网页常见的 RGB；黑白灰不受影响。
     text_color: 0x000000

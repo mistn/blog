@@ -1,5 +1,5 @@
----
-author: miuchan
+﻿---
+author: miuarc
 pubDatetime: 2026-01-31T00:00:00+08:00
 modDatetime: 2026-01-31T00:00:00+08:00
 title: PicList + Cloudflare R2 + Obsidian + Git 双端同步

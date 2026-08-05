@@ -1,10 +1,10 @@
 export const SITE = {
-  website: "https://miuchan.com/",
-  author: "miuchan",
+  website: "https://miuarc.com/",
+  author: "miuarc",
   startYear: 2025,
   profile: "",
   desc: "记录文章、笔记、实验和暂时不想丢掉的内容。",
-  title: "miuchan",
+  title: "miuarc",
   ogImage: "favicon.png",
   lightAndDarkMode: true,
   postPerIndex: 4,

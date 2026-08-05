@@ -1,5 +1,5 @@
----
-author: miuchan
+﻿---
+author: miuarc
 pubDatetime: 2026-02-20T00:00:00+08:00
 modDatetime: 2026-02-20T00:00:00+08:00
 title: 关于输入法和拼音方案的选择

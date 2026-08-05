@@ -1,5 +1,5 @@
----
-author: miuchan
+﻿---
+author: miuarc
 pubDatetime: 2026-06-14T00:00:00+08:00
 title: Azure HK B1s 1C1G Benchmark
 featured: false
@@ -14,22 +14,22 @@ description: Azure 香港 B1s 1 核 1G 性能基准测试：硬件、IP、网络
 :::: tabs
 ::: tab-item 💻基本信息
 
-![image](https://img.miuchan.com/file/s/AA8fLyl4.webp)
+![image](https://img.miuarc.com/file/s/AA8fLyl4.webp)
 
 :::
 ::: tab-item 🎬IP质量
 
-![image](https://img.miuchan.com/file/s/43ReMjGl.webp)
+![image](https://img.miuarc.com/file/s/43ReMjGl.webp)
 
 :::
 ::: tab-item 🌐网络质量
 
-![image](https://img.miuchan.com/file/s/VJrPzBpW.webp)
+![image](https://img.miuarc.com/file/s/VJrPzBpW.webp)
 
 :::
 ::: tab-item 📍回程路由
 
-![image](https://img.miuchan.com/file/s/zVpRmoeX.webp)
+![image](https://img.miuarc.com/file/s/zVpRmoeX.webp)
 
 :::
 ::::
