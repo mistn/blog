@@ -11,4 +11,4 @@ headingEyebrow: "About"
 ## 联系方式
 
 * Email: [me@miuarc.com](mailto:me@miuarc.com)
-* Telegram: [@hacu0](https://t.me/hacu0)
+* Telegram: [@renata_kulikova](https://t.me/renata_kulikova)
