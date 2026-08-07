@@ -12,3 +12,34 @@ headingEyebrow: "About"
 
 * Email: [me@miuarc.com](mailto:me@miuarc.com)
 * Telegram: [@renata_kulikova](https://t.me/renata_kulikova)
+* <details>
+  <summary>PGP</summary>
+
+  ```
+  -----BEGIN PGP PUBLIC KEY BLOCK-----
+  Comment: C87B 7CCA 1DD7 7CCD FB4A  F133 8680 6F99 DC2E 889D
+  Comment: miuarc <me@miuarc.com>
+
+  xjMEanXfThYJKwYBBAHaRw8BAQdATRWZ+fYQiNILj1sCXIRg6KuV7NfL72eSh92f
+  sZpmR6LNFm1pdWFyYyA8bWVAbWl1YXJjLmNvbT7CrwQTFgoAVxYhBMh7fMod13zN
+  +0rxM4aAb5ncLoidBQJqdd9OGxSAAAAAAAQADm1hbnUyLDIuNSsxLjEyLDIsMQIb
+  AwULCQgHAgIiAgYVCgkICwIEFgIDAQIeBwIXgAAKCRCGgG+Z3C6InRcwAQCC/x6W
+  yiwX+S21wlvXU8beKabaTMMxU4dFlZxITaWNoAD/aochKmVcJ2JBk8zytcMyvFh/
+  8VYRzSFRsEF41aJv5QHOOARqdd9OEgorBgEEAZdVAQUBAQdASDs85VHFIyMwU3Ro
+  0/omd3ZEwKJAWx1u7yPG65q8S08DAQgHwpQEGBYKADwWIQTIe3zKHdd8zftK8TOG
+  gG+Z3C6InQUCanXfThsUgAAAAAAEAA5tYW51MiwyLjUrMS4xMiwyLDECGwwACgkQ
+  hoBvmdwuiJ26NwEA5vd8/XuAH/KhvQo7Lqonydg3yh34IQmYqyGu1+DRiHwBAJaq
+  CCYAGK1jq5PtPPYk1HgvaoCmsyzq7mFTYu68nkgK
+  =x3sC
+  -----END PGP PUBLIC KEY BLOCK-----
+  ```
+
+  </details>
+* <details>
+  <summary>Age</summary>
+
+  ```
+  age1nyn086fjccvr809jyq7c5nykwseyzm07x8w7sqdy9vwhl8zv752ssejw5c
+  ```
+
+  </details>

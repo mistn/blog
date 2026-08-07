@@ -147,14 +147,14 @@
     }
 
     details {
-      @apply block cursor-pointer text-foreground select-none [&_ul]:my-0!;
+      @apply block cursor-pointer text-foreground [&_ul]:my-0!;
     }
     details:not([open]) p {
       display: none;
     }
 
     summary {
-      @apply focus-visible:no-underline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-accent focus-visible:outline-dashed;
+      @apply select-none focus-visible:no-underline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-accent focus-visible:outline-dashed;
     }
 
     pre {
