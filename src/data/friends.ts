@@ -119,4 +119,10 @@ export const friendLinks: FriendLink[] = [
     avatar: "https://blog.viki.moe/avatar.png",
     description: "生活需要记录。",
   },
+  {
+    name: "Detached",
+    href: "https://detached.online/",
+    avatar: "https://detached.online/icon-512.png",
+    description: "独立开发者的技术、工具与生活博客",
+  },
 ];
