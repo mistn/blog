@@ -1,6 +1,6 @@
 {
   "username": "miuchanya",
-  "updatedAt": "2026-08-03T15:26:09.967Z",
+  "updatedAt": "2026-08-09T18:19:38.087Z",
   "items": [
     {
       "title": "超かぐや姫！",
@@ -31,6 +31,12 @@
       "cover": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx154473-o55309dVGP3G.jpg",
       "year": 2024,
       "url": "https://anilist.co/anime/154473"
+    },
+    {
+      "title": "うずまき",
+      "cover": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx111314-ui2D6cvpNumy.jpg",
+      "year": 2024,
+      "url": "https://anilist.co/anime/111314"
     },
     {
       "title": "ダンダダン",
@@ -655,6 +661,18 @@
       "cover": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/5764.jpg",
       "year": 2008,
       "url": "https://anilist.co/anime/5764"
+    },
+    {
+      "title": "こどものじかん",
+      "cover": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx2403-vZ99B6GVLMCr.jpg",
+      "year": 2007,
+      "url": "https://anilist.co/anime/2403"
+    },
+    {
+      "title": "こどものじかん OVA",
+      "cover": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/3121.jpg",
+      "year": 2007,
+      "url": "https://anilist.co/anime/3121"
     },
     {
       "title": "ゼロの使い魔 ～双月の騎士～",
