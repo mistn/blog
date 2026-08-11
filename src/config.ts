@@ -5,7 +5,7 @@ export const SITE = {
   profile: "",
   desc: "记录文章、笔记、实验和暂时不想丢掉的内容。",
   title: "miuarc",
-  ogImage: "favicon.png",
+  ogImage: "favicon.png?v=20260812",
   lightAndDarkMode: true,
   postPerIndex: 4,
   postPerPage: 4,
