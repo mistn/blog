@@ -1,14 +1,14 @@
 ---
 author: miuarc
 pubDatetime: 2026-08-12T22:30:00+08:00
-title: Bitwarden 6 款内置邮箱别名服务整理与对比
+title: Bitwarden 邮箱别名服务配置与选择
 featured: false
 draft: false
 tags:
   - Bitwarden
   - 邮箱别名
   - 教程
-description: 梳理 Bitwarden 生成器中可配置的 6 款邮箱别名服务（Addy.io、DuckDuckGo、Fastmail、Forward Email、Firefox Relay、SimpleLogin）的配置流程与限制对比。
+description: 配置 Bitwarden 生成器中支持的全部邮箱别名服务（Addy.io、DuckDuckGo、Fastmail、Forward Email、Firefox Relay、SimpleLogin），附上简单的选择建议。
 ---
 
 平时经常会遇到一些临时网站需要注册，或者某些注册一次后就再也不会打开的网站，此时肯定不能用自己的常用邮箱进行注册。不说隐私风险，后续还有可能遭遇垃圾邮件轰炸。刚好 Bitwarden 集成了几个别名邮箱 API，下面我依次配置一遍。
