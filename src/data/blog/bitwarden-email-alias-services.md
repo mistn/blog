@@ -6,11 +6,8 @@ featured: false
 draft: false
 tags:
   - Bitwarden
-  - 密码管理器
   - 邮箱别名
-  - 临时邮箱
-  - 邮箱马甲
-  - 反垃圾邮件
+  - 教程
 description: 梳理 Bitwarden 生成器中可配置的 6 款邮箱别名服务（Addy.io、DuckDuckGo、Fastmail、Forward Email、Firefox Relay、SimpleLogin）的配置流程与限制对比。
 ---
 
