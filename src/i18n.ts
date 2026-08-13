@@ -40,7 +40,7 @@ export const ui = {
       archivesEyebrow: "Archive",
       archivesDesc: "按时间线浏览 miuarc 博客的全部已发布文章，按年份和月份整理，方便回溯历史技术笔记。",
       searchTitle: "搜索",
-      searchDesc: "搜索站内技术文章、笔记和教程，通过关键词快速定位你需要的内容。",
+      searchDesc: "站内技术文章、笔记和教程，输入关键词即可快速定位。",
       animeTitle: "追番列表",
       animeFullTitle: "追番列表 | miuarc",
       animeDesc: "可按年份或全部查看 AniList normal 列表中已看完的动画。",
