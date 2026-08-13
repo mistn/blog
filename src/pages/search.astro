@@ -14,6 +14,13 @@ const backUrl = SITE.showBackButton ? `${Astro.url.pathname}` : "/";
 
 const posts = await getCollection("blog");
 const tags = getUniqueTags(posts);
+
+function tagSize(count: number) {
+  if (count >= 4) return "xl";
+  if (count === 3) return "lg";
+  if (count === 2) return "md";
+  return "sm";
+}
 ---
 
 <Layout title={`${copy.pages.searchTitle} | ${SITE.title}`} description={copy.pages.searchDesc}>
@@ -21,7 +28,7 @@ const tags = getUniqueTags(posts);
     <div id="pagefind-search" class="mt-8" transition:persist data-backurl={backUrl}></div>
     <div id="pagefind-tags" class="mt-8">
       <ul class="flex flex-wrap gap-2.5">
-        {tags.map(({ tag, tagName, count }) => <Tag {tag} {tagName} {count} size="sm" {locale} />)}
+        {tags.map(({ tag, tagName, count }) => <Tag {tag} {tagName} {count} size={tagSize(count)} {locale} />)}
       </ul>
     </div>
   </Main>
@@ -67,9 +74,7 @@ const tags = getUniqueTags(posts);
 
     const params = new URLSearchParams(window.location.search);
 
-    const onIdle = window.requestIdleCallback || (cb => setTimeout(cb, 1));
-
-    onIdle(async () => {
+    (async () => {
       let PagefindUI;
 
       try {
@@ -92,6 +97,20 @@ const tags = getUniqueTags(posts);
         element: "#pagefind-search",
         showImages: false,
         showSubResults: true,
+        translations: {
+          placeholder: "输入关键词搜索…",
+          search_label: "站内搜索",
+          clear_search: "清除",
+          load_more: "加载更多结果",
+          filters_label: "筛选",
+          zero_results: "没有找到 [SEARCH_TERM] 的相关结果",
+          one_result: "找到 1 个 [SEARCH_TERM] 的相关结果",
+          many_results: "找到 [COUNT] 个 [SEARCH_TERM] 的相关结果",
+          alt_search:
+            "没有找到 [SEARCH_TERM] 的相关结果，改为显示 [DIFFERENT_TERM] 的结果",
+          search_suggestion: "没有找到 [SEARCH_TERM] 的相关结果，可以试试以下搜索：",
+          searching: "正在搜索 [SEARCH_TERM]...",
+        },
         processTerm: function (term) {
           params.set("q", term); // Update the `q` parameter in the URL
           history.replaceState(history.state, "", "?" + params.toString()); // Push the new URL without reloading
@@ -151,7 +170,7 @@ const tags = getUniqueTags(posts);
       }
 
       pageFindSearch.dataset.initializing = "false";
-    });
+    })();
   }
 
   document.addEventListener("astro:after-swap", () => {
@@ -167,6 +186,7 @@ const tags = getUniqueTags(posts);
 
 <style is:global>
   #pagefind-search {
+    min-height: 3.5rem;
     --pagefind-ui-font: var(--font-app);
     --pagefind-ui-text: var(--foreground);
     --pagefind-ui-background: transparent;
@@ -182,31 +202,19 @@ const tags = getUniqueTags(posts);
       display: flex;
       flex-direction: column;
       position: relative;
-      border: 1px solid rgba(0, 0, 0, 0.06);
+      border: 1px solid transparent;
       border-radius: 0.75rem;
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
-      transition: all 0.2s ease;
-      background: transparent;
-    }
-
-    html[data-theme="dark"] & form {
-      border-color: rgba(255, 255, 255, 0.06);
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+      background: var(--muted);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
 
     form:focus-within {
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-      border-color: rgba(0, 0, 0, 0.12);
+      border-color: var(--accent);
     }
 
-    html[data-theme="dark"] & form:focus-within {
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-      border-color: rgba(255, 255, 255, 0.12);
-    }
-
-    /* Search icon - centered on the 3rem input area */
+    /* Search icon - centered on the 3.5rem input area */
     #pagefind-search form::before {
-      top: 1.5rem;
+      top: 1.75rem;
       left: 0.75rem;
       transform: translateY(-50%);
       width: 1rem;
@@ -222,13 +230,13 @@ const tags = getUniqueTags(posts);
     /* Input - padded for icon space */
     input {
       width: 100%;
-      height: 3rem;
-      padding: 0 2.5rem 0 2.25rem; /* Right space for clear btn, left space for icon */
+      height: 3.5rem;
+      padding: 0 2.75rem 0 2.5rem; /* Right space for clear btn, left space for icon */
       border: none;
       outline: none;
       background: transparent;
       font-weight: 400;
-      font-size: 1rem; /* Prevent iOS zoom */
+      font-size: 1.125rem; /* Prevent iOS zoom */
       color: var(--foreground);
       box-sizing: border-box;
       flex-shrink: 0;
@@ -246,14 +254,14 @@ const tags = getUniqueTags(posts);
       outline: none;
     }
 
-    /* Clear button - centered on the 3rem input area */
+    /* Clear button - centered on the 3.5rem input area */
     .pagefind-ui__search-clear {
       display: none; /* Hidden by default, shown via JS */
       align-items: center;
       justify-content: center;
       position: absolute;
       right: 0.75rem;
-      top: 1.5rem;
+      top: 1.75rem;
       transform: translateY(-50%);
       width: 1.75rem;
       height: 1.75rem;

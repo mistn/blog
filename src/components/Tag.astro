@@ -4,7 +4,7 @@ import { getLocaleFromPath, localizePath, type Locale } from "@/i18n";
 type Props = {
   tag: string;
   tagName: string;
-  size?: "sm" | "lg";
+  size?: "sm" | "md" | "lg" | "xl";
   locale?: Locale;
   count?: number;
 };
@@ -25,8 +25,10 @@ const {
       "group inline-flex items-center gap-1 border-b border-transparent text-foreground/64 no-underline transition-colors",
       "hover:border-accent/45 hover:text-accent",
       "focus-visible:border-accent/55 focus-visible:text-accent",
-      { "px-0.5 py-0.5 text-sm": size === "sm" },
-      { "px-0.5 py-1 text-base": size === "lg" },
+      { "h-7 leading-7 px-0.5 text-sm": size === "sm" },
+      { "h-7 leading-7 px-0.5 text-base font-medium": size === "md" },
+      { "h-7 leading-7 px-1 text-lg font-semibold": size === "lg" },
+      { "h-7 leading-7 px-1 text-xl font-bold": size === "xl" },
     ]}
   >
     {tagName}
