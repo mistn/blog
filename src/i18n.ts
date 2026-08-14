@@ -16,7 +16,6 @@ export const ui = {
       tools: "工具",
       friends: "友链",
       about: "关于",
-      aboutMe: "关于我",
       search: "搜索",
       skipToContent: "跳到正文",
       theme: "切换浅色/深色模式",

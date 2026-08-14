@@ -47,7 +47,7 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
         compactMobile ? "pb-2" : "pb-3",
       ]}
     >
-      <div class="flex items-center justify-between lg:grid lg:grid-cols-3">
+      <div class="flex items-center justify-between">
         <!-- Left: Logo -->
         <div id="mobile-logo-area" class="min-w-0">
           <a href={getHref("/")} class="block no-underline">
@@ -56,12 +56,12 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
         </div>
 
         <!-- Center: Nav links (desktop) -->
-        <div class="hidden lg:flex justify-self-center">
+        <div class="hidden lg:flex flex-1 min-w-0 justify-center px-4">
           <HomeTabs />
         </div>
 
         <!-- Right: Icons -->
-        <div class="flex items-center gap-1 justify-self-end">
+        <div class="flex items-center gap-1">
           <!-- Desktop icons -->
           <div class="hidden lg:flex items-center gap-4">
             <LinkButton
@@ -250,7 +250,7 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
             data-menu-link
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>
-            <span>{copy.nav.aboutMe}</span>
+            <span>{copy.nav.about}</span>
           </a>
         </nav>
 
