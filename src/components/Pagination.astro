@@ -20,19 +20,30 @@ const prevUrl = currentPage > 1 ? buildPageUrl(currentPage - 1) : undefined;
 const nextUrl = currentPage < lastPage ? buildPageUrl(currentPage + 1) : undefined;
 
 function getPages(): (number | "...")[] {
-  if (lastPage <= 5) {
+  if (lastPage <= 4) {
     return Array.from({ length: lastPage }, (_, i) => i + 1);
   }
 
-  if (currentPage <= 3) {
-    return [1, 2, 3, "...", lastPage];
-  }
+  const shown = new Set([
+    1,
+    lastPage,
+    currentPage - 1,
+    currentPage,
+    currentPage + 1,
+  ]);
 
-  if (currentPage >= lastPage - 2) {
-    return [1, "...", lastPage - 2, lastPage - 1, lastPage];
-  }
+  const sorted = [...shown]
+    .filter(p => p >= 1 && p <= lastPage)
+    .sort((a, b) => a - b);
 
-  return [1, "...", currentPage, "...", lastPage];
+  const pages: (number | "...")[] = [];
+  let prev = 0;
+  for (const p of sorted) {
+    if (prev && p - prev > 1) pages.push("...");
+    pages.push(p);
+    prev = p;
+  }
+  return pages;
 }
 
 const pages = getPages();

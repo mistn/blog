@@ -30,7 +30,6 @@ const emailLabel = `${copy.nav.email} ${SITE.title}`;
 const getHref = (path: string) => localizePath(path, locale);
 const currentPath = normalizePath(Astro.url.pathname);
 const isActive = (path: string) => currentPath === normalizePath(getHref(path));
-const isPathActive = (path: string) => currentPath.startsWith(normalizePath(getHref(path)) + "/");
 ---
 
 <!-- ===== Header ===== -->
@@ -199,20 +198,6 @@ const isPathActive = (path: string) => currentPath.startsWith(normalizePath(getH
               </a>
             )
           }
-          <a
-            href={getHref("/weekly")}
-            class:list={[
-              "flex items-center gap-2.5 px-4 py-2.5 text-base text-left transition-colors",
-              isActive("/weekly") || isPathActive("/weekly")
-                ? "bg-black text-white dark:bg-white dark:text-black"
-                : "text-foreground/85 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black",
-            ]}
-            data-menu-link
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0"><path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z" /><path d="M16 3v4" /><path d="M8 3v4" /><path d="M4 11h16" /></svg>
-            <span>{copy.nav.weekly}</span>
-          </a>
-
           <a
             href={getHref("/anime")}
             class:list={[

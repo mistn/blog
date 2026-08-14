@@ -11,9 +11,7 @@ export const ui = {
     },
     nav: {
       home: "首页",
-      articles: "文章",
       archives: "归档",
-      weekly: "周记",
       anime: "追番",
       tools: "工具",
       friends: "友链",
@@ -52,8 +50,6 @@ export const ui = {
       friendsDesc:
         "miuarc 的友情链接页面，收录了多个优质个人独立博客，欢迎通过评论区或邮件提交申请交换友链。",
       friendsEyebrow: "Link Exchange",
-      weeklyTitle: "周记",
-      weeklyDesc: "定期记录与分享。",
       aboutTitle: "关于",
       aboutEyebrow: "About",
       aboutDesc: "了解 miuarc 的个人简介、自托管服务列表（听歌记录、壁纸站、临时邮箱等）以及联系方式。",

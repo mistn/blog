@@ -43,37 +43,5 @@ export default config({
         }),
       },
     }),
-
-    // 周刊集合
-    weekly: collection({
-      label: "周刊",
-      slugField: "title",
-      path: "src/data/weekly/*",
-      // YAML frontmatter + markdown body，content 字段作为正文
-      format: { data: "yaml", contentField: "content" },
-      schema: {
-        title: fields.slug({ name: { label: "标题" } }),
-        pubDatetime: fields.date({
-          label: "发布日期",
-          validation: { isRequired: true },
-        }),
-        issueNumber: fields.integer({ label: "期号" }),
-        description: fields.text({
-          label: "描述",
-          multiline: true,
-          validation: { isRequired: true },
-        }),
-        tags: fields.array(fields.text({ label: "标签" }), {
-          label: "标签",
-          itemLabel: (props) => props.value,
-        }),
-        draft: fields.checkbox({ label: "草稿" }),
-        // 正文内容（markdown body）
-        content: fields.mdx({
-          label: "正文",
-          extension: "md",
-        }),
-      },
-    }),
   },
 });
