@@ -164,13 +164,13 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
 <!-- ===== Mobile Sidebar (slides from right) ===== -->
 <div
   id="mobile-dropdown"
-  class="fixed top-0 right-0 h-full w-[35vw] min-w-[140px] max-w-[200px] bg-background border-l border-black dark:border-white z-50 translate-x-full transition-transform duration-300 ease-in-out"
+  class="fixed top-0 right-0 h-full w-[35vw] min-w-[140px] max-w-[200px] bg-background border-l border-black dark:border-white z-[60] translate-x-full transition-transform duration-300 ease-in-out flex flex-col"
 >
-  <nav class="h-full overflow-y-auto pb-24 pt-10">
+  <nav class="flex-1 overflow-y-auto pb-24 pt-10">
           <a
             href={getHref("/")}
             class:list={[
-              "flex items-center gap-2.5 px-4 py-3.5 text-base text-left transition-colors",
+              "flex items-center gap-2.5 px-4 py-3 text-base text-left transition-colors",
               isActive("/")
                 ? "bg-black text-white dark:bg-white dark:text-black"
                 : "text-foreground/85 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black",
@@ -186,7 +186,7 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
               <a
                 href={getHref("/archives")}
                 class:list={[
-                  "flex items-center gap-2.5 px-4 py-2.5 text-base text-left transition-colors",
+                  "flex items-center gap-2.5 px-4 py-3 text-base text-left transition-colors",
                   isActive("/archives")
                     ? "bg-black text-white dark:bg-white dark:text-black"
                     : "text-foreground/85 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black",
@@ -201,7 +201,7 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
           <a
             href={getHref("/anime")}
             class:list={[
-              "flex items-center gap-2.5 px-4 py-2.5 text-base text-left transition-colors",
+              "flex items-center gap-2.5 px-4 py-3 text-base text-left transition-colors",
               isActive("/anime")
                 ? "bg-black text-white dark:bg-white dark:text-black"
                 : "text-foreground/85 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black",
@@ -215,7 +215,7 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
           <a
             href={getHref("/friends")}
             class:list={[
-              "flex items-center gap-2.5 px-4 py-2.5 text-base text-left transition-colors",
+              "flex items-center gap-2.5 px-4 py-3 text-base text-left transition-colors",
               isActive("/friends")
                 ? "bg-black text-white dark:bg-white dark:text-black"
                 : "text-foreground/85 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black",
@@ -226,12 +226,10 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
             <span>{copy.nav.friends}</span>
           </a>
 
-          <div class="mt-6"></div>
-
           <a
             href={getHref("/tools")}
             class:list={[
-              "flex items-center gap-2.5 px-4 py-2.5 text-base text-left transition-colors",
+              "flex items-center gap-2.5 px-4 py-3 text-base text-left transition-colors",
               isActive("/tools")
                 ? "bg-black text-white dark:bg-white dark:text-black"
                 : "text-foreground/85 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black",
@@ -244,26 +242,40 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
           <a
             href={getHref("/about")}
             class:list={[
-              "flex items-center gap-2.5 px-4 py-2.5 text-base text-left transition-colors",
+              "flex items-center gap-2.5 px-4 py-3 text-base text-left transition-colors",
               isActive("/about")
                 ? "bg-black text-white dark:bg-white dark:text-black"
                 : "text-foreground/85 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black",
             ]}
             data-menu-link
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0"><circle cx="12" cy="12" r="10" /><path d="M8 14s1.5 2 4 2 4-2 4-2" /><line x1="9" x2="9.01" y1="9" y2="9" /><line x1="15" x2="15.01" y1="9" y2="9" /></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="size-4 shrink-0"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>
             <span>{copy.nav.aboutMe}</span>
           </a>
-
-          <a
-            href="/rss.xml"
-            class="flex items-center gap-2.5 px-4 py-2.5 text-base text-left text-foreground/85 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors"
-            data-menu-link
-          >
-            <IconRss class="size-4 shrink-0" />
-            <span>{copy.sidebar.rss}</span>
-          </a>
         </nav>
+
+        <div class="border-t border-black/10 dark:border-white/10 px-4 py-4">
+          <div class="flex items-center gap-4">
+            <a
+              href={emailAddress ? `mailto:${emailAddress}` : "mailto:"}
+              class="flex items-center justify-center text-foreground/68 transition hover:text-accent"
+              title={emailLabel}
+              aria-label={emailLabel}
+              data-menu-link
+            >
+              <IconMail class="size-4 shrink-0" />
+            </a>
+            <a
+              href="/rss.xml"
+              class="flex items-center justify-center text-foreground/68 transition hover:text-accent"
+              title="RSS"
+              aria-label="RSS"
+              data-menu-link
+            >
+              <IconRss class="size-4 shrink-0" />
+            </a>
+          </div>
+        </div>
       </div>
 
 <!-- ===== Mobile Menu Overlay ===== -->

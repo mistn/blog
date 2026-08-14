@@ -1,0 +1,19 @@
+---
+const MISSKEY_EMBED_URL =
+  "https://dvd.chat/embed/user-timeline/apse7z1oxc?maxHeight=700";
+const MISSKEY_EMBED_ID = "v1_b59d74ab-fbde-4d97-99a4-006eb9b43d23";
+---
+
+<details>
+  <summary>目前活跃在 Misskey</summary>
+  <iframe
+    src={MISSKEY_EMBED_URL}
+    data-misskey-embed-id={MISSKEY_EMBED_ID}
+    loading="lazy"
+    referrerpolicy="strict-origin-when-cross-origin"
+    style="border: none; width: 100%; height: 500px; color-scheme: light dark; margin-top: 10px;"
+  >
+  </iframe>
+</details>
+
+<script defer src="https://dvd.chat/embed.js"></script>

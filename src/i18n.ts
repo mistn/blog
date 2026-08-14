@@ -58,11 +58,6 @@ export const ui = {
       notFoundDesc:
          "您访问的页面不存在，可能已被移除或链接错误。返回 miuarc 博客首页浏览更多技术文章。",
     },
-    sidebar: {
-      notebook: "笔记",
-      recent: "最近",
-      rss: "RSS 订阅",
-    },
     actions: {
       goBack: "返回",
       backToTop: "回到顶部",
