@@ -9,11 +9,30 @@ const MISSKEY_EMBED_ID = "v1_b59d74ab-fbde-4d97-99a4-006eb9b43d23";
   <iframe
     src={MISSKEY_EMBED_URL}
     data-misskey-embed-id={MISSKEY_EMBED_ID}
+    data-misskey-embed
     loading="lazy"
     referrerpolicy="strict-origin-when-cross-origin"
-    style="border: none; width: 100%; height: 500px; color-scheme: light dark; margin-top: 10px;"
+    style="border: none; width: 100%; height: 500px; margin-top: 10px;"
   >
   </iframe>
 </details>
 
 <script defer src="https://dvd.chat/embed.js"></script>
+
+<script>
+  function syncMisskeyTheme() {
+    const iframe = document.querySelector<HTMLIFrameElement>(
+      "[data-misskey-embed]"
+    );
+    if (!iframe) return;
+    const isDark =
+      document.documentElement.getAttribute("data-theme") === "dark";
+    const url = new URL(iframe.src);
+    url.searchParams.set("colorMode", isDark ? "dark" : "light");
+    iframe.src = url.toString();
+  }
+
+  document.addEventListener("theme-change", syncMisskeyTheme);
+  document.addEventListener("astro:page-load", syncMisskeyTheme);
+  syncMisskeyTheme();
+</script>
