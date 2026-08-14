@@ -254,25 +254,25 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
           </a>
         </nav>
 
-        <div class="border-t border-black/10 dark:border-white/10 px-4 py-4">
-          <div class="flex items-center gap-4">
+        <div class="border-t border-black/10 dark:border-white/10 px-4 py-3">
+          <div class="flex items-center gap-3">
             <a
               href={emailAddress ? `mailto:${emailAddress}` : "mailto:"}
-              class="flex items-center justify-center text-foreground/68 transition hover:text-accent"
+              class="flex size-11 items-center justify-center rounded-full text-foreground/68 transition hover:text-accent hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black"
               title={emailLabel}
               aria-label={emailLabel}
               data-menu-link
             >
-              <IconMail class="size-4 shrink-0" />
+              <IconMail class="size-5 shrink-0" />
             </a>
             <a
               href="/rss.xml"
-              class="flex items-center justify-center text-foreground/68 transition hover:text-accent"
+              class="flex size-11 items-center justify-center rounded-full text-foreground/68 transition hover:text-accent hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black"
               title="RSS"
               aria-label="RSS"
               data-menu-link
             >
-              <IconRss class="size-4 shrink-0" />
+              <IconRss class="size-5 shrink-0" />
             </a>
           </div>
         </div>
