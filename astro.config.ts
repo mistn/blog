@@ -21,6 +21,9 @@ import { SITE } from "./src/config";
 export default defineConfig({
   site: SITE.website,
   output: "static",
+  build: {
+    inlineStylesheets: "always",
+  },
   // Vercel adapter —— 部署到 Vercel 时自动检测
   // 如果改用 Cloudflare Pages 可以移除
   adapter: vercel(),
