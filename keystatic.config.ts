@@ -1,4 +1,4 @@
-import { config, collection, fields } from "@keystatic/core";
+import { config, collection, singleton, fields } from "@keystatic/core";
 
 export default config({
   // 开发环境用本地文件系统，生产环境走 GitHub OAuth
@@ -41,6 +41,39 @@ export default config({
           label: "正文",
           extension: "md",
         }),
+      },
+    }),
+  },
+
+  singletons: {
+    // 友链（单文件，数组字段）
+    friends: singleton({
+      label: "友链",
+      path: "src/data/friends",
+      format: { data: "yaml" },
+      schema: {
+        items: fields.array(
+          fields.object({
+            name: fields.text({
+              label: "名称",
+              validation: { isRequired: true },
+            }),
+            blog: fields.text({ label: "博客名（卡片标题，留空用名称）" }),
+            href: fields.url({ label: "网址", validation: { isRequired: true } }),
+            avatar: fields.url({ label: "头像" }),
+            description: fields.text({
+              label: "描述",
+              multiline: true,
+              validation: { isRequired: true },
+            }),
+            color: fields.text({ label: "主题色" }),
+            email: fields.text({ label: "邮箱" }),
+          }),
+          {
+            label: "友链列表",
+            itemLabel: (props) => props.fields.name.value || "未命名",
+          }
+        ),
       },
     }),
   },

@@ -1,3 +1,6 @@
+import { createReader } from "@keystatic/core/reader";
+import keystaticConfig from "../../keystatic.config.ts";
+
 export type FriendLink = {
   name: string;
   blog?: string;
@@ -17,112 +20,19 @@ export const siteProfile = {
   avatar: "https://miuarc.com/avatar.avif",
 };
 
-export const friendLinks: FriendLink[] = [
-  {
-    name: "krau",
-    blog: "krau's blog",
-    href: "https://krau.top",
-    avatar: "https://krau.top/photo/avatar/avatar.jpg",
-    description: "子供の时の梦は言えますか",
-    color: "#39c5bb",
-  },
-  {
-    name: "关于IFDESS的书",
-    href: "https://111654.xyz/",
-    avatar: "https://static.ifdess.cn/img/avatar.jpg",
-    description: "这是一本记录IFDESS的经历和感悟的书。",
-  },
-  {
-    name: "huizhi's Aside",
-    href: "https://blog.huizhi.ink/",
-    description: "也许只是些碎碎念吧。",
-    avatar: "https://github.com/huizhiLLL.png",
-    color: "#0b84c6",
-  },
-  {
-    name: "Karlbaey",
-    blog: "卡尔白的纸箱📦",
-    href: "https://re.karlbaey.top",
-    avatar: "https://avatars.githubusercontent.com/u/191684279",
-    description: "这里存着卡尔白的过去、现在和未来",
-  },
-  {
-    name: "番茄主理人",
-    href: "https://fqzlr.com/",
-    avatar: "https://q1.qlogo.cn/g?b=qq&nk=20447289&s=640",
-    description: "坐而言不如起而行.",
-  },
-  {
-    name: "wutong-yu-blog",
-    href: "https://wutongyu.site",
-    avatar: "https://wutongyu.site/cat-icon.svg",
-    description: "全栈&Agent 开发和我的随想",
-  },
-  {
-    name: "灵的梦境",
-    href: "https://lemonadorable.github.io/",
-    avatar: "https://lemonadorable.github.io/favicon/favicon.gif",
-    description: "愿美梦成真",
-  },
-  {
-    name: "Seeridia's Home",
-    href: "https://blog.seeridia.top",
-    avatar: "https://www.github.com/Seeridia.png",
-    description: "Seeridia 的小小小的大窝！",
-  },
-  {
-    name: "夜轻Blog",
-    href: "https://blog.yeqing.net/",
-    avatar: "https://list.yppp.net/d/cos/yeqing.webp",
-    description: "一个人",
-  },
-  {
-    name: "顾拾柒",
-    blog: "Olinl Blog",
-    href: "https://blog.olinl.com/",
-    avatar: "https://q2.qlogo.cn/headimg_dl?dst_uin=9892214&spec=0",
-    description: "分享、实践、学习",
-  },
-  {
-    name: "胡杨怕火",
-    href: "https://funingna-wakawaka.github.io/",
-    avatar: "https://funingna-wakawaka.github.io/images/0.png",
-    description: "传递笑容魔法的Ciallo～(∠・ω< )⌒☆",
-  },
-  {
-    name: "Eric's blog",
-    href: "https://153030.xyz",
-    avatar: "https://153030.xyz/Avatar.jpg",
-    description: "一个记录日常所遇问题的博客",
-  },
-  {
-    name: "Zorro's blog",
-    href: "https://blog.zuodev.top",
-    avatar: "https://blog.zuodev.top/file/picture/User.jpg",
-    description: "记录生活、分享技术。",
-  },
-  {
-    name: "E猫的猫窝",
-    href: "https://emaostudio.online",
-    avatar: "https://emaostudio.online/avatar.jpg",
-    description: "vibe coding、AIGC、游戏和世界观脑洞记录处",
-  },
-  {
-    name: "爱吃可比克的鲸鱼",
-    href: "https://zxs24719.codeberg.page/",
-    avatar: "https://zxs24719.codeberg.page/avatar.jpg",
-    description: "爱吃可比克的鲸鱼",
-  },
-  {
-    name: "Viki 写东西的地方",
-    href: "https://blog.viki.moe",
-    avatar: "https://blog.viki.moe/avatar.png",
-    description: "生活需要记录。",
-  },
-  {
-    name: "Detached",
-    href: "https://detached.online/",
-    avatar: "https://detached.online/icon-512.png",
-    description: "独立开发者的技术、工具与生活博客",
-  },
-];
+export async function getFriendLinks(): Promise<FriendLink[]> {
+  const reader = createReader(process.cwd(), keystaticConfig);
+  const data = await reader.singletons.friends.read();
+
+  return (data?.items ?? [])
+    .map(item => ({
+      name: item.name,
+      blog: item.blog ?? undefined,
+      href: item.href,
+      avatar: item.avatar ?? undefined,
+      description: item.description,
+      color: item.color ?? undefined,
+      email: item.email ?? undefined,
+    }))
+    .filter(item => item.name && item.href);
+}

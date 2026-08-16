@@ -4,12 +4,13 @@ import ArtalkComments from "@/components/ArtalkComments.astro";
 import PageHeader from "@/components/PageHeader.astro";
 import Layout from "@/layouts/Layout.astro";
 import { Code } from "astro-expressive-code/components";
-import { defaultFriendAvatar, friendLinks, siteProfile } from "@/data/friends";
+import { defaultFriendAvatar, getFriendLinks, siteProfile } from "@/data/friends";
 import { SITE } from "@/config";
 import { ui } from "@/i18n";
 
 const locale = "zh";
 const copy = ui[locale];
+const friendLinks = await getFriendLinks();
 const applicationFields = [
   { label: "name", value: "miuarc's blog" },
   { label: "url", value: siteProfile.href },
