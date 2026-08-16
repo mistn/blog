@@ -1,5 +1,7 @@
 export const prerender = false;
 
+import { serverEnv } from "@/utils/serverEnv";
+
 const API_BASE = "https://api.uptimerobot.com/v2/getMonitors";
 const CACHE_TTL = 6 * 60 * 60 * 1000; // 6 hours
 const STATUS_DAYS = 30;
@@ -80,7 +82,7 @@ async function refreshCache(apiKey: string) {
 }
 
 export async function GET() {
-  const apiKey = import.meta.env.UPROBOT_API_KEY || import.meta.env.PUBLIC_UPROBOT_API_KEY;
+  const apiKey = serverEnv("UPROBOT_API_KEY") || serverEnv("PUBLIC_UPROBOT_API_KEY");
 
   if (!apiKey) {
     return new Response(JSON.stringify({ error: "API key not configured" }), {

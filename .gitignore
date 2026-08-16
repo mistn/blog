@@ -31,3 +31,6 @@ public/pagefind
 
 # keystatic 本地开发数据
 keystatic-local/
+
+# wrangler dev 本地状态
+.wrangler/

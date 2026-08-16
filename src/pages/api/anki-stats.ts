@@ -1,5 +1,7 @@
 export const prerender = false;
 
+import { serverEnv } from "@/utils/serverEnv";
+
 const GIST_ID = "422fab6e44d55af1173d19f27ddb5664";
 const GIST_FILENAME = "anki_stats.json";
 const CACHE_TTL = 10 * 60 * 1000;
@@ -12,7 +14,7 @@ interface CacheEntry {
 let cache: CacheEntry | null = null;
 
 async function fetchAnkiStats() {
-  const token = import.meta.env.GITHUB_TOKEN;
+  const token = serverEnv("GITHUB_TOKEN");
   const headers: Record<string, string> = {
     Accept: "application/vnd.github.v3+json",
     "User-Agent": "miuarc-blog",

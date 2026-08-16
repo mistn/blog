@@ -1,0 +1,6 @@
+# 仅对备用/预览域名禁用索引，主域名 failover 时保持可被收录
+https://backup.2731515.xyz/*
+  X-Robots-Tag: noindex, nofollow
+
+https://:subdomain.workers.dev/*
+  X-Robots-Tag: noindex, nofollow

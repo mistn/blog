@@ -3,9 +3,10 @@ export const prerender = false;
 
 import IconMoon from "@/assets/icons/IconMoon.svg";
 import IconSunHigh from "@/assets/icons/IconSunHigh.svg";
+import { serverEnv } from "@/utils/serverEnv";
 
-const adminUser = process.env.ADMIN_USER || "admin";
-const adminPass = process.env.ADMIN_PASS;
+const adminUser = serverEnv("ADMIN_USER") || "admin";
+const adminPass = serverEnv("ADMIN_PASS");
 
 let error = "";
 
