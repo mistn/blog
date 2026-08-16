@@ -6,30 +6,30 @@
 <script>
 // @ts-nocheck
 (function () {
-  var wrap = document.getElementById("game-wrap");
-  var canvas = document.getElementById("dino-canvas");
-  var charEl = document.getElementById("game-char");
+  const wrap = document.getElementById("game-wrap");
+  const canvas = document.getElementById("dino-canvas");
+  const charEl = document.getElementById("game-char");
   if (!canvas || !charEl) return;
-  var ctx = canvas.getContext("2d");
-  var W = 600, H = 200, GY = 165;
+  const ctx = canvas.getContext("2d");
+  const W = 600, H = 200, GY = 165;
 
   // Character sizing
-  var CHAR = 28;
-  var PW = 28, PH = 28;
-  var PX = 60;
+  const CHAR = 28;
+  const PW = 28, PH = 28;
+  const PX = 60;
   charEl.style.borderRadius = "50%";
 
-  var g, anim, scale = 1;
-  var colors = { fg: "#535353", ac: "#2f628f" };
+  let g, anim, scale = 1;
+  const colors = { fg: "#535353", ac: "#2f628f" };
 
   function calcScale() {
     scale = canvas.offsetWidth / W;
   }
 
   function updateColors() {
-    var root = document.documentElement;
-    var f = getComputedStyle(root).getPropertyValue("--foreground").trim();
-    var a = getComputedStyle(root).getPropertyValue("--accent").trim();
+    const root = document.documentElement;
+    const f = getComputedStyle(root).getPropertyValue("--foreground").trim();
+    const a = getComputedStyle(root).getPropertyValue("--accent").trim();
     if (f) colors.fg = f;
     if (a) colors.ac = a;
   }
@@ -60,8 +60,8 @@
   }
 
   function drawHeart(o) {
-    var pulse = Math.sin(g.tick * 0.08 + o.x * 0.1) * 0.15 + 1;
-    var cx = o.x + 8, cy = o.y + 8, s = 8 * pulse;
+    const pulse = Math.sin(g.tick * 0.08 + o.x * 0.1) * 0.15 + 1;
+    const cx = o.x + 8, cy = o.y + 8, s = 8 * pulse;
     ctx.fillStyle = "#e74c3c";
     ctx.beginPath();
     ctx.moveTo(cx, cy + s * 0.3);
@@ -76,7 +76,7 @@
 
   function drawBird(o) {
     ctx.fillStyle = colors.fg;
-    var wu = Math.sin(g.tick * 0.15 + o.x) * 0.4 + 0.6;
+    const wu = Math.sin(g.tick * 0.15 + o.x) * 0.4 + 0.6;
     ctx.beginPath();
     ctx.moveTo(o.x, o.y + 4);
     ctx.lineTo(o.x - 6, o.y - 2 - wu * 3);
@@ -105,20 +105,20 @@
   function drawGround() {
     ctx.fillStyle = colors.fg;
     ctx.fillRect(0, GY, W, 2);
-    for (var i = 0; i < 18; i++) {
-      var dx = ((i * 32 - g.go) % 640 + 640) % 640;
+    for (let i = 0; i < 18; i++) {
+      const dx = ((i * 32 - g.go) % 640 + 640) % 640;
       if (dx < W) ctx.fillRect(dx, GY + 6, 3, 3);
     }
   }
 
   function spawn() {
-    var r = Math.random();
+    const r = Math.random();
     if (r < 0.07 && g.shield === 0) {
       g.items.push({ x: W, y: GY - 30, w: 16, h: 16, type: "shield" });
     } else if (r < 0.45 && g.tick > 60) {
       g.obs.push({ x: W, y: GY - 22 - Math.random() * 18, w: 16, h: 10, type: "bird" });
     } else {
-      var ch = 18 + Math.random() * 14 | 0;
+      const ch = 18 + Math.random() * 14 | 0;
       g.obs.push({ x: W, y: GY - ch, w: 9, h: ch, arm: Math.random() > 0.5, type: "cactus" });
     }
   }
@@ -131,11 +131,11 @@
     if (g.over) return;
     g.tick++;
 
-    var p = g.p;
-    var s = p.duck ? 0.6 : 1;
-    var cw = PW * s, ch = PH * s;
-    var cx = PX + (PW - cw) / 2;
-    var cy = p.y + PH - ch;
+    const p = g.p;
+    const s = p.duck ? 0.6 : 1;
+    const cw = PW * s, ch = PH * s;
+    const cx = PX + (PW - cw) / 2;
+    const cy = p.y + PH - ch;
 
     if (g.jump) {
       if (g.p.duck) p.vy = Math.max(p.vy + 1, 12);
@@ -148,7 +148,7 @@
 
     if (g.obs.length === 0 && g.tick > 40) spawn();
     else if (g.obs.length > 0) {
-      var last = g.obs[g.obs.length - 1];
+      const last = g.obs[g.obs.length - 1];
       if (last.x < W - 260 - Math.random() * 220) spawn();
     }
 
@@ -156,30 +156,30 @@
       g.items.push({ x: W, y: GY - 32, w: 16, h: 16, type: "shield" });
     }
 
-    for (var i1 = g.items.length - 1; i1 >= 0; i1--) {
+    for (let i1 = g.items.length - 1; i1 >= 0; i1--) {
       g.items[i1].x -= g.speed;
       if (g.items[i1].x + g.items[i1].w < 0) g.items.splice(i1, 1);
     }
 
-    for (var i2 = g.items.length - 1; i2 >= 0; i2--) {
-      var it = g.items[i2];
+    for (let i2 = g.items.length - 1; i2 >= 0; i2--) {
+      const it = g.items[i2];
       if (check({ x: cx + 2, y: cy + 2, w: cw - 4, h: ch - 4 }, { x: it.x, y: it.y, w: it.w, h: it.h })) {
         if (it.type === "shield") g.shield = 1;
         g.items.splice(i2, 1);
       }
     }
 
-    for (var i3 = g.obs.length - 1; i3 >= 0; i3--) {
+    for (let i3 = g.obs.length - 1; i3 >= 0; i3--) {
       g.obs[i3].x -= g.speed;
       if (g.obs[i3].x + g.obs[i3].w < 0) { g.obs.splice(i3, 1); g.score++; }
     }
 
     g.speed = 6 + Math.floor(g.score / 8) * 0.5;
 
-    var phx = { x: cx + 2, y: cy + 2, w: cw - 4, h: ch - 4 };
-    for (var j = 0; j < g.obs.length; j++) {
-      var o = g.obs[j];
-      var ohx = { x: o.x + 2, y: o.y + 2, w: o.w - 4, h: o.h - 4 };
+    const phx = { x: cx + 2, y: cy + 2, w: cw - 4, h: ch - 4 };
+    for (let j = 0; j < g.obs.length; j++) {
+      const o = g.obs[j];
+      const ohx = { x: o.x + 2, y: o.y + 2, w: o.w - 4, h: o.h - 4 };
       if (check(phx, ohx)) {
         if (g.shield > 0) {
           g.shield = 0;
@@ -197,11 +197,11 @@
   }
 
   function updateChar(p) {
-    var s = p.duck ? 0.6 : 1;
-    var rot = p.duck ? 0 : Math.sin(g.tick * 0.1) * 3;
-    var bounce = p.jump ? 0 : Math.abs(Math.sin(g.tick * 0.12)) * 2;
-    var ch = CHAR * s;
-    var y = p.y + PH - ch;
+    const s = p.duck ? 0.6 : 1;
+    const rot = p.duck ? 0 : Math.sin(g.tick * 0.1) * 3;
+    const bounce = p.jump ? 0 : Math.abs(Math.sin(g.tick * 0.12)) * 2;
+    const ch = CHAR * s;
+    const y = p.y + PH - ch;
     charEl.style.left = (PX + (PW - PW * s) / 2) * scale + "px";
     charEl.style.top = (y + bounce) * scale + "px";
     charEl.style.width = ch * scale + "px";
@@ -210,7 +210,7 @@
     charEl.style.transformOrigin = "";
 
     if (g.shield > 0) {
-      var sh = Math.sin(g.tick * 0.08) * 0.4 + 1;
+      const sh = Math.sin(g.tick * 0.08) * 0.4 + 1;
       charEl.style.filter = "drop-shadow(0 0 " + (4 * sh) + "px " + colors.ac + ")";
     } else {
       charEl.style.filter = "none";
@@ -225,13 +225,13 @@
     drawGround();
 
     // Obstacles
-    for (var i = 0; i < g.obs.length; i++) {
+    for (let i = 0; i < g.obs.length; i++) {
       if (g.obs[i].type === "bird") drawBird(g.obs[i]);
       else drawCactus(g.obs[i]);
     }
 
     // Items
-    for (var i2 = 0; i2 < g.items.length; i2++) {
+    for (let i2 = 0; i2 < g.items.length; i2++) {
       if (g.items[i2].type === "shield") drawHeart(g.items[i2]);
     }
 
@@ -269,7 +269,7 @@
     if (e.code === "ArrowDown") duck(false);
   });
 
-  var obs = new MutationObserver(updateColors);
+  const obs = new MutationObserver(updateColors);
   obs.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
 
   reset();

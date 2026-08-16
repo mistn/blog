@@ -230,7 +230,7 @@ if (Astro.request.method === "POST") {
   <body>
     <script is:inline>
       (function(){
-        var t=localStorage.getItem("theme");
+        const t=localStorage.getItem("theme");
         if(t) document.firstElementChild.setAttribute("data-theme",t);
         else if(window.matchMedia("(prefers-color-scheme:dark)").matches) document.firstElementChild.setAttribute("data-theme","dark");
       })();
@@ -267,8 +267,8 @@ if (Astro.request.method === "POST") {
 
     <script is:inline>
       document.getElementById("toggle").onclick = function(){
-        var el = document.firstElementChild;
-        var next = el.getAttribute("data-theme") === "dark" ? "light" : "dark";
+        const el = document.firstElementChild;
+        const next = el.getAttribute("data-theme") === "dark" ? "light" : "dark";
         el.setAttribute("data-theme", next);
         localStorage.setItem("theme", next);
       };

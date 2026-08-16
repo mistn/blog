@@ -290,16 +290,16 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
   function getToggle() { return document.getElementById("menu-toggle"); }
 
   function isMenuOpen() {
-    var toggle = getToggle();
+    const toggle = getToggle();
     return toggle && toggle.getAttribute("aria-expanded") === "true";
   }
 
   function preventScroll(e) { e.preventDefault(); }
 
   function openMenu() {
-    var sb = getSidebar();
-    var overlay = getOverlay();
-    var toggle = getToggle();
+    const sb = getSidebar();
+    const overlay = getOverlay();
+    const toggle = getToggle();
     if (!sb || !overlay || !toggle) return;
     document.body.style.overflow = "hidden";
     document.body.style.position = "fixed";
@@ -321,8 +321,8 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
   }
 
   function closeMenu() {
-    var sb = getSidebar();
-    var overlay = getOverlay();
+    const sb = getSidebar();
+    const overlay = getOverlay();
     if (!sb || !overlay) return;
     document.body.style.overflow = "";
     document.body.style.position = "";
@@ -341,13 +341,13 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
     sb.setAttribute("inert", "");
     overlay.setAttribute("aria-hidden", "true");
     overlay.setAttribute("inert", "");
-    var toggle = getToggle();
+    const toggle = getToggle();
     if (toggle) toggle.setAttribute("aria-expanded", "false");
   }
 
   function closeMenuSilent() {
-    var sb = getSidebar();
-    var overlay = getOverlay();
+    const sb = getSidebar();
+    const overlay = getOverlay();
     if (!sb || !overlay) return;
     document.body.style.overflow = "";
     document.body.style.position = "";
@@ -362,12 +362,12 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
     overlay.classList.add("hidden", "opacity-0");
     overlay.setAttribute("aria-hidden", "true");
     overlay.setAttribute("inert", "");
-    var toggle = getToggle();
+    const toggle = getToggle();
     if (toggle) toggle.setAttribute("aria-expanded", "false");
   }
 
   document.addEventListener("click", function (e) {
-    var target = /** @type {HTMLElement} */ (e.target);
+    const target = /** @type {HTMLElement} */ (e.target);
 
     if (target.closest("#menu-toggle") || target.closest("#sidebar-close")) {
       if (isMenuOpen()) {
@@ -391,7 +391,7 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
 
   document.addEventListener("keydown", function (e) {
     if (e.key === "Escape") {
-      var sb = getSidebar();
+      const sb = getSidebar();
       if (sb && !sb.classList.contains("translate-x-full")) {
         closeMenu();
       }
@@ -404,8 +404,8 @@ const isActive = (path: string) => currentPath === normalizePath(getHref(path));
 
   // Initialize hidden state — avoid static aria-hidden on elements with focusable children
   (function initHidden() {
-    var sb = getSidebar();
-    var overlay = getOverlay();
+    const sb = getSidebar();
+    const overlay = getOverlay();
     if (sb) { sb.setAttribute("aria-hidden", "true"); sb.setAttribute("inert", ""); }
     if (overlay) { overlay.setAttribute("aria-hidden", "true"); overlay.setAttribute("inert", ""); }
   })();
