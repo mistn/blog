@@ -2,6 +2,18 @@
 
 Astro v5 个人博客。Keystatic 在线管理后台。
 
+## 站点预览
+
+| 桌面端 | 移动端 |
+| --- | --- |
+| ![desktop](/docs/screenshots/site-home-desktop.png) | ![mobile](/docs/screenshots/site-home-mobile.png) |
+
+## 后台预览
+
+| 首页 | 写文章 | 编辑友链 |
+| --- | --- | --- |
+| ![home](/docs/screenshots/keystatic-home.png) | ![editor](/docs/screenshots/keystatic-editor.png) | ![friends](/docs/screenshots/keystatic-friends.png) |
+
 ## 运行
 
 ```bash
@@ -34,7 +46,6 @@ pnpm anime:sync
 | 变量 | 说明 |
 |------|------|
 | `GITHUB_TOKEN` | Anki Stats 接口用 |
-| `PUBLIC_GOOGLE_SITE_VERIFICATION` | Google Search Console 验证码 |
 
 ### GitHub Actions（定时追番同步）
 
