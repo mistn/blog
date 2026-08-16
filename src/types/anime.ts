@@ -6,7 +6,7 @@ export interface AnimeItem {
 }
 
 export interface AnimeDataPayload {
-  username: string;
+  username: string | null;
   updatedAt: string | null;
   items: AnimeItem[];
 }

@@ -4,15 +4,13 @@ import { dirname, resolve } from "node:path";
 
 const ANILIST_API_URL = "https://graphql.anilist.co";
 const OUTPUT_PATH = resolve("src/data/anime.generated.json");
-const DEFAULT_ANILIST_USER_NAME = "miuchanya";
 const COMPLETED_STATUS = "COMPLETED";
 const REQUIRED_CUSTOM_LIST = "normal";
 
 const query = `
-  query AnimeCollection($userName: String, $userId: Int) {
+  query AnimeCollection($userName: String) {
     MediaListCollection(
       userName: $userName
-      userId: $userId
       type: ANIME
       status: COMPLETED
       sort: UPDATED_TIME_DESC
@@ -116,13 +114,10 @@ function getEntryKey(item) {
 }
 
 async function fetchAnimeCollection() {
-  const userName =
-    process.env.ANILIST_USER_NAME?.trim() || DEFAULT_ANILIST_USER_NAME;
-  const rawUserId = process.env.ANILIST_USER_ID?.trim() || null;
-  const userId = rawUserId ? Number(rawUserId) : null;
+  const userName = process.env.ANILIST_USER_NAME?.trim();
 
-  if (userId !== null && Number.isNaN(userId)) {
-    throw new Error("ANILIST_USER_ID must be a valid integer.");
+  if (!userName) {
+    throw new Error("ANILIST_USER_NAME must be set in environment variables.");
   }
 
   const controller = new AbortController();
@@ -140,7 +135,6 @@ async function fetchAnimeCollection() {
         query,
         variables: {
           userName,
-          userId,
         },
       }),
       signal: controller.signal,
@@ -211,7 +205,7 @@ async function main() {
     cached.items.every((item, i) => getEntryKey(item) === getEntryKey(dedupedItems[i]));
 
   const output = {
-    username: collection?.user?.name ?? DEFAULT_ANILIST_USER_NAME,
+    username: collection?.user?.name ?? null,
     updatedAt: isSame ? cached.updatedAt : new Date().toISOString(),
     items: dedupedItems,
   };

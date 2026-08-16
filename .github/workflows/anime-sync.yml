@@ -39,6 +39,8 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Sync AniList data
+        env:
+          ANILIST_USER_NAME: ${{ secrets.ANILIST_USER_NAME }}
         run: pnpm run anime:sync
 
       - name: Detect changes
