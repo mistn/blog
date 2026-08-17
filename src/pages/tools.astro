@@ -10,59 +10,148 @@ const copy = ui[locale];
 const pageTitle = copy.pages.toolsFullTitle;
 const pageDescription = copy.pages.toolsDesc;
 
-// 静态部署下监控数据为构建期快照，用构建时刻作为"更新时间"
-const buildTimestamp = new Date().toISOString();
+// UptimeRobot 只读 key，浏览器端直连获取实时监控数据
 ---
 
 <Layout title={pageTitle} description={pageDescription}>
   <SiteTopbar />
 
-  <main class="mx-auto w-full max-w-4xl px-4 sm:px-6 pt-8 pb-10 md:pt-12 md:pb-14">
+  <main
+    class="mx-auto w-full max-w-4xl px-4 pt-8 pb-10 sm:px-6 md:pt-12 md:pb-14"
+  >
     <PageHeader title={copy.pages.toolsTitle} />
 
     <div class="pt-8">
       <AnkiPanel locale="zh" />
 
       <section id="uptime-monitors" class="mt-12">
-        <div class="flex items-center justify-between mb-6">
-          <h2 class="text-lg font-semibold text-foreground">UptimeRobot 监控</h2>
-          <div id="monitor-status-bar" class="flex items-center gap-3 text-xs text-foreground/50">
-            <span class="flex items-center gap-1.5"><span class="inline-block size-2 rounded-full bg-green-500"></span> UP</span>
-            <span class="flex items-center gap-1.5"><span class="inline-block size-2 rounded-full bg-red-500"></span> DOWN</span>
-            <span class="flex items-center gap-1.5"><span class="inline-block size-2 rounded-full bg-yellow-500"></span> ISSUES</span>
+        <div class="mb-6 flex items-center justify-between">
+          <h2 class="text-lg font-semibold text-foreground">
+            UptimeRobot 监控
+          </h2>
+          <div
+            id="monitor-status-bar"
+            class="flex items-center gap-3 text-xs text-foreground/50"
+          >
+            <span class="flex items-center gap-1.5"
+              ><span class="inline-block size-2 rounded-full bg-green-500"
+              ></span> UP</span
+            >
+            <span class="flex items-center gap-1.5"
+              ><span class="inline-block size-2 rounded-full bg-red-500"></span> DOWN</span
+            >
+            <span class="flex items-center gap-1.5"
+              ><span class="inline-block size-2 rounded-full bg-yellow-500"
+              ></span> ISSUES</span
+            >
           </div>
         </div>
         <div id="monitor-grid" class="grid gap-3 sm:grid-cols-2">
-          <div class="col-span-full flex items-center justify-center py-12 text-sm text-foreground/40">
-            <svg class="size-5 mr-2 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+          <div
+            class="col-span-full flex items-center justify-center py-12 text-sm text-foreground/40"
+          >
+            <svg
+              class="mr-2 size-5 animate-spin"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              ><circle
+                class="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-width="4"></circle><path
+                class="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg
+            >
             加载中...
           </div>
         </div>
-        <p id="monitor-updated" class="mt-4 text-xs text-foreground/35 text-right" data-build-time={buildTimestamp}></p>
+        <p
+          id="monitor-updated"
+          class="mt-4 text-right text-xs text-foreground/35"
+        >
+        </p>
       </section>
 
       <section class="mt-12">
-        <h2 class="text-lg font-semibold text-foreground mb-6">更多工具</h2>
+        <h2 class="mb-6 text-lg font-semibold text-foreground">更多工具</h2>
         <div class="grid gap-3 sm:grid-cols-2">
-          <a href="https://ss.miuarc.com" target="_blank" rel="noopener" class="group flex items-center gap-3 rounded-xl border border-dashed border-gray-300 dark:border-gray-600 p-3.5 text-left transition-all duration-200 ease-out active:scale-[0.98] active:bg-gray-50 dark:active:bg-gray-800/50 md:hover:-translate-y-1 md:hover:bg-gray-50/60 dark:md:hover:bg-gray-800/30 md:hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] dark:md:hover:shadow-[0_8px_30px_rgba(0,0,0,0.2)]">
-            <img src="https://ss.miuarc.com/favicon.ico" alt="Server Probe icon" class="h-10 w-10 shrink-0 rounded-lg object-cover ring-1 ring-border/30 transition-transform duration-500 ease-out group-hover:scale-105" loading="lazy" />
-            <div class="min-w-0 flex flex-col justify-center">
-              <h3 class="line-clamp-1 text-sm font-semibold leading-snug text-foreground transition-colors duration-300 group-hover:text-accent">服务器探针</h3>
-              <p class="mt-1 line-clamp-1 text-xs leading-snug text-foreground/40">CPU / 内存 / 流量</p>
+          <a
+            href="https://ss.miuarc.com"
+            target="_blank"
+            rel="noopener"
+            class="group flex items-center gap-3 rounded-xl border border-dashed border-gray-300 p-3.5 text-left transition-all duration-200 ease-out active:scale-[0.98] active:bg-gray-50 md:hover:-translate-y-1 md:hover:bg-gray-50/60 md:hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] dark:border-gray-600 dark:active:bg-gray-800/50 dark:md:hover:bg-gray-800/30 dark:md:hover:shadow-[0_8px_30px_rgba(0,0,0,0.2)]"
+          >
+            <img
+              src="https://ss.miuarc.com/favicon.ico"
+              alt="Server Probe icon"
+              class="h-10 w-10 shrink-0 rounded-lg object-cover ring-1 ring-border/30 transition-transform duration-500 ease-out group-hover:scale-105"
+              loading="lazy"
+            />
+            <div class="flex min-w-0 flex-col justify-center">
+              <h3
+                class="line-clamp-1 text-sm leading-snug font-semibold text-foreground transition-colors duration-300 group-hover:text-accent"
+              >
+                服务器探针
+              </h3>
+              <p
+                class="mt-1 line-clamp-1 text-xs leading-snug text-foreground/40"
+              >
+                CPU / 内存 / 流量
+              </p>
             </div>
           </a>
-          <a href="https://acg.2731515.xyz" target="_blank" rel="noopener" class="group flex items-center gap-3 rounded-xl border border-dashed border-gray-300 dark:border-gray-600 p-3.5 text-left transition-all duration-200 ease-out active:scale-[0.98] active:bg-gray-50 dark:active:bg-gray-800/50 md:hover:-translate-y-1 md:hover:bg-gray-50/60 dark:md:hover:bg-gray-800/30 md:hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] dark:md:hover:shadow-[0_8px_30px_rgba(0,0,0,0.2)]">
-            <img src="https://acg.2731515.xyz/favicon.ico" alt="Wallpaper icon" class="h-10 w-10 shrink-0 rounded-lg object-cover ring-1 ring-border/30 transition-transform duration-500 ease-out group-hover:scale-105" loading="lazy" />
-            <div class="min-w-0 flex flex-col justify-center">
-              <h3 class="line-clamp-1 text-sm font-semibold leading-snug text-foreground transition-colors duration-300 group-hover:text-accent">壁纸站</h3>
-              <p class="mt-1 line-clamp-1 text-xs leading-snug text-foreground/40">高质量动漫壁纸</p>
+          <a
+            href="https://acg.2731515.xyz"
+            target="_blank"
+            rel="noopener"
+            class="group flex items-center gap-3 rounded-xl border border-dashed border-gray-300 p-3.5 text-left transition-all duration-200 ease-out active:scale-[0.98] active:bg-gray-50 md:hover:-translate-y-1 md:hover:bg-gray-50/60 md:hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] dark:border-gray-600 dark:active:bg-gray-800/50 dark:md:hover:bg-gray-800/30 dark:md:hover:shadow-[0_8px_30px_rgba(0,0,0,0.2)]"
+          >
+            <img
+              src="https://acg.2731515.xyz/favicon.ico"
+              alt="Wallpaper icon"
+              class="h-10 w-10 shrink-0 rounded-lg object-cover ring-1 ring-border/30 transition-transform duration-500 ease-out group-hover:scale-105"
+              loading="lazy"
+            />
+            <div class="flex min-w-0 flex-col justify-center">
+              <h3
+                class="line-clamp-1 text-sm leading-snug font-semibold text-foreground transition-colors duration-300 group-hover:text-accent"
+              >
+                壁纸站
+              </h3>
+              <p
+                class="mt-1 line-clamp-1 text-xs leading-snug text-foreground/40"
+              >
+                高质量动漫壁纸
+              </p>
             </div>
           </a>
-          <a href="https://mail.2731515.xyz" target="_blank" rel="noopener" class="group flex items-center gap-3 rounded-xl border border-dashed border-gray-300 dark:border-gray-600 p-3.5 text-left transition-all duration-200 ease-out active:scale-[0.98] active:bg-gray-50 dark:active:bg-gray-800/50 md:hover:-translate-y-1 md:hover:bg-gray-50/60 dark:md:hover:bg-gray-800/30 md:hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] dark:md:hover:shadow-[0_8px_30px_rgba(0,0,0,0.2)]">
-            <img src="/mail-favicon.svg" alt="Temp Mail icon" class="h-10 w-10 shrink-0 rounded-lg object-cover ring-1 ring-border/30 transition-transform duration-500 ease-out group-hover:scale-105" loading="lazy" />
-            <div class="min-w-0 flex flex-col justify-center">
-              <h3 class="line-clamp-1 text-sm font-semibold leading-snug text-foreground transition-colors duration-300 group-hover:text-accent">临时邮箱</h3>
-              <p class="mt-1 line-clamp-1 text-xs leading-snug text-foreground/40">一次性收件箱</p>
+          <a
+            href="https://mail.2731515.xyz"
+            target="_blank"
+            rel="noopener"
+            class="group flex items-center gap-3 rounded-xl border border-dashed border-gray-300 p-3.5 text-left transition-all duration-200 ease-out active:scale-[0.98] active:bg-gray-50 md:hover:-translate-y-1 md:hover:bg-gray-50/60 md:hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] dark:border-gray-600 dark:active:bg-gray-800/50 dark:md:hover:bg-gray-800/30 dark:md:hover:shadow-[0_8px_30px_rgba(0,0,0,0.2)]"
+          >
+            <img
+              src="/mail-favicon.svg"
+              alt="Temp Mail icon"
+              class="h-10 w-10 shrink-0 rounded-lg object-cover ring-1 ring-border/30 transition-transform duration-500 ease-out group-hover:scale-105"
+              loading="lazy"
+            />
+            <div class="flex min-w-0 flex-col justify-center">
+              <h3
+                class="line-clamp-1 text-sm leading-snug font-semibold text-foreground transition-colors duration-300 group-hover:text-accent"
+              >
+                临时邮箱
+              </h3>
+              <p
+                class="mt-1 line-clamp-1 text-xs leading-snug text-foreground/40"
+              >
+                一次性收件箱
+              </p>
             </div>
           </a>
         </div>
@@ -73,8 +162,17 @@ const buildTimestamp = new Date().toISOString();
 
 <style is:global>
   @keyframes dot-breathe {
-    0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 0 currentColor; }
-    50% { opacity: 0.5; transform: scale(1.8); box-shadow: 0 0 8px 2px currentColor; }
+    0%,
+    100% {
+      opacity: 1;
+      transform: scale(1);
+      box-shadow: 0 0 0 0 currentColor;
+    }
+    50% {
+      opacity: 0.5;
+      transform: scale(1.8);
+      box-shadow: 0 0 8px 2px currentColor;
+    }
   }
   .status-dot {
     display: inline-block;
@@ -87,7 +185,9 @@ const buildTimestamp = new Date().toISOString();
     transition: box-shadow 0.2s ease;
   }
   .status-bar {
-    transition: transform 0.15s ease, opacity 0.15s ease;
+    transition:
+      transform 0.15s ease,
+      opacity 0.15s ease;
   }
   .status-bar:hover {
     transform: scaleY(1.25);
@@ -104,10 +204,12 @@ const buildTimestamp = new Date().toISOString();
     border-radius: 0.375rem;
     pointer-events: none;
     white-space: nowrap;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     opacity: 0;
     transform: translateY(4px);
-    transition: opacity 0.15s ease, transform 0.15s ease;
+    transition:
+      opacity 0.15s ease,
+      transform 0.15s ease;
   }
   .bar-tooltip.visible {
     opacity: 1;
@@ -116,7 +218,7 @@ const buildTimestamp = new Date().toISOString();
 </style>
 
 <script>
-// @ts-nocheck
+  // @ts-nocheck
   const STATUS_MAP = {
     0: { label: "Paused", color: "#9ca3af", bg: "rgba(156,163,175,0.1)" },
     1: { label: "Pending", color: "#eab308", bg: "rgba(234,179,8,0.1)" },
@@ -151,7 +253,10 @@ const buildTimestamp = new Date().toISOString();
   }
 
   function dayTitle(date, percent, currentStatus) {
-    const d = new Date(date * 1000).toLocaleDateString("zh-CN", { month: "short", day: "numeric" });
+    const d = new Date(date * 1000).toLocaleDateString("zh-CN", {
+      month: "short",
+      day: "numeric",
+    });
     if (percent == null || percent === undefined) {
       return `${d} ${STATUS_MAP[currentStatus]?.label || ""}`;
     }
@@ -160,9 +265,13 @@ const buildTimestamp = new Date().toISOString();
 
   function computeAvgResponseTime(responseTimes) {
     if (!responseTimes || responseTimes.length === 0) return null;
-    let sum = 0, count = 0;
+    let sum = 0,
+      count = 0;
     for (const rt of responseTimes) {
-      if (rt.value != null) { sum += rt.value; count++; }
+      if (rt.value != null) {
+        sum += rt.value;
+        count++;
+      }
     }
     return count > 0 ? Math.round(sum / count) : null;
   }
@@ -174,19 +283,63 @@ const buildTimestamp = new Date().toISOString();
     return parts;
   }
 
+  async function fetchPage(key, offset) {
+    const { ranges } = getDateRanges();
+    const res = await fetch("https://api.uptimerobot.com/v2/getMonitors", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        api_key: key,
+        format: "json",
+        all_time_uptime_ratio: "1",
+        custom_uptime_ranges: ranges,
+        response_times: "1",
+        response_times_limit: "24",
+        response_times_average: "30",
+        offset: String(offset),
+        limit: "50",
+      }).toString(),
+    });
+    if (!res.ok) {
+      if (res.status === 429) throw new Error("UptimeRobot rate limited");
+      throw new Error(`UptimeRobot HTTP ${res.status}`);
+    }
+    const data = await res.json();
+    if (data.stat !== "ok") throw new Error(data.error?.message || "API error");
+    return data;
+  }
+
   async function fetchMonitors() {
     const grid = document.getElementById("monitor-grid");
     if (!grid) return;
 
+    const apiKey = import.meta.env.PUBLIC_UPROBOT_API_KEY;
+    if (!apiKey) {
+      grid.innerHTML = `<div class="col-span-full text-center py-12 text-sm text-red-500">未配置 UptimeRobot API key</div>`;
+      return;
+    }
+
     try {
-      const res = await fetch("/api/monitors");
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const monitors = await res.json();
-      if (monitors.error) throw new Error(monitors.error);
-      renderMonitors(monitors);
+      const firstPage = await fetchPage(apiKey, 0);
+      let all = [...firstPage.monitors];
+      const { pagination } = firstPage;
+      if (all.length < pagination.total) {
+        const ranges = [];
+        for (
+          let offset = pagination.limit;
+          offset < pagination.total;
+          offset += pagination.limit
+        ) {
+          ranges.push(fetchPage(apiKey, offset));
+        }
+        const pages = await Promise.all(ranges);
+        for (const p of pages) all.push(...p.monitors);
+      }
+      renderMonitors(all);
     } catch (err) {
       const g = document.getElementById("monitor-grid");
-      if (g) g.innerHTML = `<div class="col-span-full text-center py-12 text-sm text-red-500">${escapeHtml(err.message || String(err))}</div>`;
+      if (g)
+        g.innerHTML = `<div class="col-span-full text-center py-12 text-sm text-red-500">${escapeHtml(err.message || String(err))}</div>`;
     }
   }
 
@@ -200,23 +353,24 @@ const buildTimestamp = new Date().toISOString();
       return;
     }
 
-    grid.innerHTML = monitors.map(m => {
-      const st = STATUS_MAP[m.status] || STATUS_MAP[0];
-      const ratio = parseFloat(m.all_time_uptime_ratio || "0").toFixed(2);
+    grid.innerHTML = monitors
+      .map(m => {
+        const st = STATUS_MAP[m.status] || STATUS_MAP[0];
+        const ratio = parseFloat(m.all_time_uptime_ratio || "0").toFixed(2);
 
-      let responseTime = "-";
-      if (m.average_response_time != null && m.average_response_time > 0) {
-        responseTime = m.average_response_time;
-      } else {
-        const avg = computeAvgResponseTime(m.response_times);
-        if (avg != null) responseTime = avg;
-      }
+        let responseTime = "-";
+        if (m.average_response_time != null && m.average_response_time > 0) {
+          responseTime = m.average_response_time;
+        } else {
+          const avg = computeAvgResponseTime(m.response_times);
+          if (avg != null) responseTime = avg;
+        }
 
-      const dailyRatios = parseDailyRatios(m.custom_uptime_ranges);
-      while (dailyRatios.length < STATUS_DAYS) dailyRatios.unshift(undefined);
-      const { dates } = getDateRanges();
+        const dailyRatios = parseDailyRatios(m.custom_uptime_ranges);
+        while (dailyRatios.length < STATUS_DAYS) dailyRatios.unshift(undefined);
+        const { dates } = getDateRanges();
 
-      return `
+        return `
         <div class="rounded-xl border border-dashed border-gray-300 dark:border-gray-600 p-4 transition hover:bg-gray-50/60 dark:hover:bg-gray-800/30 hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] dark:hover:shadow-[0_8px_30px_rgba(0,0,0,0.2)]">
           <div class="flex items-start justify-between gap-2">
             <div class="min-w-0">
@@ -233,16 +387,14 @@ const buildTimestamp = new Date().toISOString();
             <span>响应 <strong class="text-foreground/80">${responseTime} ms</strong></span>
           </div>
           <div class="flex gap-0.5 mt-4 w-full">
-            ${dailyRatios.map((pct, i) => `<span class="flex-1 h-5 rounded-sm status-bar cursor-pointer" style="background:${dayColor(pct)}" data-tip="${dayTitle(dates[i] || 0, pct, m.status).replace(/"/g, '&quot;')}"></span>`).join("")}
+            ${dailyRatios.map((pct, i) => `<span class="flex-1 h-5 rounded-sm status-bar cursor-pointer" style="background:${dayColor(pct)}" data-tip="${dayTitle(dates[i] || 0, pct, m.status).replace(/"/g, "&quot;")}"></span>`).join("")}
           </div>
         </div>`;
-    }).join("");
+      })
+      .join("");
 
     if (updated) {
-      const buildTime = updated.dataset.buildTime;
-      updated.textContent = `更新于 ${
-        buildTime ? new Date(buildTime).toLocaleString("zh-CN", { hour12: false }) : ""
-      }`;
+      updated.textContent = `更新于 ${new Date().toLocaleString("zh-CN", { hour12: false })}`;
     }
   }
 
@@ -305,7 +457,7 @@ const buildTimestamp = new Date().toISOString();
     }
   }
 
-  document.addEventListener("click", (e) => {
+  document.addEventListener("click", e => {
     const bar = e.target.closest(".status-bar");
     if (bar) {
       e.stopPropagation();
@@ -326,13 +478,13 @@ const buildTimestamp = new Date().toISOString();
     }
   });
 
-  document.addEventListener("mouseover", (e) => {
+  document.addEventListener("mouseover", e => {
     if (pinned) return;
     const bar = e.target.closest(".status-bar");
     if (bar) showTooltip(bar);
   });
 
-  document.addEventListener("mouseout", (e) => {
+  document.addEventListener("mouseout", e => {
     if (pinned) return;
     const bar = e.target.closest(".status-bar");
     if (bar) hideTooltip();
@@ -341,7 +493,6 @@ const buildTimestamp = new Date().toISOString();
   document.addEventListener("astro:page-load", () => {
     if (document.getElementById("uptime-monitors")) {
       fetchMonitors();
-      setInterval(fetchMonitors, 60000);
     }
   });
 </script>

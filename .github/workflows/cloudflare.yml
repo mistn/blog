@@ -37,10 +37,10 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       # 纯静态构建，产物在 dist/。
-      # UPROBOT_API_KEY 仅构建期读取（生成监控 JSON），运行时不需要任何 env。
+      # UptimeRobot 只读 key 通过 PUBLIC_ 前缀注入前端，浏览器端实时 fetch 监控数据。
       - name: Build
         env:
-          UPROBOT_API_KEY: ${{ secrets.UPROBOT_API_KEY }}
+          PUBLIC_UPROBOT_API_KEY: ${{ secrets.UPROBOT_API_KEY }}
         run: pnpm build
 
       - name: Deploy to Cloudflare Pages

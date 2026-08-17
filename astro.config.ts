@@ -46,7 +46,7 @@ export default defineConfig({
     react(),
   ],
   vite: {
-    envPrefix: ["PUBLIC_", "VITE_", "UPROBOT_"],
+    envPrefix: ["PUBLIC_", "VITE_"],
     resolve: {
       // 强制所有模块使用同一个 React 实例，解决 React 内部实例冲突
       dedupe: ["react", "react-dom"],
