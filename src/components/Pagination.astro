@@ -17,7 +17,8 @@ const {
 
 const copy = ui[locale];
 const prevUrl = currentPage > 1 ? buildPageUrl(currentPage - 1) : undefined;
-const nextUrl = currentPage < lastPage ? buildPageUrl(currentPage + 1) : undefined;
+const nextUrl =
+  currentPage < lastPage ? buildPageUrl(currentPage + 1) : undefined;
 
 function getPages(): (number | "...")[] {
   if (lastPage <= 4) {
@@ -47,18 +48,28 @@ function getPages(): (number | "...")[] {
 }
 
 const pages = getPages();
-const linkClass = "inline-flex items-center justify-center h-8 min-w-[2rem] px-2 text-sm text-foreground/60 transition hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black";
-const activeClass = "bg-black text-white dark:bg-white dark:text-black";
+const linkClass =
+  "page-num inline-flex items-center justify-center h-8 min-w-[2rem] px-1 text-sm text-foreground/55 no-underline transition-colors hover:text-foreground";
+const activeClass = "text-foreground";
 const disabledClass = "text-foreground/20 pointer-events-none";
-const navBtnClass = "inline-flex items-center justify-center h-8 w-8 text-lg text-foreground/45 transition hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black";
+const navBtnClass =
+  "page-num inline-flex items-center justify-center h-8 w-8 text-lg text-foreground/45 transition-colors hover:text-foreground";
 const navDisabledClass = "text-foreground/20";
 ---
 
 {
   lastPage > 1 && (
-    <nav class="mt-8 mb-4 flex items-center justify-center gap-1" role="navigation" aria-label="Pagination Navigation">
+    <nav
+      class="mt-8 mb-4 flex items-center justify-center gap-1"
+      role="navigation"
+      aria-label="Pagination Navigation"
+    >
       {prevUrl ? (
-        <a href={prevUrl} class={navBtnClass} aria-label={copy.actions.previousPageLabel}>
+        <a
+          href={prevUrl}
+          class={navBtnClass}
+          aria-label={copy.actions.previousPageLabel}
+        >
           ‹
         </a>
       ) : (
@@ -67,16 +78,24 @@ const navDisabledClass = "text-foreground/20";
 
       {pages.map(p =>
         p === "..." ? (
-          <span class="inline-flex items-center justify-center h-8 min-w-[2rem] text-sm text-foreground/30">⋯</span>
+          <span class="inline-flex h-8 min-w-[2rem] items-center justify-center text-sm text-foreground/30">
+            ⋯
+          </span>
         ) : p === currentPage ? (
           <span class={[linkClass, activeClass].join(" ")}>{p}</span>
         ) : (
-          <a href={buildPageUrl(p)} class={linkClass}>{p}</a>
+          <a href={buildPageUrl(p)} class={linkClass}>
+            {p}
+          </a>
         )
       )}
 
       {nextUrl ? (
-        <a href={nextUrl} class={navBtnClass} aria-label={copy.actions.nextPageLabel}>
+        <a
+          href={nextUrl}
+          class={navBtnClass}
+          aria-label={copy.actions.nextPageLabel}
+        >
           ›
         </a>
       ) : (
@@ -85,3 +104,25 @@ const navDisabledClass = "text-foreground/20";
     </nav>
   )
 }
+
+<style>
+  .page-num {
+    position: relative;
+  }
+  .page-num::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 0.25rem;
+    width: 1.1rem;
+    height: 2px;
+    background: currentColor;
+    transform: translateX(-50%) scaleX(0);
+    transform-origin: left center;
+    transition: transform 220ms ease;
+  }
+  .page-num:hover::after,
+  .page-num.text-foreground::after {
+    transform: translateX(-50%) scaleX(1);
+  }
+</style>
