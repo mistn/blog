@@ -1,19 +1,8 @@
-export const prerender = false;
-
 import { serverEnv } from "@/utils/serverEnv";
 
 const API_BASE = "https://api.uptimerobot.com/v2/getMonitors";
-const CACHE_TTL = 6 * 60 * 60 * 1000; // 6 hours
 const STATUS_DAYS = 30;
 const DAY = 86400;
-
-interface CacheEntry {
-  data: unknown;
-  ts: number;
-}
-
-let cache: CacheEntry | null = null;
-let refreshing: Promise<unknown> | null = null;
 
 function getDateRanges() {
   const now = Math.floor(Date.now() / 1000);
@@ -75,12 +64,6 @@ async function fetchAllMonitors(apiKey: string) {
   return all;
 }
 
-async function refreshCache(apiKey: string) {
-  const data = await fetchAllMonitors(apiKey);
-  cache = { data, ts: Date.now() };
-  return data;
-}
-
 export async function GET() {
   const apiKey = serverEnv("UPROBOT_API_KEY") || serverEnv("PUBLIC_UPROBOT_API_KEY");
 
@@ -91,36 +74,11 @@ export async function GET() {
     });
   }
 
-  const now = Date.now();
-  const isFresh = cache && (now - cache.ts < CACHE_TTL);
-
-  // stale-while-revalidate: return stale, refresh in background
-  if (cache && !isFresh && !refreshing) {
-    refreshing = refreshCache(apiKey).finally(() => { refreshing = null; });
-  }
-
-  // return cached data if available
-  if (cache) {
-    return new Response(JSON.stringify(cache.data), {
-      status: 200,
-      headers: {
-        "Content-Type": "application/json",
-        "Cache-Control": "public, s-maxage=43200, stale-while-revalidate=604800",
-        "X-Cache": isFresh ? "HIT" : "STALE",
-      },
-    });
-  }
-
-  // cache miss — must wait for fresh data
   try {
-    const data = await refreshCache(apiKey);
+    const data = await fetchAllMonitors(apiKey);
     return new Response(JSON.stringify(data), {
       status: 200,
-      headers: {
-        "Content-Type": "application/json",
-        "Cache-Control": "public, s-maxage=43200, stale-while-revalidate=604800",
-        "X-Cache": "MISS",
-      },
+      headers: { "Content-Type": "application/json" },
     });
   } catch (e) {
     return new Response(JSON.stringify({ error: (e as Error).message }), {

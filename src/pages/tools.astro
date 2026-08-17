@@ -9,6 +9,9 @@ const locale = getLocaleFromPath(Astro.url.pathname);
 const copy = ui[locale];
 const pageTitle = copy.pages.toolsFullTitle;
 const pageDescription = copy.pages.toolsDesc;
+
+// 静态部署下监控数据为构建期快照，用构建时刻作为"更新时间"
+const buildTimestamp = new Date().toISOString();
 ---
 
 <Layout title={pageTitle} description={pageDescription}>
@@ -35,7 +38,7 @@ const pageDescription = copy.pages.toolsDesc;
             加载中...
           </div>
         </div>
-        <p id="monitor-updated" class="mt-4 text-xs text-foreground/35 text-right"></p>
+        <p id="monitor-updated" class="mt-4 text-xs text-foreground/35 text-right" data-build-time={buildTimestamp}></p>
       </section>
 
       <section class="mt-12">
@@ -235,7 +238,12 @@ const pageDescription = copy.pages.toolsDesc;
         </div>`;
     }).join("");
 
-    if (updated) updated.textContent = `更新于 ${new Date().toLocaleTimeString("zh-CN", { hour12: false })}`;
+    if (updated) {
+      const buildTime = updated.dataset.buildTime;
+      updated.textContent = `更新于 ${
+        buildTime ? new Date(buildTime).toLocaleString("zh-CN", { hour12: false }) : ""
+      }`;
+    }
   }
 
   function escapeHtml(text) {
