@@ -2,8 +2,7 @@
 import { cpSync, existsSync, mkdirSync } from "node:fs";
 import { resolve } from "node:path";
 
-const isCloudflare = process.env.CF_PAGES === "1" || process.env.ADAPTER === "cloudflare";
-const sourceDir = resolve(isCloudflare ? "dist/pagefind" : ".vercel/output/static/pagefind");
+const sourceDir = resolve("dist/pagefind");
 const targetDir = resolve("public/pagefind");
 
 if (!existsSync(sourceDir)) {

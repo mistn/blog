@@ -1,4 +1,4 @@
-name: Deploy to Cloudflare Workers
+name: Deploy to Cloudflare Pages
 
 on:
   push:
@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: cloudflare-workers
+  group: cloudflare-pages
   cancel-in-progress: true
 
 jobs:
@@ -36,28 +36,16 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # Cloudflare Workers with Static Assets 构建期内联 env：
-      # 运行时没有 process.env，密钥必须在构建时经 import.meta.env 打进产物。
-      # 变量名与 Vercel 环境变量保持一致，值为同名 GitHub Secrets。
-      - name: Build for Cloudflare Workers
+      # 纯静态构建，产物在 dist/。
+      # UPROBOT_API_KEY 仅构建期读取（生成监控 JSON），运行时不需要任何 env。
+      - name: Build
         env:
-          ADMIN_USER: ${{ secrets.ADMIN_USER }}
-          ADMIN_PASS: ${{ secrets.ADMIN_PASS }}
           UPROBOT_API_KEY: ${{ secrets.UPROBOT_API_KEY }}
-          PUBLIC_UPROBOT_API_KEY: ${{ secrets.PUBLIC_UPROBOT_API_KEY }}
-          GITHUB_TOKEN: ${{ secrets.ANKI_GITHUB_TOKEN }}
-          KEYSTATIC_GITHUB_CLIENT_ID: ${{ secrets.KEYSTATIC_GITHUB_CLIENT_ID }}
-          KEYSTATIC_GITHUB_CLIENT_SECRET: ${{ secrets.KEYSTATIC_GITHUB_CLIENT_SECRET }}
-          KEYSTATIC_SECRET: ${{ secrets.KEYSTATIC_SECRET }}
-          PUBLIC_KEYSTATIC_GITHUB_APP_SLUG: ${{ secrets.PUBLIC_KEYSTATIC_GITHUB_APP_SLUG }}
-        run: pnpm run build:cloudflare
+        run: pnpm build
 
-      # @astrojs/cloudflare v14 产物为 Workers with Static Assets（dist/server + dist/client），
-      # 用 wrangler deploy（而非 pages deploy）部署，自定义域名在 CF 控制台挂到该 Worker 路由。
-      - name: Deploy to Cloudflare Workers
+      - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          workingDirectory: dist/server
-          command: deploy
+          command: pages deploy dist --project-name=miuarc-blog

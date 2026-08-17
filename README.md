@@ -1,18 +1,16 @@
 # miuarc's blog
 
-个人博客。Keystatic 在线管理后台。
+个人博客。纯静态 Astro 站点。
+
+> 本仓库 `main` 分支为纯静态版（无后台、无 SSR，任何静态托管均可部署）。
+> 需要 **Keystatic 在线后台 / 双平台部署（Vercel + Cloudflare Workers）** 的旧版，
+> 见 [`backup/with-keystatic`](https://github.com/mistn/blog/tree/backup/with-keystatic) 分支。
 
 ## 站点预览
 
-| 桌面端 | 移动端 |
-| --- | --- |
+| 桌面端                                              | 移动端                                            |
+| --------------------------------------------------- | ------------------------------------------------- |
 | ![desktop](/docs/screenshots/site-home-desktop.png) | ![mobile](/docs/screenshots/site-home-mobile.png) |
-
-## 后台预览
-
-| 首页 | 写文章 | 编辑友链 |
-| --- | --- | --- |
-| ![home](/docs/screenshots/keystatic-home.png) | ![editor](/docs/screenshots/keystatic-editor.png) | ![friends](/docs/screenshots/keystatic-friends.png) |
 
 ## 运行
 
@@ -25,74 +23,43 @@ pnpm anime:sync
 
 ## 环境变量
 
-复制 `.env.example` 为 `.env`，本地开发只需 `UPROBOT_API_KEY` 即可。
+复制 `.env.example` 为 `.env`。构建只需 `UPROBOT_API_KEY`。
 
-> 部署环境变量各平台独立配置，见下文对应部署章节。
+| 变量                | 必填   | 说明                                                                                                  |
+| ------------------- | ------ | ----------------------------------------------------------------------------------------------------- |
+| `UPROBOT_API_KEY`   | 构建时 | [这里获取](https://dashboard.uptimerobot.com/integrations)，用于生成监控数据 JSON；没有则监控面板报错 |
+| `ANILIST_USER_NAME` | 可选   | AniList 用户名，追番同步用（见下）                                                                    |
 
-`KEYSTATIC_GITHUB_CLIENT_ID` / `KEYSTATIC_GITHUB_CLIENT_SECRET` 来自你创建的 GitHub OAuth App，创建步骤见下节。
+> 数据为**构建期快照**：Anki 数据直接读取公开 gist，监控数据构建时抓取一次生成 JSON，部署后随下次构建刷新。
 
-## GitHub OAuth App
+## 构建与部署
 
-Keystatic 后台登录靠 GitHub OAuth 完成，需要创建一个 OAuth App 获取凭据：
-
-1. GitHub → `Settings` → `Developer settings` → `OAuth Apps` → **New OAuth App**
-2. 填写：
-   - Application name：任意，如 `my-blog`
-   - Homepage URL：`https://你的域名`
-   - Authorization callback URL：`https://你的域名/api/keystatic/github/oauth/callback`
-3. 点击 **Register application**。创建完成后页面显示 **Client ID**，即为 `KEYSTATIC_GITHUB_CLIENT_ID`
-4. 点击 **Generate a new client secret**，生成后**只显示一次**，即为 `KEYSTATIC_GITHUB_CLIENT_SECRET`（忘了只能重新生成）
-
-> 回调 URL 必须和实际部署域名一致；Vercel 和 CF 若用不同域名，需各创建一个 OAuth App。
-
-## 部署
-
-默认构建（不设置任何变量）即为 Vercel 产物；设 `ADAPTER=cloudflare`（或 `CF_PAGES=1`）即 Cloudflare Workers 产物。
+`pnpm build` 输出纯静态产物到 `dist/`（含 pagefind 搜索索引），无任何运行时依赖，可直接部署到任意静态托管。
 
 ### Vercel
 
 1. Fork 本仓库
 2. Vercel 控制台 → Add New → Project，导入你 fork 的仓库
-3. 在 **Vercel 环境变量**（Environment Variables）中配置：
+3. 环境变量填入 `UPROBOT_API_KEY`（构建时需要）
+4. Deploy 完成
 
-   | 变量 | 必填 | 说明 |
-   |------|------|------|
-   | `ADMIN_USER` | 推荐 | 后台登录用户名，默认 `admin` |
-   | `ADMIN_PASS` | 必填 | 后台登录密码，留空则跳过鉴权 |
-   | `KEYSTATIC_GITHUB_CLIENT_ID` | 必填 | GitHub OAuth App Client ID |
-   | `KEYSTATIC_GITHUB_CLIENT_SECRET` | 必填 | GitHub OAuth App Client Secret |
-   | `KEYSTATIC_SECRET` | 必填 | 任意随机长字符串，可用 `openssl rand -hex 32` 生成 |
-   | `UPROBOT_API_KEY` | 可选 | [这里获取](https://dashboard.uptimerobot.com/integrations)，没有则监控接口报错 |
-   | `GITHUB_TOKEN` | 可选 | Anki Stats 接口用 |
+### Cloudflare Pages
 
-4. 按上节「GitHub OAuth App」创建 App 并取得凭据；还没有的话先创建再配环境变量
-5. Deploy 完成，Vercel 自动识别 Astro。
+1. Fork 本仓库
+2. 在 **GitHub Actions Secrets**（`Settings → Secrets and variables → Actions`）中配置：
 
-### Cloudflare Workers
+   | Secret                  | 说明                            |
+   | ----------------------- | ------------------------------- |
+   | `CLOUDFLARE_API_TOKEN`  | CF API Token，需 Pages 编辑权限 |
+   | `CLOUDFLARE_ACCOUNT_ID` | CF 账号 ID（控制台地址栏）      |
+   | `UPROBOT_API_KEY`       | 构建时生成监控数据用            |
 
-1. Fork 本仓库。在 **GitHub Actions Secrets**（`Settings → Secrets and variables → Actions`）中配置：
+3. 推 `main` 或手动 Run `Deploy to Cloudflare Pages` workflow，自动构建并部署
+4. 首次需先在 CF 控制台创建 Pages 项目 `miuarc-blog`
 
-   | Secret | 说明 |
-   |--------|------|
-   | `CLOUDFLARE_API_TOKEN` | CF API Token，需 `Workers Scripts: Edit` 权限 |
-   | `CLOUDFLARE_ACCOUNT_ID` | CF 账号 ID（控制台地址栏） |
-   | `ADMIN_USER` | 后台登录用户名，默认 `admin` |
-   | `ADMIN_PASS` | 后台登录密码 |
-   | `KEYSTATIC_GITHUB_CLIENT_ID` | GitHub OAuth App Client ID |
-   | `KEYSTATIC_GITHUB_CLIENT_SECRET` | GitHub OAuth App Client Secret |
-   | `KEYSTATIC_SECRET` | 任意随机长字符串 |
-   | `UPROBOT_API_KEY` | 可选，监控接口用 |
-   | `PUBLIC_UPROBOT_API_KEY` | 可选，监控接口用（需暴露给前端时） |
-   | `ANKI_GITHUB_TOKEN` | 可选，Anki Stats 用。注意变量名不能叫 `GITHUB_TOKEN`，会与 GitHub Actions 内置 token 冲突 |
-   | `PUBLIC_KEYSTATIC_GITHUB_APP_SLUG` | 可选，GitHub App slug，默认 `keystatic` |
+### 其他静态托管
 
-   > 这里配置的是 GitHub Secrets，**不是** Vercel 环境变量；与 Vercel 值相同的项（如 `ADMIN_PASS`、`UPROBOT_API_KEY`、`KEYSTATIC_SECRET`）保持值一致即可。
-
-2. 按上节「GitHub OAuth App」创建 App（若 CF 域名与 Vercel 不同，需单独创建一个）
-3. 推 `main`，或手动 Run `Deploy to Cloudflare Workers` workflow，自动构建并 `wrangler deploy`
-4. CF 控制台：Workers → 你的 Worker → Domains → 添加自定义域名
-
-   > Workers 密钥在构建时打入产物（运行时无 `process.env`），修改密钥后需重新 Run workflow。
+任何能运行 `pnpm build` 的平台都行（Netlify、GitHub Pages 等），构建命令 `pnpm build`，输出目录 `dist`。
 
 ## GitHub Actions（可选）：定时追番同步
 

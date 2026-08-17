@@ -1,6 +1,6 @@
-# 仅对备用/预览域名禁用索引，主域名 failover 时保持可被收录
-https://backup.2731515.xyz/*
+# 默认 pages.dev 子域与预览域名禁用索引，自定义主域名保持可被收录
+https://:subdomain.pages.dev/*
   X-Robots-Tag: noindex, nofollow
 
-https://:subdomain.workers.dev/*
+https://*.miuarc-blog.pages.dev/*
   X-Robots-Tag: noindex, nofollow

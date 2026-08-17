@@ -12,3 +12,6 @@
 !.prettierrc
 !eslint.config.js
 !README.md
+
+# CF Pages headers 无扩展名，prettier 无法解析
+public/_headers
