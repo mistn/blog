@@ -17,7 +17,7 @@ export const AppCard = ({ name, desc, icon, link }) => {
   if (!iconUrl && link) {
     try {
       const domain = new URL(link).hostname;
-      const svgDomains = ['github.com', 'pandoc.org', 'ditto-cp.sourceforge.io'];
+      const svgDomains = ['github.com', 'ditto-cp.sourceforge.io'];
       const localPath = svgDomains.includes(domain) ? `/software-icons/${domain}.svg` : `/software-icons/${domain}.png`;
       const apiFallback = `https://icons.duckduckgo.com/ip3/${domain}.ico`;
       iconUrl = localPath;
@@ -68,21 +68,18 @@ export const CardGroup = ({ title, children }) => (
   <AppCard name="Scoop" link="https://scoop.sh/" desc="Windows 命令行包管理器，可用来快速安装、更新和卸载软件" />
   <AppCard name="Everything" link="https://www.voidtools.com/" desc="Windows 本地文件搜索工具，搜索速度非常快" />
   <AppCard name="BCUninstaller" link="https://www.bcuninstaller.com/" desc="Windows 软件卸载工具，可以批量卸载和清理残留" />
-  <AppCard name="UniGetUI" link="https://devolutions.net/unigetui/" desc="Windows 软件包管理图形界面，可统一管理 Winget、Scoop、Chocolatey 等来源的软件" />
-  <AppCard name="StartAllBack" link="https://www.startallback.com/" desc="Windows 任务栏和开始菜单增强工具，适合把新版 Windows 调回更顺手的经典样式" />
   <AppCard name="Mem Reduct" link="https://github.com/henrypp/memreduct" desc="内存清理工具，可以查看和释放系统内存占用" />
   <AppCard name="FastCopy" link="https://fastcopy.jp/" desc="高速文件复制工具，适合复制、移动和校验大量文件" />
   <AppCard name="WizTree" link="https://diskanalyzer.com/" desc="磁盘空间分析工具，可以快速查看硬盘空间被哪些文件占用" />
   <AppCard name="Czkawka" link="https://github.com/qarmin/czkawka" desc="重复文件查找和清理工具，可扫描重复图片、文件、空文件夹等" />
   <AppCard name="Tai" link="https://github.com/Planshit/Tai" desc="Windows 软件使用时长统计工具，可以记录应用运行时间和电脑使用情况" />
-  <AppCard name="ContextMenuManager" link="https://github.com/BluePointLilac/ContextMenuManager" desc="Windows 右键菜单管理工具，可自定义和清理右键菜单项" />
 </CardGroup>
 
 <CardGroup title="开发与终端">
   <AppCard name="VS Code" link="https://code.visualstudio.com/" desc="微软推出的代码编辑器，适合写代码、改博客和编辑 Markdown" />
-  <AppCard name="Neovim" link="https://neovim.io/" desc="现代 Vim 分支编辑器，轻量快速，适合终端内编辑代码和 Markdown" />
+  <AppCard name="Mark Text" link="https://github.com/marktext/marktext" desc="Markdown 编辑器，界面简洁，支持所见即所得编辑" />
   <AppCard name="Git" link="https://git-scm.com/" desc="分布式版本控制工具，常用于代码管理和项目协作" />
-  <AppCard name="Pandoc" link="https://pandoc.org/" desc="通用文档转换工具，可以在 Markdown、Word、HTML、PDF 等格式之间转换" />
+  <AppCard name="Pandoc" link="https://github.com/jgm/pandoc" desc="通用文档转换工具，可以在 Markdown、Word、HTML、PDF 等格式之间转换" />
   <AppCard name="Termius" link="https://termius.com/" desc="跨平台 SSH 客户端，适合连接和管理服务器" />
   <AppCard name="Radmin VPN" link="https://www.radmin-vpn.com/" desc="虚拟局域网工具，可用于远程联机和设备互联" />
   <AppCard name="Notepad++" link="https://notepad-plus-plus.org/" desc="轻量级文本和代码编辑器，支持语法高亮，适合快速编辑配置文件、脚本和代码片段" />
@@ -94,12 +91,11 @@ export const CardGroup = ({ title, children }) => (
   <AppCard name="MEGA" link="https://mega.io/" desc="云存储服务，提供文件同步、备份和跨设备访问" />
   <AppCard name="坚果云" link="https://www.jianguoyun.com/" desc="国内云同步网盘，支持文件同步和 WebDAV，适合跨设备同步资料" />
   <AppCard name="Rclone" link="https://rclone.org/" desc="命令行云存储同步工具，适合备份文件、同步网盘和连接 WebDAV 等远程存储" />
-    <AppCard name="Tailscale" link="https://tailscale.com/" desc="基于 WireGuard 的零配置虚拟组网工具，可安全连接设备和搭建私有网络" />
   <AppCard name="PicList" link="https://piclist.cn/" desc="图床上传和图片管理工具，适合配合 Obsidian、博客和 Cloudflare R2 使用" />
   <AppCard name="v2rayN" link="https://github.com/2dust/v2rayN" desc="Windows 平台的代理客户端，常用于网络连接配置" />
   <AppCard name="FlClash" link="https://github.com/chen08209/FlClash" desc="跨平台代理客户端，作为备用代理工具使用" />
   <AppCard name="Watt Toolkit" link="https://steampp.net/" desc="游戏和开发平台辅助工具，常用于改善 Steam、GitHub 等服务的访问体验" />
-  <AppCard name="IDM" link="https://www.internetdownloadmanager.com/" desc="Windows 下载管理器，适合接管浏览器下载和多线程下载文件" />
+  <AppCard name="EasyTier" link="https://github.com/EasyTier/EasyTier" desc="轻量级加密组网工具，支持点对点和中继模式，可安全连接不同网络的设备" />
   <AppCard name="aria2" link="https://aria2.github.io/" desc="轻量命令行下载工具，支持 HTTP、FTP、BitTorrent 和 Metalink 等下载任务" />
 </CardGroup>
 
@@ -150,6 +146,12 @@ export const CardGroup = ({ title, children }) => (
 <summary>以前用过</summary>
 
 <CardGroup>
+  <AppCard name="StartAllBack" link="https://www.startallback.com/" desc="Windows 任务栏和开始菜单增强工具，适合把新版 Windows 调回更顺手的经典样式" />
+  <AppCard name="UniGetUI" link="https://devolutions.net/unigetui/" desc="Windows 软件包管理图形界面，可统一管理 Winget、Scoop、Chocolatey 等来源的软件" />
+  <AppCard name="ContextMenuManager" link="https://github.com/BluePointLilac/ContextMenuManager" desc="Windows 右键菜单管理工具，可自定义和清理右键菜单项" />
+  <AppCard name="Neovim" link="https://neovim.io/" desc="现代 Vim 分支编辑器，轻量快速，适合终端内编辑代码和 Markdown" />
+  <AppCard name="Tailscale" link="https://tailscale.com/" desc="基于 WireGuard 的零配置虚拟组网工具，可安全连接设备和搭建私有网络" />
+  <AppCard name="IDM" link="https://www.internetdownloadmanager.com/" desc="Windows 下载管理器，适合接管浏览器下载和多线程下载文件" />
   <AppCard name="PotPlayer" link="https://potplayer.tv/" desc="Windows 视频播放器，支持多种格式和硬件加速" />
   <AppCard name="Pot" link="https://pot-app.com/" desc="划词翻译和 OCR 翻译工具，适合阅读英文网页、文档和软件界面" />
   <AppCard name="微信输入法" link="https://z.weixin.qq.com/" desc="微信官方输入法，词库同步和中文输入体验比较自然" />
