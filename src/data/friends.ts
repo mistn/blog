@@ -48,7 +48,7 @@ const friends: FriendLink[] = [
   },
   {
     name: "番茄主理人",
-    href: "https://fqzlr.com/",
+    href: "https://blog.fqzlr.top/",
     avatar: "https://q1.qlogo.cn/g?b=qq&nk=20447289&s=640",
     description: "坐而言不如起而行.",
   },
