@@ -125,6 +125,12 @@ const friends: FriendLink[] = [
     avatar: "https://detached.online/icon-512.png",
     description: "独立开发者的技术、工具与生活博客",
   },
+  {
+    name: "Yuki の Blog",
+    href: "https://yukino-blog.site",
+    avatar: "https://yukino-blog.site/assets/uploads/2026-07-01-illust-133225934-20260306-115848-cropped-4e8597f2.jpg",
+    description: "当你无法回头的时候，才是真正的旅途。",
+  },
 ];
 
 export async function getFriendLinks(): Promise<FriendLink[]> {
