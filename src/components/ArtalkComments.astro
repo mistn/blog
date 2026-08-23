@@ -21,7 +21,10 @@ const copy = ui[locale];
   data-artalk-page-title={pageTitle}
   aria-label={copy.actions.comments}
 >
-  <h2 id="artalk-comments-title" class="text-[1.65rem] font-medium tracking-tight">
+  <h2
+    id="artalk-comments-title"
+    class="text-[1.65rem] font-medium tracking-tight"
+  >
     {copy.actions.comments}
   </h2>
   <div class="artalk-container mt-5 min-h-28"></div>
@@ -54,7 +57,7 @@ const copy = ui[locale];
     }
 
     function ensureStyle() {
-      if (document.querySelector('link[data-artalk-style]')) return;
+      if (document.querySelector("link[data-artalk-style]")) return;
       const link = document.createElement("link");
       link.rel = "stylesheet";
       link.href = CSS_URL;
@@ -65,7 +68,7 @@ const copy = ui[locale];
     let current = null;
 
     function readConfig() {
-      const root = document.querySelector('[data-artalk-root]');
+      const root = document.querySelector("[data-artalk-root]");
       if (!root) return null;
       return {
         server: root.dataset.artalkServer,
@@ -76,9 +79,11 @@ const copy = ui[locale];
     }
 
     async function mount() {
-      const root = document.querySelector('[data-artalk-root]');
+      const root = document.querySelector("[data-artalk-root]");
       if (!root) return;
-      const el = /** @type {HTMLElement|null} */ (root.querySelector(".artalk-container"));
+      const el = /** @type {HTMLElement|null} */ (
+        root.querySelector(".artalk-container")
+      );
       if (!el) return;
 
       const conf = readConfig();
@@ -99,15 +104,7 @@ const copy = ui[locale];
           pageKey: conf.pageKey,
           pageTitle: conf.pageTitle,
           darkMode: isDarkTheme(),
-          locale: {
-            counter: TEXT.counter,
-            email: TEXT.email,
-            link: TEXT.link,
-            nick: TEXT.nick,
-            noComment: TEXT.noComment,
-            placeholder: TEXT.placeholder,
-            send: TEXT.send,
-          },
+          locale: "zh-CN",
           noComment: TEXT.noComment,
           placeholder: TEXT.placeholder,
           preferRemoteConf: false,
