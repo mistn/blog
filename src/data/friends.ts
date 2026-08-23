@@ -131,6 +131,12 @@ const friends: FriendLink[] = [
     avatar: "https://yukino-blog.site/assets/uploads/2026-07-01-illust-133225934-20260306-115848-cropped-4e8597f2.jpg",
     description: "当你无法回头的时候，才是真正的旅途。",
   },
+  {
+    name: "Faust",
+    href: "https://fft.im/",
+    avatar: "https://roim-picx-9nr.pages.dev/rest/HcBRKfk.webp",
+    description: "和想象力有关",
+  },
 ];
 
 export async function getFriendLinks(): Promise<FriendLink[]> {
