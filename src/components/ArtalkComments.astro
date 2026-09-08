@@ -4,11 +4,15 @@ import { getLocaleFromPath, ui } from "@/i18n";
 type Props = {
   pageKey: string;
   pageTitle: string;
+  title?: string;
+  placeholder?: string;
+  noComment?: string;
 };
 
-const { pageKey, pageTitle } = Astro.props;
+const { pageKey, pageTitle, title, placeholder, noComment } = Astro.props;
 const locale = getLocaleFromPath(Astro.url.pathname);
 const copy = ui[locale];
+const heading = title ?? copy.actions.comments;
 ---
 
 <section
@@ -19,13 +23,15 @@ const copy = ui[locale];
   data-artalk-site="Miuarc Blog"
   data-artalk-page-key={pageKey}
   data-artalk-page-title={pageTitle}
-  aria-label={copy.actions.comments}
+  data-artalk-placeholder={placeholder}
+  data-artalk-no-comment={noComment}
+  aria-label={heading}
 >
   <h2
     id="artalk-comments-title"
     class="text-[1.65rem] font-medium tracking-tight"
   >
-    {copy.actions.comments}
+    {heading}
   </h2>
   <div class="artalk-container mt-5 min-h-28"></div>
 </section>
@@ -75,6 +81,8 @@ const copy = ui[locale];
         site: root.dataset.artalkSite,
         pageKey: root.dataset.artalkPageKey,
         pageTitle: root.dataset.artalkPageTitle,
+        placeholder: root.dataset.artalkPlaceholder || TEXT.placeholder,
+        noComment: root.dataset.artalkNoComment || TEXT.noComment,
       };
     }
 
@@ -105,8 +113,8 @@ const copy = ui[locale];
           pageTitle: conf.pageTitle,
           darkMode: isDarkTheme(),
           locale: "zh-CN",
-          noComment: TEXT.noComment,
-          placeholder: TEXT.placeholder,
+          noComment: conf.noComment,
+          placeholder: conf.placeholder,
           preferRemoteConf: false,
           sendBtn: TEXT.sendBtn,
         });
