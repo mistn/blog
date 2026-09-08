@@ -7,9 +7,10 @@ type Props = {
   title?: string;
   placeholder?: string;
   noComment?: string;
+  counter?: string;
 };
 
-const { pageKey, pageTitle, title, placeholder, noComment } = Astro.props;
+const { pageKey, pageTitle, title, placeholder, noComment, counter } = Astro.props;
 const locale = getLocaleFromPath(Astro.url.pathname);
 const copy = ui[locale];
 const heading = title ?? copy.actions.comments;
@@ -25,6 +26,7 @@ const heading = title ?? copy.actions.comments;
   data-artalk-page-title={pageTitle}
   data-artalk-placeholder={placeholder}
   data-artalk-no-comment={noComment}
+  data-artalk-counter={counter}
   aria-label={heading}
 >
   <h2
@@ -49,6 +51,7 @@ const heading = title ?? copy.actions.comments;
 
     const TEXT = {
       counter: "{count} 条评论",
+      commentFail: "评论失败",
       email: "邮箱",
       link: "网址",
       nick: "昵称",
@@ -83,6 +86,7 @@ const heading = title ?? copy.actions.comments;
         pageTitle: root.dataset.artalkPageTitle,
         placeholder: root.dataset.artalkPlaceholder || TEXT.placeholder,
         noComment: root.dataset.artalkNoComment || TEXT.noComment,
+        counter: root.dataset.artalkCounter || TEXT.counter,
       };
     }
 
@@ -103,6 +107,18 @@ const heading = title ?? copy.actions.comments;
       current = null;
       el.innerHTML = "";
 
+      function rewriteGuestbookWords() {
+        if (!conf.counter.includes("留言")) return;
+        const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+        /** @type {Text|null} */
+        let node;
+        while ((node = walker.nextNode())) {
+          if (node.nodeValue && node.nodeValue.includes("评论")) {
+            node.nodeValue = node.nodeValue.replaceAll("评论", "留言");
+          }
+        }
+      }
+
       try {
         const { default: Artalk } = await import(JS_URL);
         current = Artalk.init({
@@ -117,6 +133,12 @@ const heading = title ?? copy.actions.comments;
           placeholder: conf.placeholder,
           preferRemoteConf: false,
           sendBtn: TEXT.sendBtn,
+        });
+        rewriteGuestbookWords();
+        new MutationObserver(rewriteGuestbookWords).observe(el, {
+          childList: true,
+          subtree: true,
+          characterData: true,
         });
       } catch {
         root.classList.add("hidden");
