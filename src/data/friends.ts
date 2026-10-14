@@ -137,6 +137,12 @@ const friends: FriendLink[] = [
     avatar: "https://roim-picx-9nr.pages.dev/rest/HcBRKfk.webp",
     description: "和想象力有关",
   },
+  {
+    name: "Geuo",
+    href: "https://geuo.org/",
+    avatar: "https://geuo.org/image/avatar.png",
+    description: "记录创造，探索未知",
+  },
 ];
 
 export async function getFriendLinks(): Promise<FriendLink[]> {
