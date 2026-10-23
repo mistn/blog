@@ -47,7 +47,18 @@ const applicationText = applicationFields
     id="main-content"
     class="mx-auto w-full max-w-4xl overflow-x-hidden px-4 pt-6 pb-10 sm:px-6 md:pt-10 md:pb-14"
   >
-    <PageHeader title={copy.pages.friendsTitle} />
+    <PageHeader title={copy.pages.friendsTitle}>
+      {
+        lastUpdated && (
+          <dl class="flex flex-wrap gap-x-6 gap-y-0.5">
+            <div class="flex items-center gap-1.5">
+              <dt class="text-foreground/45">更新于</dt>
+              <dd>{lastUpdated}</dd>
+            </div>
+          </dl>
+        )
+      }
+    </PageHeader>
     <section class="py-4" data-pagefind-body>
       <div class="max-w-4xl">
         <section>
@@ -123,13 +134,6 @@ const applicationText = applicationFields
       </div>
 
       <div class="max-w-4xl">
-        {
-          lastUpdated && (
-            <p class="mt-8 text-xs text-foreground/35">
-              最后更新：{lastUpdated}
-            </p>
-          )
-        }
         <ArtalkComments
           pageKey="/friends"
           pageTitle={copy.pages.friendsTitle}
