@@ -6,30 +6,43 @@ import PageHeader from "@/components/PageHeader.astro";
 import Layout from "./Layout.astro";
 import { SITE } from "@/config";
 import { getLocaleFromPath, ui } from "@/i18n";
+import { getLastModified } from "@/utils/getLastModified.js";
 
 type Props = MarkdownLayoutProps<{ title: string; headingEyebrow?: string }>;
 
 const { frontmatter } = Astro.props;
 const locale = getLocaleFromPath(Astro.url.pathname);
 const copy = ui[locale];
+const lastUpdated = getLastModified("src/pages/about.mdx");
 ---
 
-<Layout title={`${frontmatter.title} | ${SITE.title}`} description={copy.pages.aboutDesc}>
+<Layout
+  title={`${frontmatter.title} | ${SITE.title}`}
+  description={copy.pages.aboutDesc}
+>
   <SiteTopbar />
-  <main id="main-content" class="mx-auto w-full max-w-4xl px-4 sm:px-6 pt-6 pb-10 md:pt-10 md:pb-14">
+  <main
+    id="main-content"
+    class="mx-auto w-full max-w-4xl px-4 pt-6 pb-10 sm:px-6 md:pt-10 md:pb-14"
+  >
     <PageHeader title={frontmatter.title} />
     <section id="about" class="app-prose prose-img:border-0">
-        <div class="*:first:mt-0">
-          <slot />
-        </div>
-      </section>
-      <ArtalkComments
-        pageKey="/about"
-        pageTitle={frontmatter.title}
-        title="留言"
-        placeholder="写点什么吧..."
-        noComment="「快来做第一个留言的人吧」"
-        counter="{count} 条留言"
-      />
-    </main>
+      <div class="*:first:mt-0">
+        <slot />
+      </div>
+    </section>
+    {
+      lastUpdated && (
+        <p class="mt-8 text-xs text-foreground/35">最后更新：{lastUpdated}</p>
+      )
+    }
+    <ArtalkComments
+      pageKey="/about"
+      pageTitle={frontmatter.title}
+      title="留言"
+      placeholder="写点什么吧..."
+      noComment="「快来做第一个留言的人吧」"
+      counter="{count} 条留言"
+    />
+  </main>
 </Layout>

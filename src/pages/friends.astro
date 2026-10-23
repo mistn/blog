@@ -4,13 +4,19 @@ import ArtalkComments from "@/components/ArtalkComments.astro";
 import PageHeader from "@/components/PageHeader.astro";
 import Layout from "@/layouts/Layout.astro";
 import { Code } from "astro-expressive-code/components";
-import { defaultFriendAvatar, getFriendLinks, siteProfile } from "@/data/friends";
+import {
+  defaultFriendAvatar,
+  getFriendLinks,
+  siteProfile,
+} from "@/data/friends";
 import { SITE } from "@/config";
 import { ui } from "@/i18n";
+import { getLastModified } from "@/utils/getLastModified.js";
 
 const locale = "zh";
 const copy = ui[locale];
 const friendLinks = await getFriendLinks();
+const lastUpdated = getLastModified("src/data/friends.ts");
 const applicationFields = [
   { label: "name", value: "miuarc's blog" },
   { label: "url", value: siteProfile.href },
@@ -37,20 +43,23 @@ const applicationText = applicationFields
 >
   <SiteTopbar />
 
-  <main id="main-content" class="mx-auto w-full max-w-4xl px-4 sm:px-6 pt-6 pb-10 md:pt-10 md:pb-14 overflow-x-hidden">
+  <main
+    id="main-content"
+    class="mx-auto w-full max-w-4xl overflow-x-hidden px-4 pt-6 pb-10 sm:px-6 md:pt-10 md:pb-14"
+  >
     <PageHeader title={copy.pages.friendsTitle} />
     <section class="py-4" data-pagefind-body>
       <div class="max-w-4xl">
         <section>
           {
             friendLinks.length > 0 ? (
-              <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 sm:gap-4">
+              <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 md:grid-cols-3 lg:grid-cols-4">
                 {friendLinks.map(friend => (
                   <a
                     href={friend.href}
                     target="_blank"
                     rel="noreferrer"
-                    class="group flex items-center gap-3 rounded-xl border border-dashed border-gray-300 dark:border-gray-600 p-3.5 text-left transition-all duration-200 ease-out active:scale-[0.98] active:bg-gray-50 dark:active:bg-gray-800/50 md:hover:-translate-y-1 md:hover:bg-gray-50/60 dark:md:hover:bg-gray-800/30 md:hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] dark:md:hover:shadow-[0_8px_30px_rgba(0,0,0,0.2)] sm:flex-col sm:items-center sm:gap-0 sm:p-4 sm:text-center"
+                    class="group flex items-center gap-3 rounded-xl border border-dashed border-gray-300 p-3.5 text-left transition-all duration-200 ease-out active:scale-[0.98] active:bg-gray-50 sm:flex-col sm:items-center sm:gap-0 sm:p-4 sm:text-center md:hover:-translate-y-1 md:hover:bg-gray-50/60 md:hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] dark:border-gray-600 dark:active:bg-gray-800/50 dark:md:hover:bg-gray-800/30 dark:md:hover:shadow-[0_8px_30px_rgba(0,0,0,0.2)]"
                   >
                     <img
                       src={friend.avatar ?? defaultFriendAvatar}
@@ -58,14 +67,18 @@ const applicationText = applicationFields
                       class="h-12 w-12 shrink-0 rounded-full object-cover ring-1 ring-border/30 transition-transform duration-500 ease-out group-hover:scale-105 sm:mb-2.5"
                       loading="lazy"
                     />
-                    <div class="min-w-0 flex flex-col justify-center sm:w-full sm:items-center">
-                      <h2 class="line-clamp-1 text-sm font-semibold leading-snug text-foreground transition-colors duration-300 group-hover:text-accent">{friend.blog ?? friend.name}</h2>
-                      {
-                        friend.blog && friend.blog !== friend.name && (
-                          <p class="mt-1 text-[0.7rem] leading-tight text-foreground/40">{friend.name}</p>
-                        )
-                      }
-                      <p class="mt-1.5 line-clamp-2 text-xs leading-snug text-foreground/40">{friend.description}</p>
+                    <div class="flex min-w-0 flex-col justify-center sm:w-full sm:items-center">
+                      <h2 class="line-clamp-1 text-sm leading-snug font-semibold text-foreground transition-colors duration-300 group-hover:text-accent">
+                        {friend.blog ?? friend.name}
+                      </h2>
+                      {friend.blog && friend.blog !== friend.name && (
+                        <p class="mt-1 text-[0.7rem] leading-tight text-foreground/40">
+                          {friend.name}
+                        </p>
+                      )}
+                      <p class="mt-1.5 line-clamp-2 text-xs leading-snug text-foreground/40">
+                        {friend.description}
+                      </p>
                     </div>
                   </a>
                 ))}
@@ -95,7 +108,10 @@ const applicationText = applicationFields
           <div class="friend-howto">
             <p class="friend-howto-title">申请方式</p>
             <p>
-              页面底部评论区按格式留言，或发邮件到 <a href="mailto:me@miuarc.com" class="text-accent hover:underline">me@miuarc.com</a>。
+              页面底部评论区按格式留言，或发邮件到 <a
+                href="mailto:miu@miuarc.com"
+                class="text-accent hover:underline">miu@miuarc.com</a
+              >。
             </p>
           </div>
 
@@ -107,11 +123,20 @@ const applicationText = applicationFields
       </div>
 
       <div class="max-w-4xl">
-        <ArtalkComments pageKey="/friends" pageTitle={copy.pages.friendsTitle} />
+        {
+          lastUpdated && (
+            <p class="mt-8 text-xs text-foreground/35">
+              最后更新：{lastUpdated}
+            </p>
+          )
+        }
+        <ArtalkComments
+          pageKey="/friends"
+          pageTitle={copy.pages.friendsTitle}
+        />
       </div>
     </section>
   </main>
-
 </Layout>
 
 <style>
@@ -181,7 +206,6 @@ const applicationText = applicationFields
     font-size: 0.9rem;
     font-weight: 600;
   }
-
 
   @media (max-width: 639px) {
     .apply-section {
