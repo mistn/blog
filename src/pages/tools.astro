@@ -1,5 +1,4 @@
 ---
-import AnkiPanel from "@/components/AnkiPanel.astro";
 import PageHeader from "@/components/PageHeader.astro";
 import SiteTopbar from "@/components/SiteTopbar.astro";
 import Layout from "@/layouts/Layout.astro";
@@ -21,10 +20,8 @@ const pageDescription = copy.pages.toolsDesc;
   >
     <PageHeader title={copy.pages.toolsTitle} />
 
-    <div class="pt-8">
-      <AnkiPanel locale="zh" />
-
-      <section id="uptime-monitors" class="mt-12">
+    <div>
+      <section id="uptime-monitors">
         <div class="mb-6 flex items-center justify-between">
           <h2 class="text-lg font-semibold text-foreground">
             UptimeRobot 监控
