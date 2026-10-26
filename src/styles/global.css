@@ -83,8 +83,8 @@ html[data-theme="dark"] {
     font-synthesis: none;
     font-kerning: normal;
     background-image:
-      linear-gradient(rgba(47, 98, 143, 0.014) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(47, 98, 143, 0.014) 1px, transparent 1px),
+      linear-gradient(rgba(47, 98, 143, 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(47, 98, 143, 0.035) 1px, transparent 1px),
       linear-gradient(
         180deg,
         rgba(255, 254, 251, 0.995),
@@ -102,8 +102,8 @@ html[data-theme="dark"] {
   }
   html[data-theme="light"] body {
     background-image:
-      linear-gradient(rgba(47, 98, 143, 0.008) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(47, 98, 143, 0.008) 1px, transparent 1px),
+      linear-gradient(rgba(47, 98, 143, 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(47, 98, 143, 0.035) 1px, transparent 1px),
       linear-gradient(
         180deg,
         rgba(255, 255, 255, 1),
@@ -265,6 +265,18 @@ html.is-restoring-scroll [data-post-memory-scope="list"] {
   .article-enter {
     animation-duration: 1ms;
     animation-delay: 0ms;
+  }
+
+  /* 抽屉滑入、遮罩淡入、顶栏过渡等一律瞬时完成。
+     用 0.01ms 而非 0，保证 transitionend 仍会触发——
+     移动端抽屉依赖该事件收起遮罩。 */
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
   }
 }
 

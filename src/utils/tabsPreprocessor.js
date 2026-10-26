@@ -10,7 +10,12 @@ function escapeAttr(str) {
 export function transformTabs(markdown) {
   if (!markdown || !markdown.includes(":::")) return markdown;
 
-  return markdown.replace(TAB_BLOCK_RE, (match, inner) => {
+  // 统一换行符再匹配。仓库里的 md 基本都是 CRLF（Windows 编辑器 / Keystatic 写入），
+  // 而下面的正则按行定位，`tabs[ \t]*\n` 遇到 `\r\n` 会直接失配，
+  // 结果整个 tabs 块原样输出成普通段落。
+  const source = markdown.replace(/\r\n?/g, "\n");
+
+  return source.replace(TAB_BLOCK_RE, (match, inner) => {
     const items = [];
     let m;
     const r = new RegExp(TAB_ITEM_RE, "gm");

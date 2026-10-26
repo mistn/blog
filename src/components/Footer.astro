@@ -1,50 +1,24 @@
 ---
-import type { HTMLAttributes } from "astro/types";
 import { SITE } from "@/config";
 
-const currentYear = new Date().getFullYear();
-
-type Props = HTMLAttributes<"footer">;
-
-const { class: className, ...attrs } = Astro.props;
-
-const displayYear = currentYear;
+const displayYear = new Date().getFullYear();
 ---
 
 <footer
-  class:list={["app-layout mt-auto border-t border-dashed border-gray-300 dark:border-gray-600", className]}
-  {...attrs}
+  class="mx-auto w-full max-w-4xl border-t border-border px-5 sm:px-6"
 >
   <div
-    class:list={[
-      "pt-4 md:pt-6 pb-4",
-      "flex justify-center",
-    ]}
+    class="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 py-5 text-sm whitespace-nowrap text-foreground/55"
   >
-    <div
-      class="my-2 flex flex-col items-center text-sm whitespace-nowrap text-gray-500 dark:text-gray-400"
+    <span>&#169; {displayYear} {SITE.author}</span>
+    <span class="text-foreground/20" aria-hidden="true">|</span>
+    <a
+      class="transition-colors hover:text-foreground/85"
+      href="https://icp.gov.moe/?keyword=20260260"
+      target="_blank"
+      rel="noopener noreferrer"
     >
-      <div class="flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
-        <span>&#169; {displayYear} {SITE.author}</span>
-        <span class="hidden sm:inline text-gray-300 dark:text-gray-600">|</span>
-        <a
-          href="https://creativecommons.org/licenses/by-nc-sa/4.0/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="hover:text-gray-600 dark:hover:text-gray-300"
-        >
-          CC BY-NC-SA 4.0
-        </a>
-        <span class="hidden sm:inline text-gray-300 dark:text-gray-600">|</span>
-        <a
-          class="hover:text-gray-600 dark:hover:text-gray-300"
-          href="https://icp.gov.moe/?keyword=20260260"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          萌ICP备20260260号
-        </a>
-      </div>
-    </div>
+      萌ICP备20260260号
+    </a>
   </div>
 </footer>

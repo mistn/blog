@@ -2,8 +2,9 @@
 import { getCollection } from "astro:content";
 import SiteTopbar from "@/components/SiteTopbar.astro";
 import Layout from "@/layouts/Layout.astro";
-import Card from "@/components/Card.astro";
+import PageHeader from "@/components/PageHeader.astro";
 import getPostsByGroupCondition from "@/utils/getPostsByGroupCondition";
+import { getPath } from "@/utils/getPath";
 import { SITE } from "@/config";
 import { getLocaleFromPath, localizePath, ui } from "@/i18n";
 
@@ -18,54 +19,103 @@ const locale = getLocaleFromPath(Astro.url.pathname);
 const copy = ui[locale];
 const posts = await getCollection("blog", ({ data }) => !data.draft);
 const months = copy.months;
+
+const pad = (n: number) => String(n).padStart(2, "0");
+const formatDay = (date: Date) =>
+  `${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+
+const byYear = Object.entries(
+  getPostsByGroupCondition(posts, post => post.data.pubDatetime.getFullYear())
+).sort(([yearA], [yearB]) => Number(yearB) - Number(yearA));
 ---
 
-<Layout title={`${copy.pages.archivesTitle} | ${SITE.title}`} description={copy.pages.archivesDesc}>
+<Layout
+  title={`${copy.pages.archivesTitle} | ${SITE.title}`}
+  description={copy.pages.archivesDesc}
+>
   <SiteTopbar />
 
-  <main id="main-content" class="mx-auto w-full max-w-4xl px-4 sm:px-6 pt-6 pb-10 md:pt-10 md:pb-14">
-    <h1 class="text-4xl font-extrabold tracking-tight text-foreground mb-10">
-      {copy.pages.archivesTitle}
-    </h1>
-    {
-      Object.entries(
-        getPostsByGroupCondition(posts, post =>
-          post.data.pubDatetime.getFullYear()
-        )
-      )
-        .sort(([yearA], [yearB]) => Number(yearB) - Number(yearA))
-        .map(([year, yearGroup]) => (
-          <div>
-            <span class="text-2xl font-bold">{year}</span>
-            <sup class="text-sm">{yearGroup.length}</sup>
-            {Object.entries(
-              getPostsByGroupCondition(
-                yearGroup,
-                post => post.data.pubDatetime.getMonth() + 1
+  <main
+    id="main-content"
+    class="mx-auto w-full max-w-4xl px-5 pt-6 pb-10 sm:px-6 md:pt-10 md:pb-14"
+  >
+    <PageHeader title={copy.pages.archivesTitle}>
+      <p class="text-sm text-foreground/55">共 {posts.length} 篇</p>
+    </PageHeader>
+
+    <div class="space-y-14">
+      {
+        byYear.map(([year, yearGroup]) => (
+          <section>
+            <h2 class="mb-6 flex items-baseline gap-2.5 border-b border-border pb-3">
+              <span class="text-2xl font-medium tracking-tight text-foreground">
+                {year}
+              </span>
+              <span class="text-[13px] text-foreground/45">
+                {yearGroup.length} 篇
+              </span>
+            </h2>
+
+            <div class="relative sm:pl-[4.75rem]">
+              <span
+                class="absolute top-2 bottom-2 left-[4.75rem] hidden w-px bg-foreground/15 sm:block"
+                aria-hidden="true"
+              ></span>
+              {Object.entries(
+                getPostsByGroupCondition(
+                  yearGroup,
+                  post => post.data.pubDatetime.getMonth() + 1
+                )
               )
-            )
-              .sort(([monthA], [monthB]) => Number(monthB) - Number(monthA))
-              .map(([month, monthGroup]) => (
-                  <div class="flex flex-col sm:flex-row sm:gap-2">
-                    <div class="mt-4 w-20 shrink-0 text-lg sm:my-4">
-                    <span class="font-bold">{months[Number(month) - 1]}</span>
-                    <sup class="text-xs">{monthGroup.length}</sup>
+                .sort(([monthA], [monthB]) => Number(monthB) - Number(monthA))
+                .map(([month, monthGroup]) => (
+                  <div class="relative pb-9 last:pb-0">
+                    <div class="mb-2 text-[13px] tracking-[0.12em] text-foreground/45 sm:hidden">
+                      {months[Number(month) - 1]}
+                    </div>
+                    <span
+                      class="absolute top-1.5 -left-[4.75rem] hidden w-14 text-right text-[13px] tracking-[0.06em] text-foreground/45 sm:block"
+                      aria-hidden="true"
+                    >
+                      {months[Number(month) - 1]}
+                    </span>
+                    <span
+                      class="absolute top-[9px] -left-[3px] hidden size-1.5 rounded-full bg-foreground/30 ring-2 ring-background sm:block"
+                      aria-hidden="true"
+                    ></span>
+                    <ul class="min-w-0 pl-0 sm:pl-5">
+                      {monthGroup
+                        .sort(
+                          (a, b) =>
+                            new Date(b.data.pubDatetime).getTime() -
+                            new Date(a.data.pubDatetime).getTime()
+                        )
+                        .map(post => (
+                          <li>
+                            <a
+                              href={localizePath(
+                                getPath(post.id, post.filePath),
+                                locale
+                              )}
+                              data-post-link
+                              class="group flex items-baseline justify-between gap-4 py-2"
+                            >
+                              <span class="min-w-0 truncate text-base text-foreground/90 transition-colors group-hover:text-accent">
+                                {post.data.title}
+                              </span>
+                              <span class="shrink-0 text-[13px] tabular-nums text-foreground/45">
+                                {formatDay(post.data.pubDatetime)}
+                              </span>
+                            </a>
+                          </li>
+                        ))}
+                    </ul>
                   </div>
-                  <ul class="pl-0">
-                    {monthGroup
-                      .sort(
-                        (a, b) =>
-                          new Date(b.data.pubDatetime).getTime() -
-                          new Date(a.data.pubDatetime).getTime()
-                      )
-                      .map(data => (
-                        <Card {...data} {locale} />
-                      ))}
-                  </ul>
-                </div>
-              ))}
-          </div>
+                ))}
+            </div>
+          </section>
         ))
-    }
+      }
+    </div>
   </main>
 </Layout>

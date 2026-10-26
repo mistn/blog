@@ -3,23 +3,15 @@ import { getCollection } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
 import SiteTopbar from "@/components/SiteTopbar.astro";
 import Datetime from "@/components/Datetime.astro";
-import Pagination from "@/components/Pagination.astro";
 import getSortedPosts from "@/utils/getSortedPosts";
 import { getPath } from "@/utils/getPath";
 import { SITE } from "@/config";
 import { getLocaleFromPath, localizePath, ui } from "@/i18n";
 
-
-const posts = await getCollection("blog");
+const posts = await getCollection("blog", ({ data }) => !data.draft);
 const locale = getLocaleFromPath(Astro.url.pathname);
 const copy = ui[locale];
-const sortedPosts = getSortedPosts(posts);
-const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
-const listPosts = recentPosts.slice(0, SITE.postPerPage);
-const totalPages = Math.ceil(recentPosts.length / SITE.postPerPage);
-
-const buildPageUrl = (n: number) =>
-  n === 1 ? localizePath("/", locale) : localizePath(`/posts/${n}`, locale);
+const listPosts = getSortedPosts(posts);
 
 const pageTitle = `${SITE.title} - 技术笔记与个人博客`;
 const pageDesc = copy.pages.homeDesc;
@@ -34,7 +26,7 @@ const pageDesc = copy.pages.homeDesc;
     class="mx-auto w-full max-w-4xl px-5 sm:px-6 pt-3 pb-6 md:pt-4 md:pb-8"
   >
     <section class="overflow-hidden">
-      <h1 class="sr-only">最新文章</h1>
+      <h1 class="sr-only">全部文章</h1>
       <div class="py-1.5 md:py-4">
         <div>
           <div class="min-w-0">
@@ -53,14 +45,13 @@ const pageDesc = copy.pages.homeDesc;
                       <Datetime {...post.data} {locale} class="" />
 
                     </div>
-                    <p class="mt-2 md:mt-3 max-w-3xl text-sm leading-relaxed text-gray-600 dark:text-gray-400 md:text-base line-clamp-2">
+                    <p class="mt-2 md:mt-3 text-sm leading-relaxed text-gray-600 dark:text-gray-400 md:text-base line-clamp-2">
                       {post.data.description}
                     </p>
                   </article>
                 ))
               }
             </div>
-            <Pagination currentPage={1} lastPage={totalPages} {buildPageUrl} {locale} />
           </div>
         </div>
       </div>

@@ -1,5 +1,11 @@
 import type { Props } from "astro";
 import IconMail from "@/assets/icons/IconMail.svg";
+import IconHome from "@/assets/icons/IconHome.svg";
+import IconArchive from "@/assets/icons/IconArchive.svg";
+import IconPlay from "@/assets/icons/IconPlay.svg";
+import IconHeart from "@/assets/icons/IconHeart.svg";
+import IconTool from "@/assets/icons/IconTool.svg";
+import IconUser from "@/assets/icons/IconUser.svg";
 import IconBrandX from "@/assets/icons/IconBrandX.svg";
 import IconWhatsapp from "@/assets/icons/IconWhatsapp.svg";
 import IconFacebook from "@/assets/icons/IconFacebook.svg";
@@ -22,6 +28,43 @@ export const SOCIALS: Social[] = [
     icon: IconMail,
   },
 ] as const;
+
+export type NavLabelKey =
+  | "home"
+  | "archives"
+  | "anime"
+  | "friends"
+  | "tools"
+  | "about";
+
+export interface NavItem {
+  /** 路由路径，实际渲染时会走 localizePath */
+  path: string;
+  /** 对应 i18n 里 nav 下的文案键名 */
+  labelKey: NavLabelKey;
+  /** 移动端抽屉使用的图标，桌面标签不渲染图标 */
+  icon: (_props: Props) => Element;
+  /** 为 true 时不在导航中渲染（如关闭归档入口） */
+  hidden?: boolean;
+}
+
+/**
+ * 站点主导航的唯一数据源。
+ * 桌面标签栏（HomeTabs）与移动端抽屉都从这里渲染，新增栏目只需改这一处。
+ */
+export const NAV_ITEMS: NavItem[] = [
+  { path: "/", labelKey: "home", icon: IconHome },
+  {
+    path: "/archives",
+    labelKey: "archives",
+    icon: IconArchive,
+    hidden: !SITE.showArchives,
+  },
+  { path: "/anime", labelKey: "anime", icon: IconPlay },
+  { path: "/friends", labelKey: "friends", icon: IconHeart },
+  { path: "/tools", labelKey: "tools", icon: IconTool },
+  { path: "/about", labelKey: "about", icon: IconUser },
+];
 
 export const SHARE_LINKS: Social[] = [
   {

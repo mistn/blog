@@ -21,6 +21,9 @@ export const ui = {
       theme: "切换浅色/深色模式",
       email: "发送邮件",
       login: "登录",
+      menu: "导航菜单",
+      openMenu: "打开菜单",
+      closeMenu: "关闭菜单",
     },
     pages: {
       postsTitle: "文章",

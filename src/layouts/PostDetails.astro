@@ -328,8 +328,11 @@ const nextPost =
   }
 
   function addHeadingLinks() {
+    // 只给正文内的标题加锚点，避免把评论区标题也变成「评论 #」
     const headings = Array.from(
-      document.querySelectorAll("h2, h3, h4, h5, h6")
+      document.querySelectorAll(
+        "#article h2, #article h3, #article h4, #article h5, #article h6"
+      )
     );
     for (const heading of headings) {
       heading.classList.add("group");

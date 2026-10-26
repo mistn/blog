@@ -47,6 +47,14 @@ export default defineConfig({
   ],
   vite: {
     envPrefix: ["PUBLIC_", "VITE_"],
+    server: {
+      // 不要监听构建产物与本地工具缓存目录。
+      // 这些目录里动辄上万个文件（如浏览器 profile），被 chokidar 持续监听会
+      // 让 dev server 空转吃满 CPU、内存涨到 GB 级，表现为预览页面明显卡顿。
+      watch: {
+        ignored: ["**/.workbuddy-ai/**", "**/dist/**"],
+      },
+    },
     resolve: {
       // 强制所有模块使用同一个 React 实例，解决 React 内部实例冲突
       dedupe: ["react", "react-dom"],

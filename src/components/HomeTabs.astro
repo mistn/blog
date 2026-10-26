@@ -1,4 +1,5 @@
 ---
+import { NAV_ITEMS } from "@/constants";
 import { getLocaleFromPath, localizePath, normalizePath, ui } from "@/i18n";
 
 const { pathname } = Astro.url;
@@ -7,88 +8,64 @@ const copy = ui[locale];
 const currentPath = normalizePath(pathname);
 const getHref = (path: string) => localizePath(path, locale);
 const isActive = (path: string) => currentPath === normalizePath(getHref(path));
-
-const tabClass =
-  "home-tab inline-flex items-center px-2 py-1 text-lg font-semibold text-foreground/85 relative cursor-pointer";
-const activeTabClass =
-  "text-foreground";
-
-const underlineClass =
-  "after:absolute after:-bottom-0.5 after:left-0 after:h-[2px] after:w-0 after:bg-black dark:after:bg-white after:transition-[width] after:duration-200 after:content-[''] hover:after:w-full";
-const activeUnderlineClass =
-  "after:w-full";
+const navItems = NAV_ITEMS.filter(item => !item.hidden);
 ---
 
 <nav
-  data-home-tabs
-  class="flex min-w-0 items-center gap-x-6 whitespace-nowrap text-sm"
+  aria-label={copy.nav.menu}
+  class="flex min-w-0 items-center gap-x-5 text-[15px] leading-6 whitespace-nowrap sm:gap-x-6"
 >
-  <a href={getHref("/")}
-    data-path={getHref("/")}
-    class:list={[tabClass, underlineClass, { [activeTabClass]: isActive("/"), [activeUnderlineClass]: isActive("/") }]}
-  >
-    {copy.nav.home}
-  </a>
-
-  <a href={getHref("/archives")}
-    data-path={getHref("/archives")}
-    class:list={[tabClass, underlineClass, { [activeTabClass]: isActive("/archives"), [activeUnderlineClass]: isActive("/archives") }]}
-  >
-    {copy.nav.archives}
-  </a>
-
-  <a href={getHref("/anime")}
-    data-path={getHref("/anime")}
-    class:list={[tabClass, underlineClass, { [activeTabClass]: isActive("/anime"), [activeUnderlineClass]: isActive("/anime") }]}
-  >
-    {copy.nav.anime}
-  </a>
-
-  <a href={getHref("/friends")}
-    data-path={getHref("/friends")}
-    class:list={[tabClass, underlineClass, { [activeTabClass]: isActive("/friends"), [activeUnderlineClass]: isActive("/friends") }]}
-  >
-    {copy.nav.friends}
-  </a>
-
-  <a href={getHref("/tools")}
-    data-path={getHref("/tools")}
-    class:list={[tabClass, underlineClass, { [activeTabClass]: isActive("/tools"), [activeUnderlineClass]: isActive("/tools") }]}
-  >
-    {copy.nav.tools}
-  </a>
-
-  <a href={getHref("/about")}
-    data-path={getHref("/about")}
-    class:list={[tabClass, underlineClass, { [activeTabClass]: isActive("/about"), [activeUnderlineClass]: isActive("/about") }]}
-  >
-    {copy.nav.about}
-  </a>
+  {
+    navItems.map(item => (
+      <a
+        href={getHref(item.path)}
+        aria-current={isActive(item.path) ? "page" : undefined}
+        class="home-tab"
+      >
+        {copy.nav[item.labelKey]}
+      </a>
+    ))
+  }
 </nav>
 
-<script is:inline>
-  const ACTIVE_UNDERLINE = "after:w-full";
-  const ACTIVE_CLASSES = ["text-foreground"];
-
-  function normalizePath(path) {
-    if (!path) return "/";
-    return path.endsWith("/") && path !== "/" ? path.slice(0, -1) : path;
+<style>
+  .home-tab {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 2px;
+    color: color-mix(in srgb, var(--foreground) 62%, transparent);
+    transition: color 0.18s ease;
   }
 
-  function syncHomeTabs() {
-    const currentPath = normalizePath(window.location.pathname);
-
-    document.querySelectorAll("[data-home-tabs] [data-path]").forEach(tab => {
-      const target = normalizePath(tab.getAttribute("data-path"));
-      const isActive = target === currentPath;
-      ACTIVE_CLASSES.forEach(c => tab.classList.toggle(c, isActive));
-      tab.classList.toggle(ACTIVE_UNDERLINE, isActive);
-    });
+  .home-tab::after {
+    content: "";
+    position: absolute;
+    right: 2px;
+    bottom: -2px;
+    left: 2px;
+    height: 2px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 0.22s ease;
   }
 
-  // Re-bind on page loads (Astro view transitions)
-  document.addEventListener("astro:page-load", function () {
-    syncHomeTabs();
-  });
-  syncHomeTabs();
-</script>
+  @media (hover: hover) {
+    .home-tab:hover {
+      color: var(--foreground);
+    }
+  }
+
+  .home-tab:active {
+    color: var(--foreground);
+  }
+
+  .home-tab[aria-current="page"] {
+    color: var(--foreground);
+  }
+
+  .home-tab[aria-current="page"]::after {
+    transform: scaleX(1);
+  }
+</style>

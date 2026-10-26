@@ -34,3 +34,6 @@ keystatic-local/
 
 # wrangler dev 本地状态
 .wrangler/
+
+# 本地工具缓存 / 调试产物（截图、浏览器 profile 等）
+.workbuddy-ai/
