@@ -424,9 +424,11 @@ const navItems = NAV_ITEMS.filter(item => !item.hidden);
   .site-topbar {
     background: transparent;
     border-bottom: 1px solid transparent;
+    /* margin-bottom 参与「收回顶栏高度」的补偿，见 .is-scrolled */
     transition:
       background-color 0.25s ease,
-      border-color 0.25s ease;
+      border-color 0.25s ease,
+      margin-bottom 0.25s ease;
   }
 
   .site-topbar .topbar-row {
@@ -442,6 +444,15 @@ const navItems = NAV_ITEMS.filter(item => !item.hidden);
     backdrop-filter: blur(12px) saturate(140%);
     -webkit-backdrop-filter: blur(12px) saturate(140%);
     border-bottom-color: var(--border);
+
+    /* 顶栏在滚动后会收窄 18px（padding-top 22→10、padding-bottom 16→10）。
+       sticky 元素仍占文档流，高度一变，整个文档高度就跟着变，浏览器会把
+       滚动位置拉回去补偿；被拉回后 scrollY 跌破阈值，is-scrolled 又失效，
+       顶栏重新变高 —— 于是卡在顶部反复上下抖。
+       用等量的 margin-bottom 把少掉的高度补回来（两者同一条过渡曲线，
+       所以每一帧的总高度都恒为 79px），文档高度不变，反馈环就断了。
+       若以后调整上面两组 padding，这里的 18px 要同步改。 */
+    margin-bottom: 18px;
   }
 
   .site-topbar.is-scrolled .topbar-row {

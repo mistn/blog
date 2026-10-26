@@ -167,7 +167,9 @@ html[data-theme="dark"] {
 /* Source: https://piccalil.li/blog/a-more-modern-css-reset/ */
 /* Anything that has been anchored to should have extra scroll margin */
 :target {
-  scroll-margin-block: 1rem;
+  /* 必须让开吸顶的顶栏（未滚动 79px / 滚动后 61px），
+     否则锚点标题会正好落在顶栏底下。5rem 在滚动状态下留 19px 呼吸位。 */
+  scroll-margin-block: 5rem;
 }
 
 ::view-transition-group(root),
