@@ -566,8 +566,19 @@ const navItems = NAV_ITEMS.filter(item => !item.hidden);
   }
 
   .mobile-overlay {
+    /* 旧内核不支持 color-mix() 时整条 background 会失效、遮罩变全透明，先给固定色兜底 */
+    background: rgba(15, 23, 42, 0.28);
     background: color-mix(in srgb, var(--foreground) 26%, transparent);
     backdrop-filter: blur(7px) saturate(120%);
     -webkit-backdrop-filter: blur(7px) saturate(120%);
+  }
+
+  /* 不支持 backdrop-filter 时没有磨砂，用更重的压暗补偿，避免看起来像遮罩没生效 */
+  @supports not (
+    (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))
+  ) {
+    .mobile-overlay {
+      background: rgba(15, 23, 42, 0.5);
+    }
   }
 </style>
