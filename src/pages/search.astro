@@ -3,9 +3,8 @@ import "@pagefind/default-ui/css/ui.css";
 import Main from "@/layouts/Main.astro";
 import Layout from "@/layouts/Layout.astro";
 import { SITE } from "@/config";
-import { getLocaleFromPath, ui } from "@/i18n";
+import { getLocaleFromPath, localizePath, ui } from "@/i18n";
 import { getCollection } from "astro:content";
-import Tag from "@/components/Tag.astro";
 import getUniqueTags from "@/utils/getUniqueTags";
 
 const locale = getLocaleFromPath(Astro.url.pathname);
@@ -14,23 +13,55 @@ const backUrl = SITE.showBackButton ? `${Astro.url.pathname}` : "/";
 
 const posts = await getCollection("blog");
 const tags = getUniqueTags(posts);
-
-function tagSize(count: number) {
-  if (count >= 4) return "xl";
-  if (count === 3) return "lg";
-  if (count === 2) return "md";
-  return "sm";
-}
 ---
 
-<Layout title={`${copy.pages.searchTitle} | ${SITE.title}`} description={copy.pages.searchDesc}>
+<Layout
+  title={`${copy.pages.searchTitle} | ${SITE.title}`}
+  description={copy.pages.searchDesc}
+>
   <Main pageTitle={copy.pages.searchTitle} pageDesc={copy.pages.searchDesc}>
-    <div id="pagefind-search" class="mt-8" transition:persist data-backurl={backUrl}></div>
-    <div id="pagefind-tags" class="mt-8">
-      <ul class="flex flex-wrap gap-2.5">
-        {tags.map(({ tag, tagName, count }) => <Tag {tag} {tagName} {count} size={tagSize(count)} {locale} />)}
-      </ul>
+    <div
+      id="pagefind-search"
+      class="mt-8"
+      transition:persist
+      data-backurl={backUrl}
+    >
     </div>
+    <section
+      id="pagefind-tags"
+      class="mt-12 border-t border-border pt-7"
+      aria-labelledby="tags-browse-title"
+    >
+      <div class="flex items-baseline justify-between gap-3">
+        <div class="flex items-baseline gap-2.5">
+          <h2
+            id="tags-browse-title"
+            class="text-sm font-medium tracking-tight text-foreground"
+          >
+            {copy.pages.tagsTitle}
+          </h2>
+          <span
+            class="text-[0.7rem] font-medium tracking-[0.18em] text-foreground/34 uppercase"
+            >Tags</span
+          >
+        </div>
+        <span class="text-xs text-foreground/45 tabular-nums"
+          >共 {tags.length} 个</span
+        >
+      </div>
+      <ul class="mt-4 flex flex-wrap gap-2">
+        {
+          tags.map(({ tag, tagName, count }) => (
+            <li>
+              <a href={localizePath(`/tags/${tag}/`, locale)} class="tag-chip">
+                <span>{tagName}</span>
+                <span class="tag-chip__count">{count}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
   </Main>
 </Layout>
 
@@ -39,12 +70,18 @@ function tagSize(count: number) {
     if (window.PagefindUI) return Promise.resolve(window.PagefindUI);
 
     return new Promise((resolve, reject) => {
-      const existingScript = document.querySelector("[data-pagefind-ui-script]");
+      const existingScript = document.querySelector(
+        "[data-pagefind-ui-script]"
+      );
 
       if (existingScript) {
-        existingScript.addEventListener("load", () => resolve(window.PagefindUI), {
-          once: true,
-        });
+        existingScript.addEventListener(
+          "load",
+          () => resolve(window.PagefindUI),
+          {
+            once: true,
+          }
+        );
         existingScript.addEventListener("error", reject, { once: true });
         return;
       }
@@ -108,7 +145,8 @@ function tagSize(count: number) {
           many_results: "找到 [COUNT] 个 [SEARCH_TERM] 的相关结果",
           alt_search:
             "没有找到 [SEARCH_TERM] 的相关结果，改为显示 [DIFFERENT_TERM] 的结果",
-          search_suggestion: "没有找到 [SEARCH_TERM] 的相关结果，可以试试以下搜索：",
+          search_suggestion:
+            "没有找到 [SEARCH_TERM] 的相关结果，可以试试以下搜索：",
           searching: "正在搜索 [SEARCH_TERM]...",
         },
         processTerm: function (term) {
@@ -122,51 +160,94 @@ function tagSize(count: number) {
         },
       });
 
-      // If search param exists (eg: search?q=astro), trigger search
-      const query = params.get("q");
-      if (query) {
-        search.triggerSearch(query);
-      }
-
       // Dynamic clear button visibility
       const searchInput = document.querySelector(".pagefind-ui__search-input");
       const clearButton = document.querySelector(".pagefind-ui__search-clear");
+      const searchForm = searchInput?.closest("form");
+      const tagsContainer = document.getElementById("pagefind-tags");
+
+      function toggleClearButton() {
+        if (!searchInput || !clearButton) return;
+        const hasValue = searchInput.value.length > 0;
+        clearButton.style.display = hasValue ? "flex" : "none";
+        searchForm?.classList.toggle("has-value", hasValue);
+      }
+
+      function toggleTags() {
+        if (!tagsContainer || !searchInput) return;
+        tagsContainer.style.display =
+          searchInput.value.length > 0 ? "none" : "block";
+      }
+
+      function syncInputState() {
+        toggleClearButton();
+        toggleTags();
+      }
 
       if (searchInput && clearButton) {
         // Replace clear button text with X icon
         clearButton.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
         clearButton.setAttribute("aria-label", "Clear search");
         clearButton.classList.add("pagefind-ui__search-clear--icon");
-
-        function toggleClearButton() {
-          clearButton.style.display = searchInput.value.length > 0 ? "flex" : "none";
-        }
-
-        toggleClearButton();
-        searchInput.addEventListener("input", toggleClearButton);
       }
-
-      // Toggle tags visibility based on search input
-      const tagsContainer = document.getElementById("pagefind-tags");
-
-      function toggleTags() {
-        if (tagsContainer) {
-          tagsContainer.style.display = searchInput.value.length > 0 ? "none" : "block";
-        }
-      }
-
-      toggleTags();
-      searchInput.addEventListener("input", toggleTags);
-      clearButton?.addEventListener("click", toggleTags);
 
       // Reset search param if search input is cleared
-      searchInput?.addEventListener("input", resetSearchParam);
-      clearButton?.addEventListener("click", resetSearchParam);
-
       function resetSearchParam(e) {
         if (e.target?.value?.trim() === "") {
           history.replaceState(history.state, "", window.location.pathname);
         }
+      }
+
+      syncInputState();
+      searchInput?.addEventListener("input", syncInputState);
+      searchInput?.addEventListener("input", resetSearchParam);
+      clearButton?.addEventListener("click", syncInputState);
+      clearButton?.addEventListener("click", resetSearchParam);
+
+      // 按 / 快速聚焦搜索框（只注册一次，避免 SPA 导航后叠加监听）
+      if (!window.__pagefindHotkey) {
+        window.__pagefindHotkey = true;
+        document.addEventListener("keydown", function (event) {
+          if (
+            event.defaultPrevented ||
+            event.metaKey ||
+            event.ctrlKey ||
+            event.altKey
+          )
+            return;
+
+          const target = event.target;
+          if (
+            target instanceof HTMLElement &&
+            (target.tagName === "INPUT" ||
+              target.tagName === "TEXTAREA" ||
+              target.isContentEditable)
+          ) {
+            return;
+          }
+
+          if (event.key !== "/") return;
+
+          const input = document.querySelector(".pagefind-ui__search-input");
+          if (!input) return;
+          event.preventDefault();
+          input.focus();
+        });
+      }
+
+      // 带 ?q= 进入时 Pagefind 会异步把关键词写进输入框；
+      // 放在监听器就绪后再触发，并轮询同步，避免标签区没被隐藏。
+      const query = params.get("q");
+      if (query) {
+        search.triggerSearch(query);
+        let tries = 0;
+        const syncFromQuery = () => {
+          syncInputState();
+          if (searchInput && searchInput.value.length === 0 && tries++ < 20) {
+            setTimeout(syncFromQuery, 50);
+          }
+        };
+        setTimeout(syncFromQuery, 0);
       }
 
       pageFindSearch.dataset.initializing = "false";
@@ -193,140 +274,242 @@ function tagSize(count: number) {
     --pagefind-ui-border: transparent;
     --pagefind-ui-primary: var(--accent);
     --pagefind-ui-tag: var(--background);
-    --pagefind-ui-border-radius: 0.75rem;
+    --pagefind-ui-border-radius: 6px;
     --pagefind-ui-border-width: 0px;
     --pagefind-ui-image-border-radius: 8px;
     --pagefind-ui-image-box-ratio: 3 / 2;
 
+    /* 边框只加在 input 上：结果抽屉在 form 内部，加在 form 上会把结果也圈进一张圆角卡片 */
     form {
       display: flex;
       flex-direction: column;
       position: relative;
-      border: 1px solid var(--border);
-      border-radius: 0.75rem;
-      background: var(--background);
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
-      transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
     }
 
-    html[data-theme="dark"] & form {
-      border-color: var(--border);
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-    }
-
-    form:focus-within {
-      border-color: var(--border);
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-      transform: translateY(-1px);
-    }
-
-    html[data-theme="dark"] & form:focus-within {
-      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
-    }
-
-    /* Search icon - centered on the 3.5rem input area */
-    #pagefind-search form::before {
-      top: 1.75rem;
-      left: 0.75rem;
-      transform: translateY(-50%);
-      width: 1rem;
-      height: 1rem;
-      background-color: #9ca3af;
-      opacity: 0.7;
-    }
-
-    html[data-theme="dark"] #pagefind-search form::before {
-      background-color: #6b7280;
-    }
-
-    /* Input - padded for icon space */
     input {
       width: 100%;
       height: 3.5rem;
-      padding: 0 2.75rem 0 2.5rem; /* Right space for clear btn, left space for icon */
-      border: none;
-      outline: none;
-      background: transparent;
+      padding: 0 2.75rem 0 2.5rem; /* 右留给清除按钮，左留给放大镜 */
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      outline: 2px solid transparent;
+      outline-offset: 2px;
+      background: var(--background);
       font-weight: 400;
-      font-size: 1.125rem; /* Prevent iOS zoom */
+      font-size: 1.0625rem; /* 16px+ 防止 iOS 聚焦缩放 */
       color: var(--foreground);
       box-sizing: border-box;
       flex-shrink: 0;
+      transition:
+        border-color 0.18s ease,
+        outline-color 0.18s ease;
+    }
+
+    input:focus {
+      border-color: color-mix(in srgb, var(--accent) 55%, var(--border));
+      outline-color: color-mix(in srgb, var(--accent) 15%, transparent);
     }
 
     input::placeholder {
-      color: #9ca3af;
+      color: color-mix(in srgb, var(--foreground) 38%, transparent);
+      opacity: 1;
     }
 
-    html[data-theme="dark"] input::placeholder {
-      color: #6b7280;
+    /* 放大镜（Pagefind 用 mask，改 background-color 即改颜色），按 3.5rem 输入框垂直居中 */
+    form::before {
+      top: 1.75rem;
+      left: 1rem;
+      width: 1rem;
+      height: 1rem;
+      transform: translateY(-50%);
+      background-color: color-mix(in srgb, var(--foreground) 40%, transparent);
+      opacity: 1;
     }
 
-    input:focus-visible {
-      outline: none;
+    /* 空态右侧的键盘提示 */
+    form::after {
+      content: "/";
+      position: absolute;
+      top: 1.75rem;
+      right: 0.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.5rem;
+      height: 1.5rem;
+      transform: translateY(-50%);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-size: 0.72rem;
+      line-height: 1;
+      color: color-mix(in srgb, var(--foreground) 42%, transparent);
+      pointer-events: none;
+      transition: opacity 0.15s ease;
     }
 
-    /* Clear button - centered on the 3.5rem input area */
+    form.has-value::after,
+    form:focus-within::after {
+      opacity: 0;
+    }
+
+    /* Clear button */
     .pagefind-ui__search-clear {
-      display: none; /* Hidden by default, shown via JS */
+      display: none; /* 默认隐藏，由 JS 按输入内容显示 */
       align-items: center;
       justify-content: center;
       position: absolute;
-      right: 0.75rem;
+      right: 0.6rem;
       top: 1.75rem;
       transform: translateY(-50%);
-      width: 1.75rem;
-      height: 1.75rem;
+      width: 1.9rem;
+      height: 1.9rem;
       border: none;
       background: transparent;
       cursor: pointer;
-      color: #9ca3af;
-      transition: all 0.15s ease;
-      border-radius: 9999px;
+      color: color-mix(in srgb, var(--foreground) 45%, transparent);
+      transition:
+        color 0.15s ease,
+        background-color 0.15s ease;
+      border-radius: 4px;
       padding: 0;
       z-index: 1;
     }
 
     .pagefind-ui__search-clear:hover {
-      color: #6b7280;
-      background: rgba(0, 0, 0, 0.05);
+      color: var(--foreground);
+      background: var(--muted);
     }
 
-    html[data-theme="dark"] .pagefind-ui__search-clear:hover {
-      color: #d1d5db;
-      background: rgba(255, 255, 255, 0.05);
+    .pagefind-ui__search-clear:focus-visible,
+    .pagefind-ui__result-title a:focus-visible {
+      outline: 2px solid color-mix(in srgb, var(--accent) 45%, transparent);
+      outline-offset: 2px;
     }
 
-    .pagefind-ui__result-title a {
-      color: var(--accent);
-      outline-offset: 1px;
-      outline-color: var(--accent);
-      text-decoration-style: dashed;
-      text-underline-offset: 4px;
-    }
-
-    .pagefind-ui__result-title a:focus-visible,
-    .pagefind-ui__search-clear:focus-visible {
-      text-decoration-line: none;
-      outline-width: 2px;
-      outline-style: dashed;
-    }
-
+    /* Results */
     .pagefind-ui__results-area {
-      padding: 0 0.875rem;
+      margin-top: 1.25rem;
+      padding: 0;
     }
 
     .pagefind-ui__message {
-      padding-left: 0.875rem;
-      padding-right: 0.875rem;
+      padding: 0 0 0.5rem;
+      color: color-mix(in srgb, var(--foreground) 55%, transparent);
+      font-size: 0.9rem;
+    }
+
+    .pagefind-ui__result {
+      padding: 1.1rem 0;
+      border-bottom: 1px solid var(--border);
     }
 
     .pagefind-ui__result:last-of-type {
       border-bottom: 0;
     }
 
+    .pagefind-ui__result-title {
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    .pagefind-ui__result-title a {
+      color: var(--accent);
+      text-decoration: none;
+      text-underline-offset: 4px;
+    }
+
+    .pagefind-ui__result-title a:hover {
+      text-decoration: underline;
+      text-decoration-style: dashed;
+    }
+
+    .pagefind-ui__result-excerpt {
+      margin-top: 0.35rem;
+      color: color-mix(in srgb, var(--foreground) 58%, transparent);
+      font-size: 0.9rem;
+      line-height: 1.75;
+    }
+
+    .pagefind-ui__result-excerpt mark {
+      background: color-mix(in srgb, var(--accent) 14%, transparent);
+      color: var(--foreground);
+      border-radius: 2px;
+      padding: 0 0.1em;
+    }
+
+    .pagefind-ui__button {
+      width: 100%;
+      margin-top: 1rem;
+      padding: 0.7rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: transparent;
+      color: color-mix(in srgb, var(--foreground) 70%, transparent);
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition:
+        border-color 0.16s ease,
+        color 0.16s ease,
+        background-color 0.16s ease;
+    }
+
+    .pagefind-ui__button:hover {
+      border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+      color: var(--accent);
+      background: color-mix(in srgb, var(--accent) 5%, transparent);
+    }
+
     .pagefind-ui__result-nested .pagefind-ui__result-link:before {
       font-family: var(--font-ui-sans);
+    }
+  }
+
+  /* 标签 chip */
+  .tag-chip {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.45rem;
+    padding: 0.34rem 0.62rem;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-size: 0.875rem;
+    line-height: 1.2;
+    color: color-mix(in srgb, var(--foreground) 72%, transparent);
+    text-decoration: none;
+    transition:
+      border-color 0.16s ease,
+      color 0.16s ease,
+      background-color 0.16s ease;
+  }
+
+  .tag-chip__count {
+    font-size: 0.68rem;
+    font-variant-numeric: tabular-nums;
+    color: color-mix(in srgb, var(--foreground) 40%, transparent);
+    transition: color 0.16s ease;
+  }
+
+  @media (hover: hover) {
+    .tag-chip:hover {
+      border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+      color: var(--accent);
+      background: color-mix(in srgb, var(--accent) 6%, transparent);
+    }
+
+    .tag-chip:hover .tag-chip__count {
+      color: color-mix(in srgb, var(--accent) 70%, transparent);
+    }
+  }
+
+  .tag-chip:active {
+    border-color: color-mix(in srgb, var(--accent) 55%, var(--border));
+    color: var(--accent);
+  }
+
+  /* 触屏设备没有物理键盘，隐藏 / 快捷键提示 */
+  @media (pointer: coarse) {
+    #pagefind-search form::after {
+      display: none;
     }
   }
 </style>
