@@ -85,12 +85,7 @@ const navItems = NAV_ITEMS.filter(item => !item.hidden);
             )
           }
 
-          <a
-            href="/rss.xml"
-            class="icon-btn"
-            title="RSS"
-            aria-label="RSS"
-          >
+          <a href="/rss.xml" class="icon-btn" title="RSS" aria-label="RSS">
             <IconRss class="size-5" />
           </a>
         </div>
@@ -150,7 +145,7 @@ const navItems = NAV_ITEMS.filter(item => !item.hidden);
               <line x1="4" y1="18" x2="20" y2="18"></line>
             </svg>
             <svg
-              class="absolute size-5 -rotate-90 scale-50 opacity-0 transition-all duration-300 ease-in-out group-aria-expanded:rotate-0 group-aria-expanded:scale-100 group-aria-expanded:opacity-100"
+              class="absolute size-5 scale-50 -rotate-90 opacity-0 transition-all duration-300 ease-in-out group-aria-expanded:scale-100 group-aria-expanded:rotate-0 group-aria-expanded:opacity-100"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -254,6 +249,15 @@ const navItems = NAV_ITEMS.filter(item => !item.hidden);
     return document.getElementById("menu-toggle");
   }
 
+  // 刚展开后的短暂窗口内忽略「关闭」，避免移动端连点两次把刚打开的抽屉立刻关掉。
+  // 展开后抽屉会盖住右上角的菜单按钮，第二次点击实际落在抽屉内的 X 上。
+  var OPEN_GUARD_MS = 320;
+  var openedAt = 0;
+  // 关闭动画结束后再隐藏遮罩。用可取消的定时器代替一次性的 transitionend：
+  // 「关 → 立刻开」时旧的 transitionend 会把重新打开的遮罩误设为 hidden，
+  // 导致菜单可见却没有蒙层、点外部关不掉、页面还锁着滚动。
+  var overlayHideTimer = null;
+
   function isMenuOpen() {
     const toggle = getToggle();
     return toggle && toggle.getAttribute("aria-expanded") === "true";
@@ -278,6 +282,12 @@ const navItems = NAV_ITEMS.filter(item => !item.hidden);
     const overlay = getOverlay();
     const toggle = getToggle();
     if (!sb || !overlay || !toggle) return;
+
+    if (overlayHideTimer) {
+      clearTimeout(overlayHideTimer);
+      overlayHideTimer = null;
+    }
+    openedAt = Date.now();
 
     lockScroll();
     document.addEventListener("touchmove", preventScroll, { passive: false });
@@ -315,14 +325,14 @@ const navItems = NAV_ITEMS.filter(item => !item.hidden);
     sb.classList.remove("opacity-100");
     sb.classList.add("translate-x-full");
     sb.classList.add("opacity-0");
-    sb.addEventListener(
-      "transitionend",
-      function handler() {
-        overlay.classList.add("hidden");
-        sb.removeEventListener("transitionend", handler);
-      },
-      { once: true }
-    );
+
+    if (overlayHideTimer) clearTimeout(overlayHideTimer);
+    overlayHideTimer = setTimeout(function () {
+      overlayHideTimer = null;
+      // 动画期间若已重新打开，就不要隐藏遮罩
+      if (isMenuOpen()) return;
+      overlay.classList.add("hidden");
+    }, 320);
 
     sb.setAttribute("aria-hidden", "true");
     sb.setAttribute("inert", "");
@@ -337,6 +347,11 @@ const navItems = NAV_ITEMS.filter(item => !item.hidden);
     const sb = getSidebar();
     const overlay = getOverlay();
     if (!sb || !overlay) return;
+
+    if (overlayHideTimer) {
+      clearTimeout(overlayHideTimer);
+      overlayHideTimer = null;
+    }
 
     unlockScroll();
     document.removeEventListener("touchmove", preventScroll);
@@ -362,6 +377,8 @@ const navItems = NAV_ITEMS.filter(item => !item.hidden);
 
     if (target.closest("#menu-toggle") || target.closest("#sidebar-close")) {
       if (isMenuOpen()) {
+        // 刚展开就来的第二次点击视为误触，忽略，避免「开→关」闪烁
+        if (Date.now() - openedAt < OPEN_GUARD_MS) return;
         closeMenu();
       } else {
         openMenu();
@@ -375,6 +392,7 @@ const navItems = NAV_ITEMS.filter(item => !item.hidden);
     }
 
     if (target.closest("#mobile-overlay")) {
+      if (Date.now() - openedAt < OPEN_GUARD_MS) return;
       closeMenu();
     }
   });
@@ -494,7 +512,7 @@ const navItems = NAV_ITEMS.filter(item => !item.hidden);
     align-items: center;
     gap: 12px;
     padding: 12px 20px 12px 24px;
-    font-size: 15px;
+    font-size: 16px;
     line-height: 1.5;
     color: color-mix(in srgb, var(--foreground) 58%, transparent);
     transition:
