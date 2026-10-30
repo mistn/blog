@@ -1,7 +1,7 @@
 ﻿---
 author: miuarc
 pubDatetime: 2026-05-02T14:30:00+08:00
-modDatetime: 2026-07-04T18:05:00+08:00
+modDatetime: 2026-10-30T21:52:00+08:00
 title: Windows 自用软件与设置（长期更新）
 featured: false
 draft: false
@@ -68,7 +68,6 @@ export const CardGroup = ({ title, children }) => (
   <AppCard name="Scoop" link="https://scoop.sh/" desc="Windows 命令行包管理器，可用来快速安装、更新和卸载软件" />
   <AppCard name="Everything" link="https://www.voidtools.com/" desc="Windows 本地文件搜索工具，搜索速度非常快" />
   <AppCard name="BCUninstaller" link="https://www.bcuninstaller.com/" desc="Windows 软件卸载工具，可以批量卸载和清理残留" />
-  <AppCard name="Mem Reduct" link="https://github.com/henrypp/memreduct" desc="内存清理工具，可以查看和释放系统内存占用" />
   <AppCard name="FastCopy" link="https://fastcopy.jp/" desc="高速文件复制工具，适合复制、移动和校验大量文件" />
   <AppCard name="WizTree" link="https://diskanalyzer.com/" desc="磁盘空间分析工具，可以快速查看硬盘空间被哪些文件占用" />
   <AppCard name="Czkawka" link="https://github.com/qarmin/czkawka" desc="重复文件查找和清理工具，可扫描重复图片、文件、空文件夹等" />
@@ -76,63 +75,74 @@ export const CardGroup = ({ title, children }) => (
 </CardGroup>
 
 <CardGroup title="开发与终端">
-  <AppCard name="VS Code" link="https://code.visualstudio.com/" desc="微软推出的代码编辑器，适合写代码、改博客和编辑 Markdown" />
   <AppCard name="Mark Text" link="https://github.com/marktext/marktext" desc="Markdown 编辑器，界面简洁，支持所见即所得编辑" />
   <AppCard name="Git" link="https://git-scm.com/" desc="分布式版本控制工具，常用于代码管理和项目协作" />
   <AppCard name="Pandoc" link="https://github.com/jgm/pandoc" desc="通用文档转换工具，可以在 Markdown、Word、HTML、PDF 等格式之间转换" />
   <AppCard name="Termius" link="https://termius.com/" desc="跨平台 SSH 客户端，适合连接和管理服务器" />
-  <AppCard name="Radmin VPN" link="https://www.radmin-vpn.com/" desc="虚拟局域网工具，可用于远程联机和设备互联" />
   <AppCard name="Notepad++" link="https://notepad-plus-plus.org/" desc="轻量级文本和代码编辑器，支持语法高亮，适合快速编辑配置文件、脚本和代码片段" />
+  <AppCard name="Codex" link="https://openai.com/codex/" desc="OpenAI 的命令行编程助手，可以在终端里读写代码、执行命令和处理开发任务" />
 </CardGroup>
 
-<CardGroup title="网络与存储">
+<CardGroup title="网络工具">
+  <AppCard name="v2rayN" link="https://github.com/2dust/v2rayN" desc="Windows 平台的代理客户端，常用于网络连接配置" />
+  <AppCard name="FlClash" link="https://github.com/chen08209/FlClash" desc="跨平台代理客户端，作为备用代理工具使用" />
+  <AppCard name="Watt Toolkit" link="https://steampp.net/" desc="游戏和开发平台辅助工具，常用于改善 Steam、GitHub 等服务的访问体验" />
+  <AppCard name="EasyTier" link="https://github.com/EasyTier/EasyTier" desc="轻量级加密组网工具，支持点对点和中继模式，可安全连接不同网络的设备" />
+  <AppCard name="Radmin VPN" link="https://www.radmin-vpn.com/" desc="虚拟局域网工具，可用于远程联机和设备互联" />
+</CardGroup>
+
+<CardGroup title="云存储与同步">
   <AppCard name="OneDrive" link="https://www.microsoft.com/microsoft-365/onedrive/" desc="微软云存储服务，系统深度集成，适合同步办公文档和跨设备访问" />
   <AppCard name="Dropbox" link="https://www.dropbox.com/" desc="云同步网盘，适合跨设备同步文件和备份资料" />
   <AppCard name="MEGA" link="https://mega.io/" desc="云存储服务，提供文件同步、备份和跨设备访问" />
   <AppCard name="坚果云" link="https://www.jianguoyun.com/" desc="国内云同步网盘，支持文件同步和 WebDAV，适合跨设备同步资料" />
   <AppCard name="Rclone" link="https://rclone.org/" desc="命令行云存储同步工具，适合备份文件、同步网盘和连接 WebDAV 等远程存储" />
   <AppCard name="PicList" link="https://piclist.cn/" desc="图床上传和图片管理工具，适合配合 Obsidian、博客和 Cloudflare R2 使用" />
-  <AppCard name="v2rayN" link="https://github.com/2dust/v2rayN" desc="Windows 平台的代理客户端，常用于网络连接配置" />
-  <AppCard name="FlClash" link="https://github.com/chen08209/FlClash" desc="跨平台代理客户端，作为备用代理工具使用" />
-  <AppCard name="Watt Toolkit" link="https://steampp.net/" desc="游戏和开发平台辅助工具，常用于改善 Steam、GitHub 等服务的访问体验" />
-  <AppCard name="EasyTier" link="https://github.com/EasyTier/EasyTier" desc="轻量级加密组网工具，支持点对点和中继模式，可安全连接不同网络的设备" />
-  <AppCard name="aria2" link="https://aria2.github.io/" desc="轻量命令行下载工具，支持 HTTP、FTP、BitTorrent 和 Metalink 等下载任务" />
 </CardGroup>
 
 <CardGroup title="安全与密码">
-  <AppCard name="Bitwarden" link="https://bitwarden.com/" desc="跨平台密码管理器，用来保存账号、密码和二步验证信息" />
+  <AppCard name="Bitwarden" link="https://bitwarden.com/" desc="跨平台密码管理器，配合自建的 Vaultwarden 服务端使用，密码库完全在自己手里" />
 </CardGroup>
 
 <CardGroup title="输入法">
-  <AppCard name="Fcitx5 for Android" link="https://fcitx5-android.github.io/" desc="Android 平台的中文输入法，支持拼音、双拼、五笔等多种输入方案" />
   <AppCard name="Weasel" link="https://github.com/rime/weasel" desc="Rime 输入法的 Windows 版本，适合自定义输入方案和配置" />
 </CardGroup>
 
-<CardGroup title="截图与翻译">
+<CardGroup title="截图与查词">
   <AppCard name="PixPin" link="https://pixpinapp.com/" desc="截图和贴图工具，可以用来截图、标注、钉图和录制简单内容" />
   <AppCard name="欧路词典" link="https://www.eudic.net/" desc="英语词典和翻译工具，适合查单词、背词和阅读英文内容" />
   <AppCard name="GoldenDict-ng" link="https://github.com/xiaoyifang/goldendict-ng" desc="跨平台词典查询工具，支持多种词典格式和在线翻译" />
 </CardGroup>
 
-<CardGroup title="学习与记忆">
+<CardGroup title="学习与研究">
   <AppCard name="Anki" link="https://apps.ankiweb.net/" desc="间隔重复记忆软件，适合背单词、记知识点和长期复习" />
+  <AppCard name="Zotero" link="https://www.zotero.org/" desc="开源文献管理工具，可以收集整理文献、管理阅读笔记并自动生成引用" />
 </CardGroup>
 
-<CardGroup title="阅读与文档">
+<CardGroup title="阅读与电子书">
   <AppCard name="SumatraPDF" link="https://www.sumatrapdfreader.org/" desc="轻量 PDF 阅读器，启动快，适合日常阅读 PDF 和电子书" />
   <AppCard name="PDFgear" link="https://www.pdfgear.com/" desc="PDF 阅读、编辑和转换工具，适合日常处理 PDF 文件" />
-  <AppCard name="Koodo Reader" link="https://www.koodoreader.com/" desc="跨平台电子书阅读器，支持 EPUB、PDF、MOBI 等多种格式" />
+  <AppCard name="Readest" link="https://readest.com/" desc="开源的跨平台电子书阅读器，支持 EPUB、MOBI、PDF 等格式，排版和标注体验不错" />
   <AppCard name="calibre" link="https://calibre-ebook.com/" desc="电子书管理工具，适合整理、转换和传输 EPUB、MOBI 等电子书" />
+</CardGroup>
+
+<CardGroup title="文档与办公">
   <AppCard name="Obsidian" link="https://obsidian.md/" desc="本地优先的 Markdown 笔记软件，适合写作、知识管理和博客草稿整理" />
+  <AppCard name="Notion" link="https://www.notion.com/" desc="一体化的笔记和协作平台，适合整理文档、项目资料和团队共享内容" />
   <AppCard name="Microsoft Visio" link="https://www.microsoft.com/microsoft-365/visio/flowchart-software" desc="微软的流程图和图表绘制工具，适合画流程图、结构图和示意图" />
   <AppCard name="Thunderbird" link="https://www.thunderbird.net/" desc="跨平台邮件客户端，适合统一管理多个邮箱账号" />
+</CardGroup>
+
+<CardGroup title="效率与待办">
+  <AppCard name="Quicker" link="https://getquicker.net/" desc="Windows 效率工具，可以通过动作面板快速执行各种操作" />
+  <AppCard name="Ditto" link="https://github.com/sabrogden/Ditto" desc="剪贴板增强工具，可以保存和搜索历史复制内容" />
+  <AppCard name="Microsoft To Do" link="https://to-do.office.com/tasks/" desc="微软的待办清单工具，免费且和微软账号、Outlook 任务打通，适合个人任务管理" />
 </CardGroup>
 
 <CardGroup title="压缩与传输">
   <AppCard name="7-Zip" link="https://www.7-zip.org/" desc="轻量压缩和解压工具，支持 7z、zip、rar 等常见压缩格式" />
   <AppCard name="LocalSend" link="https://localsend.org/" desc="局域网文件传输工具，可以在电脑、手机和平板之间快速传文件" />
-  <AppCard name="Ditto" link="https://github.com/sabrogden/Ditto" desc="剪贴板增强工具，可以保存和搜索历史复制内容" />
-  <AppCard name="Quicker" link="https://getquicker.net/" desc="Windows 效率工具，可以通过动作面板快速执行各种操作" />
+  <AppCard name="aria2" link="https://aria2.github.io/" desc="轻量命令行下载工具，支持 HTTP、FTP、BitTorrent 和 Metalink 等下载任务" />
 </CardGroup>
 
 <CardGroup title="多媒体">
@@ -149,10 +159,13 @@ export const CardGroup = ({ title, children }) => (
   <AppCard name="StartAllBack" link="https://www.startallback.com/" desc="Windows 任务栏和开始菜单增强工具，适合把新版 Windows 调回更顺手的经典样式" />
   <AppCard name="UniGetUI" link="https://devolutions.net/unigetui/" desc="Windows 软件包管理图形界面，可统一管理 Winget、Scoop、Chocolatey 等来源的软件" />
   <AppCard name="ContextMenuManager" link="https://github.com/BluePointLilac/ContextMenuManager" desc="Windows 右键菜单管理工具，可自定义和清理右键菜单项" />
+  <AppCard name="Mem Reduct" link="https://github.com/henrypp/memreduct" desc="内存清理工具，可以查看和释放系统内存占用" />
   <AppCard name="Neovim" link="https://neovim.io/" desc="现代 Vim 分支编辑器，轻量快速，适合终端内编辑代码和 Markdown" />
+  <AppCard name="VS Code" link="https://code.visualstudio.com/" desc="微软推出的代码编辑器，适合写代码、改博客和编辑 Markdown" />
   <AppCard name="Tailscale" link="https://tailscale.com/" desc="基于 WireGuard 的零配置虚拟组网工具，可安全连接设备和搭建私有网络" />
   <AppCard name="IDM" link="https://www.internetdownloadmanager.com/" desc="Windows 下载管理器，适合接管浏览器下载和多线程下载文件" />
   <AppCard name="PotPlayer" link="https://potplayer.tv/" desc="Windows 视频播放器，支持多种格式和硬件加速" />
+  <AppCard name="Koodo Reader" link="https://www.koodoreader.com/" desc="跨平台电子书阅读器，支持 EPUB、PDF、MOBI 等多种格式" />
   <AppCard name="Pot" link="https://pot-app.com/" desc="划词翻译和 OCR 翻译工具，适合阅读英文网页、文档和软件界面" />
   <AppCard name="微信输入法" link="https://z.weixin.qq.com/" desc="微信官方输入法，词库同步和中文输入体验比较自然" />
   <AppCard name="OpenList Desktop" link="https://github.com/OpenListTeam/OpenList-Desktop" desc="OpenList 的桌面客户端，方便管理和挂载网盘、WebDAV 等存储" />
@@ -168,24 +181,7 @@ Material Design 风格的深色鼠标指针主题，适合搭配深色模式使�
 
 ![](https://s3.2731515.xyz/PicGo/20260502193819q24E3U.webp)
 
-## 3. 一键安装
-
-<details>
-<summary>scoop 批量安装所有列出的软件</summary>
-
-```powershell
-# 添加所需 bucket
-scoop bucket add nerd-fonts
-scoop bucket add lemon
-scoop bucket add versions
-
-# 批量安装
-scoop install 7zip aria2 chafa context-menu-manager czkawka-gui dark ffmpeg git innounp JetBrainsMono-NF localsend mpv neovim-nightly nodejs-lts openssl piclist pnpm python rclone scoop-search tree-sitter unigetui
-```
-
-</details>
-
-## 4. 常用网站
+## 3. 常用网站
 
 <CardGroup>
   <AppCard name="FreeMdict Forum" link="https://forum.freemdict.com/" desc="MDict 词典资源交流论坛，可用于查找词典资源和配置经验" />
