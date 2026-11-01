@@ -90,6 +90,9 @@ function normalizeEntry(entry) {
   const media = entry?.media;
   const title =
     media?.title?.native ?? media?.title?.userPreferred ?? media?.title?.romaji;
+  // 英文站显示 romaji，中文站显示 native，两个都存下来
+  const titleRomaji =
+    media?.title?.romaji ?? media?.title?.userPreferred ?? title ?? null;
   const cover = media?.coverImage?.extraLarge ?? media?.coverImage?.large;
   const year =
     media?.seasonYear ??
@@ -103,6 +106,7 @@ function normalizeEntry(entry) {
 
   return {
     title,
+    titleRomaji,
     cover,
     year,
     url,

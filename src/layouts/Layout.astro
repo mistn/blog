@@ -3,7 +3,7 @@ import { ClientRouter } from "astro:transitions";
 import { SITE } from "@/config";
 import Footer from "@/components/Footer.astro";
 import BackToTopButton from "@/components/BackToTopButton.astro";
-import { getLocaleFromPath, ui, type Locale } from "@/i18n";
+import { getLocaleFromPath, localeMeta, ui, type Locale } from "@/i18n";
 import "@/styles/global.css";
 
 type StructuredDataType = "BlogPosting" | "CollectionPage" | "WebPage";
@@ -21,10 +21,13 @@ type Props = {
   structuredDataType?: StructuredDataType;
   structuredData?: Record<string, unknown> | null;
   locale?: Locale;
+  /** hreflang 配对，仅传入确实存在对应译文的页面 */
+  alternates?: { hreflang: string; href: string }[];
 };
 
 const locale = Astro.props.locale ?? getLocaleFromPath(Astro.url.pathname);
 const copy = ui[locale];
+const meta = localeMeta[locale];
 
 const {
   title = SITE.title,
@@ -38,6 +41,7 @@ const {
   scrollSmooth = false,
   structuredDataType = pubDatetime ? "BlogPosting" : "WebPage",
   structuredData,
+  alternates = [],
 } = Astro.props;
 
 const socialImageURL = new URL(ogImage, Astro.url);
@@ -58,6 +62,7 @@ const baseStructuredData =
         description: `${description}`,
         image: `${socialImageURL}`,
         url: canonicalHref,
+        inLanguage: meta.htmlLang,
         datePublished: pubDatetime?.toISOString(),
         ...(modDatetime && { dateModified: modDatetime.toISOString() }),
         author: [person],
@@ -69,7 +74,7 @@ const baseStructuredData =
         description: `${description}`,
         url: canonicalHref,
         image: `${socialImageURL}`,
-        inLanguage: "zh-CN",
+        inLanguage: meta.htmlLang,
         isPartOf: {
           "@type": "WebSite",
           name: SITE.title,
@@ -86,18 +91,31 @@ const resolvedStructuredData = structuredData
 <!doctype html>
 <html
   dir={SITE.dir}
-  lang="zh-CN"
-  class={`${scrollSmooth && "scroll-smooth"}`}
+  lang={meta.htmlLang}
+  class={scrollSmooth ? "scroll-smooth" : undefined}
 >
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/avif" sizes="any" href="/favicon.avif?v=20260721" />
+    <link
+      rel="icon"
+      type="image/avif"
+      sizes="any"
+      href="/favicon.avif?v=20260721"
+    />
     <link rel="icon" type="image/png" href="/favicon.png?v=20260812" />
 
     <slot name="head" />
-    <script defer src="https://cloud.umami.is/script.js" data-website-id="63f34637-df53-4bc9-9a3f-d0908d2931b3"></script>
+    <script
+      defer
+      src="https://cloud.umami.is/script.js"
+      data-website-id="63f34637-df53-4bc9-9a3f-d0908d2931b3"></script>
     <link rel="canonical" href={canonicalURL} />
+    {
+      alternates.map(({ hreflang, href }) => (
+        <link rel="alternate" hreflang={hreflang} href={href} />
+      ))
+    }
     <meta name="generator" content={Astro.generator} />
 
     <!-- General Meta Tags -->
@@ -114,6 +132,7 @@ const resolvedStructuredData = structuredData
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalURL} />
+    <meta property="og:locale" content={meta.ogLocale} />
     <meta property="og:image" content={socialImageURL} />
 
     <!-- Article Published/Modified time -->
@@ -151,8 +170,11 @@ const resolvedStructuredData = structuredData
     <link
       rel="alternate"
       type="application/rss+xml"
-      title={SITE.title}
-      href={new URL("rss.xml", Astro.site)}
+      title={locale === "en" ? `${SITE.title} (English)` : SITE.title}
+      href={new URL(
+        locale === "en" ? "en/rss.xml" : "rss.xml",
+        Astro.site
+      )}
     />
 
     <meta name="theme-color" content="" />
@@ -201,9 +223,13 @@ const resolvedStructuredData = structuredData
     </script>
   </head>
   <body>
+    <!-- 键盘用户按 Tab 的第一站：直接跳过顶栏和导航 -->
+    <a href="#main-content" class="skip-link">{copy.nav.skipToContent}</a>
     <div class="flex-1"><slot /></div>
     <Footer />
-    <div class="fixed right-4 sm:right-8 bottom-8 z-50 flex flex-col items-center gap-4">
+    <div
+      class="fixed right-4 bottom-8 z-50 flex flex-col items-center gap-4 sm:right-8"
+    >
       <BackToTopButton />
       <slot name="floating" />
     </div>
@@ -223,10 +249,7 @@ const resolvedStructuredData = structuredData
       }
 
       function getCurrentPath() {
-        return normalizePath(
-          window.location.pathname,
-          window.location.search
-        );
+        return normalizePath(window.location.pathname, window.location.search);
       }
 
       function getListMemoryScope() {
@@ -324,7 +347,9 @@ const resolvedStructuredData = structuredData
                 behavior: "instant",
               });
               requestAnimationFrame(() => {
-                document.documentElement.classList.remove("is-restoring-scroll");
+                document.documentElement.classList.remove(
+                  "is-restoring-scroll"
+                );
               });
             });
           });
@@ -346,3 +371,27 @@ const resolvedStructuredData = structuredData
     </script>
   </body>
 </html>
+
+<style>
+  /* 跳到正文：平时移出视口，聚焦时滑进来。
+     不用 sr-only / not-sr-only 组合 —— 两者都写 position，靠源码顺序决胜，容易翻车。 */
+  .skip-link {
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    z-index: 60;
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--background);
+    color: var(--foreground);
+    font-size: 14px;
+    line-height: 1.4;
+    transform: translateY(-200%);
+    transition: transform 0.18s ease;
+  }
+
+  .skip-link:focus-visible {
+    transform: translateY(0);
+  }
+</style>

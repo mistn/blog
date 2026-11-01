@@ -1,4 +1,5 @@
 import type { Props } from "astro";
+import { defaultLocale, type Locale } from "@/i18n";
 import IconMail from "@/assets/icons/IconMail.svg";
 import IconHome from "@/assets/icons/IconHome.svg";
 import IconArchive from "@/assets/icons/IconArchive.svg";
@@ -42,7 +43,7 @@ export interface NavItem {
   path: string;
   /** 对应 i18n 里 nav 下的文案键名 */
   labelKey: NavLabelKey;
-  /** 移动端抽屉使用的图标，桌面标签不渲染图标 */
+  /** 移动端下拉菜单使用的图标，桌面标签不渲染图标 */
   icon: (_props: Props) => Element;
   /** 为 true 时不在导航中渲染（如关闭归档入口） */
   hidden?: boolean;
@@ -50,7 +51,7 @@ export interface NavItem {
 
 /**
  * 站点主导航的唯一数据源。
- * 桌面标签栏（HomeTabs）与移动端抽屉都从这里渲染，新增栏目只需改这一处。
+ * 桌面标签栏（HomeTabs）与移动端下拉菜单都从这里渲染，新增栏目只需改这一处。
  */
 export const NAV_ITEMS: NavItem[] = [
   { path: "/", labelKey: "home", icon: IconHome },
@@ -65,6 +66,21 @@ export const NAV_ITEMS: NavItem[] = [
   { path: "/tools", labelKey: "tools", icon: IconTool },
   { path: "/about", labelKey: "about", icon: IconUser },
 ];
+
+/**
+ * 英文站已经存在的栏目。
+ * 只有列在这里的项才会出现在 /en 下的导航里 —— 漏掉会少一个入口，
+ * 多写了会链到 404，所以新增英文页面时记得同步这里。
+ */
+export const EN_NAV_LABELS: NavLabelKey[] = ["home", "anime", "about"];
+
+/** 按语言过滤导航项，桌面标签栏和移动端抽屉都走这个。 */
+export const getNavItems = (locale: Locale): NavItem[] =>
+  NAV_ITEMS.filter(
+    item =>
+      !item.hidden &&
+      (locale === defaultLocale || EN_NAV_LABELS.includes(item.labelKey))
+  );
 
 export const SHARE_LINKS: Social[] = [
   {

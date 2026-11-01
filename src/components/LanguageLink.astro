@@ -1,0 +1,117 @@
+---
+import { getCollection } from "astro:content";
+import IconGlobe from "@/assets/icons/IconGlobe.svg";
+import { BLOG_EN_PATH, BLOG_PATH } from "@/content.config";
+import {
+  getLocaleFromPath,
+  localeMeta,
+  localizePath,
+  normalizePath,
+} from "@/i18n";
+import { getPath } from "@/utils/getPath";
+
+type Props = {
+  class?: string;
+  /** icon = 顶栏圆形按钮；text = 移动端抽屉工具行里的文字项 */
+  variant?: "icon" | "text";
+};
+
+const { class: className, variant = "icon" } = Astro.props;
+const locale = getLocaleFromPath(Astro.url.pathname);
+const target = locale === "zh" ? "en" : "zh";
+const label = target === "en" ? "English version" : "中文版";
+
+const path = normalizePath(Astro.url.pathname);
+// 兜底：当前页面没有对应译文时回另一种语言的主页。
+let href = localizePath("/", target);
+
+// 两端都存在的静态页，路径一一对应，直接换语言前缀即可。
+// 新增这种页面时记得把路径加进来，否则切换语言会掉回首页。
+const MIRRORED_PAGES = ["/about", "/anime"];
+const mirroredZhPath = locale === "en" ? path.slice("/en".length) : path;
+if (MIRRORED_PAGES.includes(mirroredZhPath)) {
+  href = localizePath(mirroredZhPath, target);
+} else if (locale === "zh" && path.startsWith("/posts/")) {
+  // 文章：配对规则是「同名文件」，所以按 getPath 生成的路径比对，
+  // 而不是拿 URL 末段去撞 post.id —— 文章放进子目录后 id 会带目录前缀，
+  // 撞不上就会静默退回首页。
+  const enPosts = await getCollection("blogEn", ({ data }) => !data.draft);
+  const hasTranslation = enPosts.some(
+    post => getPath(post.id, post.filePath, true, BLOG_EN_PATH) === path
+  );
+  if (hasTranslation) href = localizePath(path, "en");
+} else if (locale === "en" && path.startsWith("/en/posts/")) {
+  const zhPath = path.slice("/en".length);
+  const zhPosts = await getCollection("blog", ({ data }) => !data.draft);
+  const hasOriginal = zhPosts.some(
+    post => getPath(post.id, post.filePath, true, BLOG_PATH) === zhPath
+  );
+  if (hasOriginal) href = zhPath;
+}
+---
+
+<a
+  href={href}
+  hreflang={target}
+  lang={localeMeta[target].htmlLang}
+  class:list={["lang-btn", variant === "text" && "lang-btn--text", className]}
+  title={label}
+  aria-label={label}
+>
+  {
+    variant === "text" ? (
+      target === "en" ? (
+        "English"
+      ) : (
+        "中文"
+      )
+    ) : (
+      // 顶栏统一用图标。文字方案都试过：「EN」两个字像标签，「中 / EN」双显太碎；
+      // 项目自带的 IconLanguage 是「文A」字形，笔画短而碎，20px 下糊成一团。
+      // 地球是纯几何形，和放大镜、月亮的体量最接近。
+      <IconGlobe class="size-5" />
+    )
+  }
+</a>
+
+<style>
+  .lang-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 9999px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: color-mix(in srgb, var(--foreground) 62%, transparent);
+    transition:
+      color 0.18s ease,
+      background-color 0.18s ease;
+  }
+
+  /* 抽屉工具行里的文字形态：跟着那一行的小字号走，不要 40px 圆 */
+  .lang-btn--text {
+    width: auto;
+    min-width: 0;
+    height: auto;
+    padding: 6px 8px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0;
+    color: color-mix(in srgb, var(--foreground) 55%, transparent);
+  }
+
+  @media (hover: hover) {
+    .lang-btn:hover {
+      color: var(--accent);
+      background: var(--muted);
+    }
+  }
+
+  .lang-btn:active {
+    background: var(--muted);
+  }
+</style>

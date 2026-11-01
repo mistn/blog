@@ -1,0 +1,206 @@
+---
+/**
+ * 首页文章列表。
+ * 首屏只放出前 `initial` 条，其余由「加载更多」逐批展开 —— 不分页、不加 URL，
+ * 也就不会出现「翻页后滚回顶部」那种跳转。
+ *
+ * 关键取舍：**所有条目都渲染进 HTML**，超出首屏的只是被 CSS 隐藏。
+ * 这样爬虫和 Pagefind 依然能看到全部文章，也不会有一开始全展开再塌回去的抖动。
+ * 代价是无 JS 时只能看到前 `initial` 条（导航里的「归档」仍然列出全部）。
+ */
+import Datetime from "@/components/Datetime.astro";
+import { getLocaleFromPath, ui, type Locale } from "@/i18n";
+
+export type PostListItem = {
+  href: string;
+  title: string;
+  description: string;
+  pubDatetime: Date;
+  modDatetime?: Date | null;
+};
+
+type Props = {
+  items: PostListItem[];
+  locale?: Locale;
+  /** 首屏渲染多少条，其余折叠到「加载更多」后面 */
+  initial?: number;
+  /** 每次点开多少条 */
+  step?: number;
+};
+
+const {
+  items,
+  locale = getLocaleFromPath(Astro.url.pathname),
+  initial = 8,
+  step = 8,
+} = Astro.props;
+
+const copy = ui[locale];
+const remaining = Math.max(items.length - initial, 0);
+
+const fill = (template: string, vars: Record<string, string | number>) =>
+  Object.entries(vars).reduce(
+    (acc, [key, value]) => acc.replace(`{${key}}`, String(value)),
+    template
+  );
+---
+
+<div data-post-list>
+  {
+    items.map((post, index) => (
+      <article
+        class:list={["py-5 md:py-7", index >= initial && "post-item--extra"]}
+        data-post-item
+      >
+        <a
+          href={post.href}
+          data-post-link
+          class="card-link-press inline-block text-[1.45rem] leading-tight font-medium tracking-tight transition hover:text-accent active:opacity-60"
+        >
+          {post.title}
+        </a>
+        <div class="mt-2.5 flex flex-wrap items-center gap-2.5 text-xs text-foreground/60 md:mt-3.5 [&_svg]:scale-75 [&_svg]:opacity-70">
+          <Datetime
+            pubDatetime={post.pubDatetime}
+            modDatetime={post.modDatetime}
+            {locale}
+            class=""
+          />
+        </div>
+        <p class="mt-2 line-clamp-2 text-sm leading-relaxed text-gray-600 md:mt-3 md:text-base dark:text-gray-400">
+          {post.description}
+        </p>
+      </article>
+    ))
+  }
+</div>
+
+{
+  remaining > 0 && (
+    <button
+      type="button"
+      class="post-more"
+      data-post-more
+      data-step={step}
+      data-status-label={copy.pages.listStatus}
+      hidden
+    >
+      {copy.pages.loadMore}
+    </button>
+  )
+}
+
+<p class="sr-only" aria-live="polite" data-post-status></p>
+
+<script>
+  function initPostList() {
+    const list = document.querySelector("[data-post-list]");
+    const button =
+      document.querySelector<HTMLButtonElement>("[data-post-more]");
+
+    // 条目不足一屏时没有按钮，直接跳过
+    if (!list || !button || button.dataset.ready === "true") return;
+    button.dataset.ready = "true";
+
+    const items = Array.from(
+      list.querySelectorAll<HTMLElement>("[data-post-item]")
+    );
+    const status = document.querySelector<HTMLElement>("[data-post-status]");
+    const step = Number(button.dataset.step) || 8;
+
+    const fill = (template: string, vars: Record<string, string | number>) =>
+      Object.entries(vars).reduce(
+        (acc, [key, value]) => acc.replace(`{${key}}`, String(value)),
+        template
+      );
+
+    const isExtra = (el: HTMLElement) =>
+      el.classList.contains("post-item--extra");
+    const shownCount = () => items.filter(el => !isExtra(el)).length;
+
+    const reveal = (upTo: number) => {
+      items.forEach((el, index) => {
+        if (index < upTo) el.classList.remove("post-item--extra");
+      });
+    };
+
+    const sync = () => {
+      const shown = shownCount();
+
+      button.hidden = items.length - shown <= 0;
+
+      // 按钮文案不带数量，只剩「加载更多」；具体进度交给下面的状态行播报
+      if (status) {
+        status.textContent = fill(button.dataset.statusLabel ?? "", {
+          shown,
+          total: items.length,
+        });
+      }
+    };
+
+    // 从文章页返回时恢复展开进度。不恢复的话列表会塌回首屏条数，
+    // ClientRouter 的滚动位置被夹住，落点会乱跳。
+    const STORAGE_KEY = "postListExpanded";
+    const saved = Number(sessionStorage.getItem(STORAGE_KEY) ?? 0);
+    if (saved > 0) reveal(saved);
+
+    button.addEventListener("click", () => {
+      // 记下第一个新放出来的条目，全部展开后按钮会消失，
+      // 焦点留在被隐藏的按钮上会掉回 body，读屏用户会丢失位置。
+      const firstNew = shownCount();
+      reveal(firstNew + step);
+      sessionStorage.setItem(STORAGE_KEY, String(shownCount()));
+      sync();
+
+      if (button.hidden) {
+        items[firstNew]?.querySelector("a")?.focus({ preventScroll: true });
+      }
+    });
+
+    sync();
+  }
+
+  initPostList();
+  // after-swap 时 DOM 已就位、浏览器还没重绘，在这里展开能赶在滚动位置恢复之前
+  document.addEventListener("astro:after-swap", initPostList);
+  document.addEventListener("astro:page-load", initPostList);
+</script>
+
+<style>
+  /* 超出首屏的条目由服务端就打上这个类，避免「先全展开再塌回去」的抖动 */
+  .post-item--extra {
+    display: none;
+  }
+
+  /* 只是一行文字，不加边框/底色/圆角 —— 和列表本身的留白节奏保持一致。
+     宽度拉满是为了保留足够的点击区域（移动端高度 ≥ 44px）。 */
+  .post-more {
+    display: block;
+    width: 100%;
+    margin-top: 1.25rem;
+    padding: 0.8rem 1rem;
+    border: 0;
+    background: transparent;
+    font-size: 0.88rem;
+    line-height: 1.4;
+    color: color-mix(in srgb, var(--foreground) 58%, transparent);
+    font-variant-numeric: tabular-nums;
+    cursor: pointer;
+    transition: color 0.16s ease;
+  }
+
+  @media (hover: hover) {
+    .post-more:hover {
+      color: var(--accent);
+    }
+  }
+
+  .post-more:active {
+    color: var(--accent);
+  }
+
+  .post-more:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--accent) 45%, transparent);
+    outline-offset: 2px;
+  }
+</style>

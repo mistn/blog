@@ -5,7 +5,7 @@ import SiteTopbar from "@/components/SiteTopbar.astro";
 import PageHeader from "@/components/PageHeader.astro";
 import Layout from "./Layout.astro";
 import { SITE } from "@/config";
-import { getLocaleFromPath, ui } from "@/i18n";
+import { getLocaleFromPath, toAbsoluteUrl, ui } from "@/i18n";
 import { getLastModified } from "@/utils/getLastModified.js";
 
 type Props = MarkdownLayoutProps<{ title: string; headingEyebrow?: string }>;
@@ -13,12 +13,22 @@ type Props = MarkdownLayoutProps<{ title: string; headingEyebrow?: string }>;
 const { frontmatter } = Astro.props;
 const locale = getLocaleFromPath(Astro.url.pathname);
 const copy = ui[locale];
-const lastUpdated = getLastModified("src/pages/about.mdx");
+const isEn = locale === "en";
+const lastUpdated = getLastModified(
+  isEn ? "src/pages/en/about.mdx" : "src/pages/about.mdx"
+);
+const alternates = [
+  { hreflang: "zh-CN", href: toAbsoluteUrl("/about", Astro.url) },
+  { hreflang: "en", href: toAbsoluteUrl("/en/about", Astro.url) },
+  { hreflang: "x-default", href: toAbsoluteUrl("/about", Astro.url) },
+];
 ---
 
 <Layout
   title={`${frontmatter.title} | ${SITE.title}`}
   description={copy.pages.aboutDesc}
+  {locale}
+  {alternates}
 >
   <SiteTopbar />
   <main
@@ -30,7 +40,7 @@ const lastUpdated = getLastModified("src/pages/about.mdx");
         lastUpdated && (
           <dl class="flex flex-wrap gap-x-6 gap-y-0.5">
             <div class="flex items-center gap-1.5">
-              <dt class="text-foreground/45">更新于</dt>
+              <dt class="text-foreground/45">{copy.actions.updated}</dt>
               <dd>{lastUpdated}</dd>
             </div>
           </dl>
@@ -43,12 +53,12 @@ const lastUpdated = getLastModified("src/pages/about.mdx");
       </div>
     </section>
     <ArtalkComments
-      pageKey="/about"
+      pageKey={isEn ? "/en/about" : "/about"}
       pageTitle={frontmatter.title}
-      title="留言"
-      placeholder="写点什么吧..."
-      noComment="「快来做第一个留言的人吧」"
-      counter="{count} 条留言"
+      title={copy.actions.comments}
+      placeholder={copy.actions.commentPlaceholder}
+      noComment={copy.actions.noComment}
+      counter={copy.actions.commentCount}
     />
   </main>
 </Layout>

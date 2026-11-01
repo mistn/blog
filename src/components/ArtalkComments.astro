@@ -10,7 +10,8 @@ type Props = {
   counter?: string;
 };
 
-const { pageKey, pageTitle, title, placeholder, noComment, counter } = Astro.props;
+const { pageKey, pageTitle, title, placeholder, noComment, counter } =
+  Astro.props;
 const locale = getLocaleFromPath(Astro.url.pathname);
 const copy = ui[locale];
 const heading = title ?? copy.actions.comments;
@@ -49,17 +50,31 @@ const heading = title ?? copy.actions.comments;
     const CSS_URL = "https://unpkg.com/artalk@2.10.0/dist/Artalk.css";
     const JS_URL = "https://esm.sh/artalk@2.10.0";
 
-    const TEXT = {
-      counter: "{count} 条评论",
-      commentFail: "评论失败",
-      email: "邮箱",
-      link: "网址",
-      nick: "昵称",
-      noComment: "「此时无声胜有声」",
-      placeholder: "键入内容...",
-      send: "发送",
-      sendBtn: "发送",
-    };
+    const isEn = document.documentElement.lang.toLowerCase().startsWith("en");
+
+    const TEXT = isEn
+      ? {
+          counter: "{count} comments",
+          commentFail: "Failed to post comment",
+          email: "Email",
+          link: "Website",
+          nick: "Nickname",
+          noComment: "Be the first to leave a comment.",
+          placeholder: "Write something...",
+          send: "Send",
+          sendBtn: "Send",
+        }
+      : {
+          counter: "{count} 条评论",
+          commentFail: "评论失败",
+          email: "邮箱",
+          link: "网址",
+          nick: "昵称",
+          noComment: "「此时无声胜有声」",
+          placeholder: "键入内容...",
+          send: "发送",
+          sendBtn: "发送",
+        };
 
     function isDarkTheme() {
       return document.documentElement.getAttribute("data-theme") === "dark";
@@ -128,7 +143,7 @@ const heading = title ?? copy.actions.comments;
           pageKey: conf.pageKey,
           pageTitle: conf.pageTitle,
           darkMode: isDarkTheme(),
-          locale: "zh-CN",
+          locale: isEn ? "en-US" : "zh-CN",
           noComment: conf.noComment,
           placeholder: conf.placeholder,
           preferRemoteConf: false,

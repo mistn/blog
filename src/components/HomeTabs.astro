@@ -1,5 +1,5 @@
 ---
-import { NAV_ITEMS } from "@/constants";
+import { getNavItems } from "@/constants";
 import { getLocaleFromPath, localizePath, normalizePath, ui } from "@/i18n";
 
 const { pathname } = Astro.url;
@@ -8,7 +8,7 @@ const copy = ui[locale];
 const currentPath = normalizePath(pathname);
 const getHref = (path: string) => localizePath(path, locale);
 const isActive = (path: string) => currentPath === normalizePath(getHref(path));
-const navItems = NAV_ITEMS.filter(item => !item.hidden);
+const navItems = getNavItems(locale);
 ---
 
 <nav

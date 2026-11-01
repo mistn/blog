@@ -30,6 +30,15 @@ const copy = ui[locale];
       >
         {copy.pages.notFoundCta}
       </a>
+      <!-- 静态 404 构建时拿不到真实路径，只能中英各给一个入口 -->
+      <a
+        href="/en"
+        hreflang="en"
+        lang="en"
+        class="mt-3 text-sm text-foreground/45 underline decoration-dashed underline-offset-4 transition-colors hover:text-foreground/75"
+      >
+        {ui.en.pages.notFoundCta}
+      </a>
     </div>
   </main>
 

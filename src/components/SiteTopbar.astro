@@ -1,24 +1,31 @@
 ---
 import IconMail from "@/assets/icons/IconMail.svg";
 import IconMoon from "@/assets/icons/IconMoon.svg";
+import IconRss from "@/assets/icons/IconRss.svg";
 import IconSearch from "@/assets/icons/IconSearch.svg";
 import IconSunHigh from "@/assets/icons/IconSunHigh.svg";
-import IconRss from "@/assets/icons/IconRss.svg";
 import HomeTabs from "@/components/HomeTabs.astro";
-import { NAV_ITEMS, SOCIALS } from "@/constants";
+import LanguageLink from "@/components/LanguageLink.astro";
+import { getNavItems, SOCIALS } from "@/constants";
 import { SITE } from "@/config";
 import { getLocaleFromPath, localizePath, normalizePath, ui } from "@/i18n";
 
 const locale = getLocaleFromPath(Astro.url.pathname);
 const copy = ui[locale];
+// RSS 原来是全站唯一入口、且在底栏，要滚 3～4 屏才够得到；
+// 顶栏（桌面）和抽屉工具行（移动）各放一个，底栏那个保留不动。
+const feedHref = locale === "en" ? "/en/rss.xml" : "/rss.xml";
 const emailLink = SOCIALS.find(social => social.href.startsWith("mailto:"));
 const emailAddress = emailLink?.href.replace("mailto:", "");
-const emailLabel = `${copy.nav.email} ${SITE.title}`;
+// 文字只写「邮件」，地址留给 title / aria-label，读屏和长按预览还能拿到
+const emailLabel = emailAddress
+  ? `${copy.nav.email} ${emailAddress}`
+  : copy.nav.email;
 
 const getHref = (path: string) => localizePath(path, locale);
 const currentPath = normalizePath(Astro.url.pathname);
 const isActive = (path: string) => currentPath === normalizePath(getHref(path));
-const navItems = NAV_ITEMS.filter(item => !item.hidden);
+const navItems = getNavItems(locale);
 ---
 
 <header id="site-topbar" class="site-topbar sticky top-0 z-30">
@@ -53,15 +60,19 @@ const navItems = NAV_ITEMS.filter(item => !item.hidden);
       <div class="flex shrink-0 items-center gap-0.5 sm:gap-1">
         <!-- 桌面端图标 -->
         <div class="hidden items-center gap-1 lg:flex">
-          <a
-            href={localizePath("/search", locale)}
-            class="icon-btn"
-            aria-current={isActive("/search") ? "page" : undefined}
-            title={copy.nav.search}
-            aria-label={copy.nav.search}
-          >
-            <IconSearch class="size-5" />
-          </a>
+          {
+            locale === "zh" && (
+              <a
+                href={localizePath("/search", locale)}
+                class="icon-btn"
+                aria-current={isActive("/search") ? "page" : undefined}
+                title={copy.nav.search}
+                aria-label={copy.nav.search}
+              >
+                <IconSearch class="size-5" />
+              </a>
+            )
+          }
 
           {
             SITE.lightAndDarkMode && (
@@ -85,41 +96,21 @@ const navItems = NAV_ITEMS.filter(item => !item.hidden);
             )
           }
 
-          <a href="/rss.xml" class="icon-btn" title="RSS" aria-label="RSS">
-            <IconRss class="size-5" />
-          </a>
+          <LanguageLink />
         </div>
 
-        <!-- 移动端：搜索 / 主题 / 菜单 -->
+        <!-- 移动端只留搜索和菜单：主题与语言都收进抽屉底部的工具行 -->
         <div class="flex items-center gap-0.5 lg:hidden">
-          <a
-            href={localizePath("/search", locale)}
-            class="icon-btn"
-            title={copy.nav.search}
-            aria-label={copy.nav.search}
-          >
-            <IconSearch class="size-5" />
-          </a>
-
           {
-            SITE.lightAndDarkMode && (
-              <button
-                id="theme-btn"
-                type="button"
+            locale === "zh" && (
+              <a
+                href={localizePath("/search", locale)}
                 class="icon-btn"
-                title={copy.nav.theme}
-                aria-label={copy.nav.theme}
-                aria-live="polite"
+                title={copy.nav.search}
+                aria-label={copy.nav.search}
               >
-                <span
-                  data-theme-icon-anchor
-                  class="pointer-events-none relative block size-5"
-                  aria-hidden="true"
-                >
-                  <IconMoon class="absolute inset-0 size-full scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
-                  <IconSunHigh class="absolute inset-0 size-full scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
-                </span>
-              </button>
+                <IconSearch class="size-5" />
+              </a>
             )
           }
 
@@ -130,6 +121,8 @@ const navItems = NAV_ITEMS.filter(item => !item.hidden);
             aria-label={copy.nav.openMenu}
             aria-controls="mobile-dropdown"
             aria-expanded="false"
+            data-open-label={copy.nav.openMenu}
+            data-close-label={copy.nav.closeMenu}
           >
             <svg
               class="absolute size-5 transition-all duration-300 ease-in-out group-aria-expanded:scale-50 group-aria-expanded:rotate-90 group-aria-expanded:opacity-0"
@@ -161,85 +154,105 @@ const navItems = NAV_ITEMS.filter(item => !item.hidden);
       </div>
     </div>
   </div>
-</header>
+  <!-- ===== 移动端顶部下拉菜单 ===== -->
+  <div
+    id="mobile-dropdown"
+    class="mobile-sheet lg:hidden"
+    aria-hidden="true"
+    inert
+  >
+    <div class="mx-auto w-full max-w-4xl px-5 pb-4 sm:px-6">
+      <div class="mobile-sheet-panel">
+        <nav class="grid grid-cols-2 gap-0.5 p-2" aria-label={copy.nav.menu}>
+          {
+            navItems.map(item => {
+              const Icon = item.icon;
+              return (
+                <a
+                  href={getHref(item.path)}
+                  class="sheet-item"
+                  aria-current={isActive(item.path) ? "page" : undefined}
+                  data-menu-link
+                >
+                  <Icon class="size-[18px] shrink-0" />
+                  <span class="truncate">{copy.nav[item.labelKey]}</span>
+                </a>
+              );
+            })
+          }
+        </nav>
 
-<!-- ===== 移动端抽屉 ===== -->
-<div
-  id="mobile-dropdown"
-  class="mobile-drawer fixed top-0 right-0 z-[60] flex h-full w-[62vw] max-w-[204px] translate-x-full flex-col bg-background opacity-0 transition-[transform,opacity] duration-300 ease-out"
->
-  <div class="flex justify-end px-2 pt-2">
-    <button
-      id="sidebar-close"
-      type="button"
-      class="icon-btn"
-      aria-label={copy.nav.closeMenu}
-    >
-      <svg
-        class="size-5"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        aria-hidden="true"
-      >
-        <line x1="6" y1="6" x2="18" y2="18"></line>
-        <line x1="18" y1="6" x2="6" y2="18"></line>
-      </svg>
-    </button>
-  </div>
-
-  <nav class="flex-1 overflow-y-auto pt-1 pb-6" aria-label={copy.nav.menu}>
-    {
-      navItems.map(item => {
-        const Icon = item.icon;
-        return (
+        <div class="sheet-utils border-t border-border">
+          {
+            SITE.lightAndDarkMode && (
+              <button
+                id="theme-btn"
+                type="button"
+                class="sheet-util"
+                title={copy.nav.theme}
+                aria-label={copy.nav.theme}
+                aria-live="polite"
+              >
+                <span
+                  data-theme-icon-anchor
+                  class="pointer-events-none relative block size-4"
+                  aria-hidden="true"
+                >
+                  <IconMoon class="absolute inset-0 size-full scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
+                  <IconSunHigh class="absolute inset-0 size-full scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
+                </span>
+                <span
+                  data-theme-label
+                  data-target-dark={copy.nav.themeToDark}
+                  data-target-light={copy.nav.themeToLight}
+                >
+                  {copy.nav.themeToDark}
+                </span>
+              </button>
+            )
+          }
+          <LanguageLink variant="text" />
           <a
-            href={getHref(item.path)}
-            class="drawer-item"
-            aria-current={isActive(item.path) ? "page" : undefined}
+            href={feedHref}
+            class="sheet-util"
+            title={copy.nav.rss}
+            aria-label={copy.nav.rss}
             data-menu-link
           >
-            <Icon class="size-4 shrink-0" />
-            <span>{copy.nav[item.labelKey]}</span>
+            <IconRss class="size-4 shrink-0" />
+            <span>RSS</span>
           </a>
-        );
-      })
-    }
-  </nav>
-
-  <div class="flex items-center gap-1 border-t border-border px-4 py-3">
-    <a
-      href={emailAddress ? `mailto:${emailAddress}` : "mailto:"}
-      class="icon-btn"
-      title={emailLabel}
-      aria-label={emailLabel}
-      data-menu-link
-    >
-      <IconMail class="size-5" />
-    </a>
-    <a
-      href="/rss.xml"
-      class="icon-btn"
-      title="RSS"
-      aria-label="RSS"
-      data-menu-link
-    >
-      <IconRss class="size-5" />
-    </a>
+          <a
+            href={emailAddress ? `mailto:${emailAddress}` : "mailto:"}
+            class="sheet-util sheet-util-mail"
+            title={emailLabel}
+            aria-label={emailLabel}
+            data-menu-link
+          >
+            <IconMail class="size-4 shrink-0" />
+            <span>{copy.nav.mail}</span>
+          </a>
+        </div>
+      </div>
+    </div>
   </div>
-</div>
+</header>
 
-<!-- ===== 抽屉遮罩 ===== -->
+<!-- ===== 下拉菜单遮罩 =====
+     放在 header 外面是必须的：header 滚动后会挂 backdrop-filter，而带 backdrop-filter
+     的元素会变成「backdrop root」，它里面的后代只能采样到 header 自己那一层背景，
+     遮罩的 blur 就整个失效（表现为「页面没滚动时能糊，一滚就变纯色」）。
+     挪成 header 的同级之后，遮罩采样的才是整页内容。 -->
 <div
   id="mobile-overlay"
-  class="mobile-overlay fixed inset-0 z-40 hidden opacity-0 transition-opacity duration-200 ease-out"
+  class="mobile-overlay lg:hidden"
+  aria-hidden="true"
+  inert
 >
 </div>
 
 <script is:inline>
-  function getSidebar() {
+  function getSheet() {
     return document.getElementById("mobile-dropdown");
   }
   function getOverlay() {
@@ -249,176 +262,115 @@ const navItems = NAV_ITEMS.filter(item => !item.hidden);
     return document.getElementById("menu-toggle");
   }
 
-  // 刚展开后的短暂窗口内忽略「关闭」，避免移动端连点两次把刚打开的抽屉立刻关掉。
-  // 展开后抽屉会盖住右上角的菜单按钮，第二次点击实际落在抽屉内的 X 上。
-  var OPEN_GUARD_MS = 320;
-  var openedAt = 0;
-  // 关闭动画结束后再隐藏遮罩。用可取消的定时器代替一次性的 transitionend：
-  // 「关 → 立刻开」时旧的 transitionend 会把重新打开的遮罩误设为 hidden，
-  // 导致菜单可见却没有蒙层、点外部关不掉、页面还锁着滚动。
-  var overlayHideTimer = null;
-
   function isMenuOpen() {
     const toggle = getToggle();
-    return toggle && toggle.getAttribute("aria-expanded") === "true";
+    return !!toggle && toggle.getAttribute("aria-expanded") === "true";
   }
 
   function preventScroll(e) {
+    const target = e.target;
+    // 面板自身在屏幕很矮时可能需要滚动，放行面板内部的滚动手势。
+    if (target instanceof Element && target.closest(".mobile-sheet-panel")) {
+      return;
+    }
     e.preventDefault();
   }
 
+  // 不用 overflow:hidden 锁滚动：那会让顶栏的 position: sticky 失效，
+  // 菜单在页面滚动后打开时会跟着跑到视口外。改为拦截滚轮和触摸手势。
   function lockScroll() {
-    document.documentElement.style.overflow = "hidden";
-    document.body.style.overflow = "hidden";
+    document.addEventListener("wheel", preventScroll, { passive: false });
+    document.addEventListener("touchmove", preventScroll, { passive: false });
   }
 
   function unlockScroll() {
-    document.documentElement.style.overflow = "";
-    document.body.style.overflow = "";
+    document.removeEventListener("wheel", preventScroll);
+    document.removeEventListener("touchmove", preventScroll);
+  }
+
+  function setExpanded(open) {
+    const toggle = getToggle();
+    if (!toggle) return;
+    toggle.setAttribute("aria-expanded", open ? "true" : "false");
+    toggle.setAttribute(
+      "aria-label",
+      open ? toggle.dataset.closeLabel : toggle.dataset.openLabel
+    );
   }
 
   function openMenu() {
-    const sb = getSidebar();
+    const sheet = getSheet();
     const overlay = getOverlay();
-    const toggle = getToggle();
-    if (!sb || !overlay || !toggle) return;
-
-    if (overlayHideTimer) {
-      clearTimeout(overlayHideTimer);
-      overlayHideTimer = null;
-    }
-    openedAt = Date.now();
+    if (!sheet || !overlay) return;
 
     lockScroll();
-    document.addEventListener("touchmove", preventScroll, { passive: false });
-    overlay.addEventListener("wheel", preventScroll, { passive: false });
-    overlay.addEventListener("touchmove", preventScroll, { passive: false });
 
-    overlay.classList.remove("hidden");
-    sb.classList.remove("translate-x-full");
-    sb.classList.remove("opacity-0");
-    requestAnimationFrame(function () {
-      overlay.classList.remove("opacity-0");
-      sb.classList.add("translate-x-0");
-      sb.classList.add("opacity-100");
-    });
-
-    sb.removeAttribute("inert");
+    sheet.classList.add("is-open");
+    overlay.classList.add("is-open");
+    sheet.removeAttribute("inert");
     overlay.removeAttribute("inert");
-    sb.setAttribute("aria-hidden", "false");
+    sheet.setAttribute("aria-hidden", "false");
     overlay.setAttribute("aria-hidden", "false");
-    toggle.setAttribute("aria-expanded", "true");
+    setExpanded(true);
   }
 
-  function closeMenu() {
-    const sb = getSidebar();
+  function closeMenu(returnFocus) {
+    const sheet = getSheet();
     const overlay = getOverlay();
-    if (!sb || !overlay) return;
+    if (!sheet || !overlay) return;
 
     unlockScroll();
     document.removeEventListener("touchmove", preventScroll);
-    overlay.removeEventListener("wheel", preventScroll);
-    overlay.removeEventListener("touchmove", preventScroll);
 
-    overlay.classList.add("opacity-0");
-    sb.classList.remove("translate-x-0");
-    sb.classList.remove("opacity-100");
-    sb.classList.add("translate-x-full");
-    sb.classList.add("opacity-0");
-
-    if (overlayHideTimer) clearTimeout(overlayHideTimer);
-    overlayHideTimer = setTimeout(function () {
-      overlayHideTimer = null;
-      // 动画期间若已重新打开，就不要隐藏遮罩
-      if (isMenuOpen()) return;
-      overlay.classList.add("hidden");
-    }, 320);
-
-    sb.setAttribute("aria-hidden", "true");
-    sb.setAttribute("inert", "");
-    overlay.setAttribute("aria-hidden", "true");
+    // 收起动画由 CSS transition 负责，这里只切换状态。
+    sheet.classList.remove("is-open");
+    overlay.classList.remove("is-open");
+    sheet.setAttribute("inert", "");
     overlay.setAttribute("inert", "");
+    sheet.setAttribute("aria-hidden", "true");
+    overlay.setAttribute("aria-hidden", "true");
+    setExpanded(false);
 
-    const toggle = getToggle();
-    if (toggle) toggle.setAttribute("aria-expanded", "false");
+    if (returnFocus) {
+      const toggle = getToggle();
+      if (toggle) toggle.focus({ preventScroll: true });
+    }
   }
 
   function closeMenuSilent() {
-    const sb = getSidebar();
-    const overlay = getOverlay();
-    if (!sb || !overlay) return;
-
-    if (overlayHideTimer) {
-      clearTimeout(overlayHideTimer);
-      overlayHideTimer = null;
-    }
-
-    unlockScroll();
-    document.removeEventListener("touchmove", preventScroll);
-    overlay.removeEventListener("wheel", preventScroll);
-    overlay.removeEventListener("touchmove", preventScroll);
-
-    sb.classList.add("translate-x-full");
-    sb.classList.remove("translate-x-0");
-    sb.classList.add("opacity-0");
-    sb.classList.remove("opacity-100");
-    sb.setAttribute("aria-hidden", "true");
-    sb.setAttribute("inert", "");
-    overlay.classList.add("hidden", "opacity-0");
-    overlay.setAttribute("aria-hidden", "true");
-    overlay.setAttribute("inert", "");
-
-    const toggle = getToggle();
-    if (toggle) toggle.setAttribute("aria-expanded", "false");
+    // 换页时不做动画，直接收起并解锁滚动。
+    closeMenu(false);
   }
 
   document.addEventListener("click", function (e) {
     const target = /** @type {HTMLElement} */ (e.target);
+    if (!target || typeof target.closest !== "function") return;
 
-    if (target.closest("#menu-toggle") || target.closest("#sidebar-close")) {
-      if (isMenuOpen()) {
-        // 刚展开就来的第二次点击视为误触，忽略，避免「开→关」闪烁
-        if (Date.now() - openedAt < OPEN_GUARD_MS) return;
-        closeMenu();
-      } else {
-        openMenu();
-      }
+    if (target.closest("#menu-toggle")) {
+      if (isMenuOpen()) closeMenu(true);
+      else openMenu();
       return;
     }
 
     if (target.closest("[data-menu-link]")) {
-      closeMenu();
+      closeMenu(false);
       return;
     }
 
-    if (target.closest("#mobile-overlay")) {
-      if (Date.now() - openedAt < OPEN_GUARD_MS) return;
-      closeMenu();
-    }
+    if (target.closest("#mobile-overlay")) closeMenu(true);
   });
 
   document.addEventListener("keydown", function (e) {
-    if (e.key !== "Escape") return;
-    const sb = getSidebar();
-    if (sb && !sb.classList.contains("translate-x-full")) closeMenu();
+    if (e.key !== "Escape" || !isMenuOpen()) return;
+    closeMenu(true);
   });
 
-  document.addEventListener("astro:before-swap", function () {
-    closeMenuSilent();
-  });
+  document.addEventListener("astro:before-swap", closeMenuSilent);
 
-  (function initHidden() {
-    const sb = getSidebar();
-    const overlay = getOverlay();
-    if (sb) {
-      sb.setAttribute("aria-hidden", "true");
-      sb.setAttribute("inert", "");
-    }
-    if (overlay) {
-      overlay.setAttribute("aria-hidden", "true");
-      overlay.setAttribute("inert", "");
-    }
-  })();
+  // 在菜单展开时把窗口拉宽到桌面断点，收起菜单并解除滚动锁定。
+  window.addEventListener("resize", function () {
+    if (isMenuOpen() && window.innerWidth >= 1024) closeMenu(false);
+  });
 </script>
 
 <script is:inline>
@@ -506,71 +458,144 @@ const navItems = NAV_ITEMS.filter(item => !item.hidden);
     color: var(--accent);
   }
 
-  .drawer-item {
-    position: relative;
+  /* 顶部下拉面板：从顶栏下方展开，内容宽度与页面主体对齐 */
+  .mobile-sheet {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    left: 0;
+    z-index: 20;
+    opacity: 0;
+    transform: translateY(-8px);
+    pointer-events: none;
+    transition:
+      opacity 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .mobile-sheet.is-open {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .mobile-sheet-panel {
+    max-height: calc(100dvh - 7rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: var(--background);
+    box-shadow:
+      0 18px 40px -14px rgb(0 0 0 / 0.3),
+      0 2px 8px -3px rgb(0 0 0 / 0.12);
+  }
+
+  .sheet-item {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 12px 20px 12px 24px;
-    font-size: 16px;
-    line-height: 1.5;
-    color: color-mix(in srgb, var(--foreground) 58%, transparent);
+    gap: 10px;
+    min-width: 0;
+    padding: 12px 12px;
+    border-radius: 10px;
+    font-size: 15px;
+    line-height: 1.4;
+    color: color-mix(in srgb, var(--foreground) 62%, transparent);
     transition:
       background-color 0.16s ease,
       color 0.16s ease;
   }
 
-  .drawer-item svg {
+  .sheet-item svg {
     opacity: 0.55;
     transition: opacity 0.16s ease;
   }
 
-  .drawer-item::before {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 10px;
-    width: 2px;
-    height: 0;
-    background: var(--foreground);
-    transform: translateY(-50%);
-    transition: height 0.2s ease;
-  }
-
   @media (hover: hover) {
-    .drawer-item:not([aria-current="page"]):hover {
+    .sheet-item:not([aria-current="page"]):hover {
       background: var(--muted);
       color: var(--foreground);
     }
 
-    .drawer-item:not([aria-current="page"]):hover svg {
-      opacity: 0.8;
+    .sheet-item:not([aria-current="page"]):hover svg {
+      opacity: 0.85;
     }
   }
 
-  .drawer-item:not([aria-current="page"]):active {
+  .sheet-item:not([aria-current="page"]):active {
     background: var(--muted);
     color: var(--foreground);
   }
 
-  .drawer-item[aria-current="page"] {
+  .sheet-item[aria-current="page"] {
+    background: var(--muted);
     color: var(--foreground);
   }
 
-  .drawer-item[aria-current="page"] svg {
+  .sheet-item[aria-current="page"] svg {
     opacity: 0.9;
   }
 
-  .drawer-item[aria-current="page"]::before {
-    height: 18px;
+  /* 抽屉底部工具行：主题 / 语言 / RSS / 邮件，四件低频操作共用一行 */
+  .sheet-utils {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2px;
+    padding: 6px 8px;
+  }
+
+  .sheet-util {
+    display: inline-flex;
+    min-width: 0;
+    max-width: 100%;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 8px;
+    border-radius: 8px;
+    font-size: 13px;
+    color: color-mix(in srgb, var(--foreground) 55%, transparent);
+    transition:
+      color 0.16s ease,
+      background-color 0.16s ease;
+  }
+
+  /* 邮件靠右，和左边两个操作分开；窄屏换行后自然占满一行 */
+  .sheet-util-mail {
+    margin-left: auto;
+  }
+
+  @media (hover: hover) {
+    .sheet-util:hover {
+      background: var(--muted);
+      color: var(--foreground);
+    }
+  }
+
+  .sheet-util:active {
+    background: var(--muted);
+    color: var(--foreground);
   }
 
   .mobile-overlay {
+    /* 固定在视口上、且是 header 的同级 —— 这两个条件缺一个，blur 就会被 header 的
+       backdrop-filter 吃掉（见模板里那段注释）。 */
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
     /* 旧内核不支持 color-mix() 时整条 background 会失效、遮罩变全透明，先给固定色兜底 */
     background: rgba(15, 23, 42, 0.28);
     background: color-mix(in srgb, var(--foreground) 26%, transparent);
     backdrop-filter: blur(7px) saturate(120%);
     -webkit-backdrop-filter: blur(7px) saturate(120%);
+  }
+
+  .mobile-overlay.is-open {
+    opacity: 1;
+    pointer-events: auto;
   }
 
   /* 不支持 backdrop-filter 时没有磨砂，用更重的压暗补偿，避免看起来像遮罩没生效 */

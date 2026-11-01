@@ -1,24 +1,41 @@
 ---
+import IconRss from "@/assets/icons/IconRss.svg";
 import { SITE } from "@/config";
+import { getLocaleFromPath } from "@/i18n";
 
 const displayYear = new Date().getFullYear();
+const locale = getLocaleFromPath(Astro.url.pathname);
+const feedHref = locale === "en" ? "/en/rss.xml" : "/rss.xml";
 ---
 
-<footer
-  class="mx-auto w-full max-w-4xl border-t border-border px-5 sm:px-6"
->
+{
+  /* 分成「版权」和「链接」两组、各自贴一边 —— 不是三个散项均匀铺开。
+    三件很短的文字摊在 896px 里，中间那个会孤零零悬在正中，像三段不相干的东西。
+    只有两项分组时 justify-between 才成立：左边回答「这是谁」，右边是出口。
+    窄屏退回居中换行，避免版权和链接被推到屏幕两端。 */
+}
+<footer class="mx-auto w-full max-w-4xl border-t border-border px-5 sm:px-6">
   <div
-    class="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 py-5 text-sm whitespace-nowrap text-foreground/55"
+    class="flex flex-wrap items-center justify-center gap-x-5 gap-y-1 py-5 text-sm whitespace-nowrap text-foreground/55 sm:justify-between"
   >
     <span>&#169; {displayYear} {SITE.author}</span>
-    <span class="text-foreground/20" aria-hidden="true">|</span>
-    <a
-      class="transition-colors hover:text-foreground/85"
-      href="https://icp.gov.moe/?keyword=20260260"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      萌ICP备20260260号
-    </a>
+    <div class="flex items-center gap-x-5">
+      <a
+        class="inline-flex items-center gap-1.5 transition-colors hover:text-foreground/85"
+        href={feedHref}
+        title="RSS"
+      >
+        <IconRss class="size-4" />
+        <span>RSS</span>
+      </a>
+      <a
+        class="transition-colors hover:text-foreground/85"
+        href="https://icp.gov.moe/?keyword=20260260"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        萌ICP备20260260号
+      </a>
+    </div>
   </div>
 </footer>

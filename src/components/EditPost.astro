@@ -1,13 +1,13 @@
 ---
-import type { CollectionEntry } from "astro:content";
+import type { BlogEntry } from "@/content.config";
 import IconEdit from "@/assets/icons/IconEdit.svg";
 import { SITE } from "@/config";
 import { getLocaleFromPath, ui, type Locale } from "@/i18n";
 
 type Props = {
-  hideEditPost?: CollectionEntry<"blog">["data"]["hideEditPost"];
+  hideEditPost?: BlogEntry["data"]["hideEditPost"];
   class?: string;
-  post: CollectionEntry<"blog">;
+  post: BlogEntry;
   locale?: Locale;
 };
 

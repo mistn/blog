@@ -1,4 +1,7 @@
 import { defineConfig } from "astro/config";
+import { existsSync } from "node:fs";
+import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { unified } from "@astrojs/markdown-remark";
 import tailwindcss from "@tailwindcss/vite";
 import sitemap from "@astrojs/sitemap";
@@ -15,6 +18,43 @@ import { remarkTabsPlugin } from "./src/utils/remarkTabsPlugin.js";
 import remarkDirective from "remark-directive";
 import expressiveCode from "astro-expressive-code";
 import { SITE } from "./src/config";
+
+const distDir = fileURLToPath(new URL("./dist/", import.meta.url));
+
+/** 把 URL 路径映射到另一种语言的同一页面（/posts/x/ ⇄ /en/posts/x/） */
+function counterpartPath(pathname: string, target: "zh" | "en") {
+  const isEn = pathname === "/en/" || pathname.startsWith("/en/");
+  // 去掉 /en 前缀后要留空而不是补 "/"，否则 /en/about/ 会变成 //about/
+  const zhPath = isEn ? pathname.replace(/^\/en(?=\/|$)/, "") || "/" : pathname;
+  if (target === "zh") return zhPath;
+  return isEn ? pathname : zhPath === "/" ? "/en/" : `/en${zhPath}`;
+}
+
+/** 构建产物里是否真的生成了这一页（serialize 在 build:done 阶段跑，dist 已写完） */
+function builtPageExists(pathname: string) {
+  const segments = decodeURIComponent(pathname).split("/").filter(Boolean);
+  return existsSync(join(distDir, ...segments, "index.html"));
+}
+
+/**
+ * 给 sitemap 条目补 hreflang。
+ * @astrojs/sitemap 自带的 i18n 选项会把每个 URL 机械映射到所有语言，
+ * 但标签、归档、搜索、友链、工具这些中文页并没有英文版，那样会写出一堆
+ * 指向 404 的 alternate。这里按构建产物实际存在的页面配对，只配对成功才写。
+ */
+function buildAlternateLinks(url: string) {
+  const { origin, pathname } = new URL(url);
+  const zhPath = counterpartPath(pathname, "zh");
+  const enPath = counterpartPath(pathname, "en");
+  if (!builtPageExists(zhPath) || !builtPageExists(enPath)) return undefined;
+
+  const zhUrl = new URL(zhPath, origin).href;
+  return [
+    { lang: "zh-CN", url: zhUrl },
+    { lang: "en", url: new URL(enPath, origin).href },
+    { lang: "x-default", url: zhUrl },
+  ];
+}
 
 // https://astro.build/config
 export default defineConfig({
@@ -41,6 +81,11 @@ export default defineConfig({
     expressiveCode(),
     sitemap({
       filter: page => SITE.showArchives || !page.endsWith("/archives"),
+      serialize(item) {
+        const links = buildAlternateLinks(item.url);
+        if (links) item.links = links;
+        return item;
+      },
     }),
     mdx(),
     react(),

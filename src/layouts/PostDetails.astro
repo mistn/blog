@@ -1,5 +1,6 @@
 ---
-import { render, type CollectionEntry } from "astro:content";
+import { getCollection, render } from "astro:content";
+import { BLOG_EN_PATH, BLOG_PATH, type BlogEntry } from "@/content.config";
 import Layout from "@/layouts/Layout.astro";
 import SiteTopbar from "@/components/SiteTopbar.astro";
 import Datetime from "@/components/Datetime.astro";
@@ -12,13 +13,19 @@ import getSortedPosts from "@/utils/getSortedPosts";
 import { getPath } from "@/utils/getPath";
 import { slugifyStr } from "@/utils/slugify";
 import { SITE } from "@/config";
-import { getLocaleFromPath, localizePath, ui, type Locale } from "@/i18n";
+import {
+  getLocaleFromPath,
+  localizePath,
+  toAbsoluteUrl,
+  ui,
+  type Locale,
+} from "@/i18n";
 import { transformTabs } from "@/utils/tabsPreprocessor";
 import { marked } from "marked";
 
 type Props = {
-  post: CollectionEntry<"blog">;
-  posts: CollectionEntry<"blog">[];
+  post: BlogEntry;
+  posts: BlogEntry[];
   locale?: Locale;
 };
 
@@ -28,6 +35,9 @@ const {
   locale = getLocaleFromPath(Astro.url.pathname),
 } = Astro.props;
 const copy = ui[locale];
+const postBase = locale === "en" ? BLOG_EN_PATH : BLOG_PATH;
+const postPath = getPath(post.id, post.filePath, true, postBase);
+const localizedPostPath = localizePath(postPath, locale);
 
 const {
   title,
@@ -69,12 +79,48 @@ if (typeof initOgImage === "string") {
 }
 
 if (!ogImageUrl && SITE.dynamicOgImage) {
-  ogImageUrl = `${getPath(post.id, post.filePath)}/index.png`;
+  ogImageUrl = `${localizedPostPath}/index.png`;
 }
 
 const ogImage = ogImageUrl
   ? new URL(ogImageUrl, Astro.url.origin).href
   : undefined;
+
+// hreflang 只标记真正有对应译文的页面：英文文章按同名文件与中文文章配对。
+// 两个方向都要先确认对侧文章存在且已发布，否则会输出指向 404 的 hreflang。
+const alternates: { hreflang: string; href: string }[] = [];
+const isPublished = (entry: BlogEntry) => !entry.data.draft;
+
+if (locale === "en") {
+  const zhPosts = (await getCollection("blog")).filter(isPublished);
+  const translated = zhPosts.find(p => p.id === post.id);
+  if (translated) {
+    const zhHref = toAbsoluteUrl(
+      getPath(translated.id, translated.filePath, true, BLOG_PATH),
+      Astro.url
+    );
+    alternates.push(
+      { hreflang: "zh-CN", href: zhHref },
+      { hreflang: "en", href: toAbsoluteUrl(localizedPostPath, Astro.url) },
+      { hreflang: "x-default", href: zhHref }
+    );
+  }
+} else {
+  const enPosts = (await getCollection("blogEn")).filter(isPublished);
+  const translated = enPosts.find(p => p.id === post.id);
+  if (translated) {
+    const enPath = localizePath(
+      getPath(translated.id, translated.filePath, true, BLOG_EN_PATH),
+      "en"
+    );
+    const zhHref = toAbsoluteUrl(localizedPostPath, Astro.url);
+    alternates.push(
+      { hreflang: "zh-CN", href: zhHref },
+      { hreflang: "en", href: toAbsoluteUrl(enPath, Astro.url) },
+      { hreflang: "x-default", href: zhHref }
+    );
+  }
+}
 
 const layoutProps = {
   title: `${title} | ${SITE.title}`,
@@ -86,6 +132,7 @@ const layoutProps = {
   ogImage,
   scrollSmooth: true,
   locale,
+  alternates,
 };
 
 const sortedPosts = getSortedPosts(posts);
@@ -178,20 +225,28 @@ const nextPost =
                 style="--article-enter-delay: 88ms;"
                 class="mt-12 flex flex-wrap gap-3"
               >
-                {tags.map(tag => (
-                  <a
-                    href={localizePath(`/tags/${slugifyStr(tag)}/`, locale)}
-                    class="text-xs text-gray-400 hover:text-gray-900 dark:text-gray-500 dark:hover:text-gray-100 transition-colors"
-                  >
-                    {tag}
-                  </a>
-                ))}
+                {tags.map(tag =>
+                  locale === "zh" ? (
+                    <a
+                      href={localizePath(`/tags/${slugifyStr(tag)}/`, locale)}
+                      class="text-xs text-gray-400 hover:text-gray-900 dark:text-gray-500 dark:hover:text-gray-100 transition-colors"
+                    >
+                      {tag}
+                    </a>
+                  ) : (
+                    <span class="text-xs text-gray-400 dark:text-gray-500">
+                      {tag}
+                    </span>
+                  )
+                )}
               </div>
 
               <EditPost class="sm:hidden mt-8" {hideEditPost} {post} {locale} />
 
               <div class="mt-10 text-xs text-gray-400 dark:text-gray-500 leading-relaxed">
-                本文采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" class="hover:text-gray-600 dark:hover:text-gray-300 underline underline-offset-2 decoration-dashed">CC BY-NC-SA 4.0</a> 许可协议，转载请注明出处。
+                {copy.actions.licenseNote}{" "}
+                <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer" class="hover:text-gray-600 dark:hover:text-gray-300 underline underline-offset-2 decoration-dashed">CC BY-NC-SA 4.0</a>
+                {copy.actions.licenseNoteSuffix}
               </div>
 
               <div
@@ -204,7 +259,7 @@ const nextPost =
                   prevPost && (
                     <a
                       href={localizePath(
-                        getPath(prevPost.id, prevPost.filePath),
+                        getPath(prevPost.id, prevPost.filePath, true, postBase),
                         locale
                       )}
                       class="group flex flex-1 items-center gap-1.5 text-base text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors duration-300 no-underline"
@@ -227,7 +282,7 @@ const nextPost =
                   nextPost && (
                     <a
                       href={localizePath(
-                        getPath(nextPost.id, nextPost.filePath),
+                        getPath(nextPost.id, nextPost.filePath, true, postBase),
                         locale
                       )}
                       class="group flex flex-1 items-center justify-end gap-1.5 text-base text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors duration-300 no-underline"
@@ -249,7 +304,7 @@ const nextPost =
               </div>
 
               <ArtalkComments
-                pageKey={getPath(post.id, post.filePath)}
+                pageKey={localizedPostPath}
                 pageTitle={title}
               />
             </article>
@@ -329,6 +384,10 @@ const nextPost =
 
   function addHeadingLinks() {
     // 只给正文内的标题加锚点，避免把评论区标题也变成「评论 #」
+    const isEn = document.documentElement.lang
+      .toLowerCase()
+      .startsWith("en");
+    const labelPrefix = isEn ? "Link to: " : "链接到：";
     const headings = Array.from(
       document.querySelectorAll(
         "#article h2, #article h3, #article h4, #article h5, #article h6"
@@ -340,7 +399,7 @@ const nextPost =
       link.className =
         "heading-link ms-2 no-underline opacity-75 md:opacity-0 md:group-hover:opacity-100 md:focus:opacity-100";
       link.href = "#" + heading.id;
-      link.setAttribute("aria-label", `链接到：${heading.textContent}`);
+      link.setAttribute("aria-label", `${labelPrefix}${heading.textContent}`);
 
       const span = document.createElement("span");
       span.ariaHidden = "true";

@@ -11,12 +11,13 @@ import { slugifyStr } from "./slugify";
 export function getPath(
   id: string,
   filePath: string | undefined,
-  includeBase = true
+  includeBase = true,
+  base = BLOG_PATH
 ) {
   if (!filePath) return [includeBase ? "/posts" : "", slugifyStr(id)].join("/");
 
   const pathSegments = filePath
-    .replaceAll(BLOG_PATH, "")
+    .replaceAll(base, "")
     .split("/")
     .filter(path => path !== "") // remove empty string in the segments ["", "other-path"] <- empty string will be removed
     .filter(path => !path.startsWith("_")) // exclude directories start with underscore "_"

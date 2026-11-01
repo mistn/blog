@@ -47,6 +47,13 @@ function reflectPreference(): void {
     .querySelectorAll("#theme-btn, #theme-btn-desktop")
     .forEach(button => button.setAttribute("aria-label", themeValue));
 
+  // 移动端抽屉工具行里的文字项：显示的是「点一下会切到哪」
+  document.querySelectorAll<HTMLElement>("[data-theme-label]").forEach(el => {
+    const nextLabel =
+      themeValue === DARK ? el.dataset.targetLight : el.dataset.targetDark;
+    if (nextLabel) el.textContent = nextLabel;
+  });
+
   // Get a reference to the body element
   const body = document.body;
 
