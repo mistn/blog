@@ -1,7 +1,6 @@
 ---
 import IconMail from "@/assets/icons/IconMail.svg";
 import IconMoon from "@/assets/icons/IconMoon.svg";
-import IconRss from "@/assets/icons/IconRss.svg";
 import IconSearch from "@/assets/icons/IconSearch.svg";
 import IconSunHigh from "@/assets/icons/IconSunHigh.svg";
 import HomeTabs from "@/components/HomeTabs.astro";
@@ -11,7 +10,7 @@ import { getLocaleFromPath, localizePath, normalizePath, ui } from "@/i18n";
 
 const locale = getLocaleFromPath(Astro.url.pathname);
 const copy = ui[locale];
-// RSS 不占顶栏：桌面端底部有入口，移动端在抽屉工具行里。
+// RSS 不占顶栏和抽屉，只在底栏保留。
 const emailLink = SOCIALS.find(social => social.href.startsWith("mailto:"));
 const emailAddress = emailLink?.href.replace("mailto:", "");
 // 文字只写「邮件」，地址留给 title / aria-label，读屏和长按预览还能拿到
@@ -198,16 +197,6 @@ const navItems = getNavItems();
               </button>
             )
           }
-          <a
-            href="/rss.xml"
-            class="sheet-util"
-            title={copy.nav.rss}
-            aria-label={copy.nav.rss}
-            data-menu-link
-          >
-            <IconRss class="size-4 shrink-0" />
-            <span>RSS</span>
-          </a>
           <a
             href={emailAddress ? `mailto:${emailAddress}` : "mailto:"}
             class="sheet-util sheet-util-mail"
@@ -528,7 +517,7 @@ const navItems = getNavItems();
     opacity: 0.9;
   }
 
-  /* 抽屉底部工具行：主题 / 语言 / RSS / 邮件，四件低频操作共用一行 */
+  /* 抽屉底部工具行：主题 / 邮件，低频操作共用一行 */
   .sheet-utils {
     display: flex;
     flex-wrap: wrap;
