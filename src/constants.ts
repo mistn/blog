@@ -1,5 +1,4 @@
 import type { Props } from "astro";
-import { defaultLocale, type Locale } from "@/i18n";
 import IconMail from "@/assets/icons/IconMail.svg";
 import IconHome from "@/assets/icons/IconHome.svg";
 import IconArchive from "@/assets/icons/IconArchive.svg";
@@ -67,20 +66,9 @@ export const NAV_ITEMS: NavItem[] = [
   { path: "/about", labelKey: "about", icon: IconUser },
 ];
 
-/**
- * 英文站已经存在的栏目。
- * 只有列在这里的项才会出现在 /en 下的导航里 —— 漏掉会少一个入口，
- * 多写了会链到 404，所以新增英文页面时记得同步这里。
- */
-export const EN_NAV_LABELS: NavLabelKey[] = ["home", "anime", "about"];
-
-/** 按语言过滤导航项，桌面标签栏和移动端抽屉都走这个。 */
-export const getNavItems = (locale: Locale): NavItem[] =>
-  NAV_ITEMS.filter(
-    item =>
-      !item.hidden &&
-      (locale === defaultLocale || EN_NAV_LABELS.includes(item.labelKey))
-  );
+/** 过滤掉关闭的栏目，桌面标签栏和移动端下拉菜单都走这个。 */
+export const getNavItems = (): NavItem[] =>
+  NAV_ITEMS.filter(item => !item.hidden);
 
 export const SHARE_LINKS: Social[] = [
   {

@@ -5,7 +5,7 @@ import SiteTopbar from "@/components/SiteTopbar.astro";
 import PageHeader from "@/components/PageHeader.astro";
 import Layout from "./Layout.astro";
 import { SITE } from "@/config";
-import { getLocaleFromPath, toAbsoluteUrl, ui } from "@/i18n";
+import { getLocaleFromPath, ui } from "@/i18n";
 import { getLastModified } from "@/utils/getLastModified.js";
 
 type Props = MarkdownLayoutProps<{ title: string; headingEyebrow?: string }>;
@@ -13,22 +13,13 @@ type Props = MarkdownLayoutProps<{ title: string; headingEyebrow?: string }>;
 const { frontmatter } = Astro.props;
 const locale = getLocaleFromPath(Astro.url.pathname);
 const copy = ui[locale];
-const isEn = locale === "en";
-const lastUpdated = getLastModified(
-  isEn ? "src/pages/en/about.mdx" : "src/pages/about.mdx"
-);
-const alternates = [
-  { hreflang: "zh-CN", href: toAbsoluteUrl("/about", Astro.url) },
-  { hreflang: "en", href: toAbsoluteUrl("/en/about", Astro.url) },
-  { hreflang: "x-default", href: toAbsoluteUrl("/about", Astro.url) },
-];
+const lastUpdated = getLastModified("src/pages/about.mdx");
 ---
 
 <Layout
   title={`${frontmatter.title} | ${SITE.title}`}
   description={copy.pages.aboutDesc}
   {locale}
-  {alternates}
 >
   <SiteTopbar />
   <main
@@ -53,7 +44,7 @@ const alternates = [
       </div>
     </section>
     <ArtalkComments
-      pageKey={isEn ? "/en/about" : "/about"}
+      pageKey="/about"
       pageTitle={frontmatter.title}
       title={copy.actions.comments}
       placeholder={copy.actions.commentPlaceholder}

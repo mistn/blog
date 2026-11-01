@@ -6,7 +6,7 @@ import PostList from "@/components/PostList.astro";
 import getSortedPosts from "@/utils/getSortedPosts";
 import { getPath } from "@/utils/getPath";
 import { SITE } from "@/config";
-import { getLocaleFromPath, localizePath, toAbsoluteUrl, ui } from "@/i18n";
+import { getLocaleFromPath, localizePath, ui } from "@/i18n";
 
 const posts = await getCollection("blog", ({ data }) => !data.draft);
 const locale = getLocaleFromPath(Astro.url.pathname);
@@ -23,15 +23,9 @@ const items = listPosts.map(post => ({
 
 const pageTitle = `${SITE.title} - ${copy.pages.homeFullTitle}`;
 const pageDesc = copy.pages.homeDesc;
-
-const alternates = [
-  { hreflang: "zh-CN", href: toAbsoluteUrl("/", Astro.url) },
-  { hreflang: "en", href: toAbsoluteUrl("/en", Astro.url) },
-  { hreflang: "x-default", href: toAbsoluteUrl("/", Astro.url) },
-];
 ---
 
-<Layout title={pageTitle} description={pageDesc} {alternates}>
+<Layout title={pageTitle} description={pageDesc}>
   <SiteTopbar />
   <main
     id="main-content"

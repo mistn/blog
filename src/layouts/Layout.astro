@@ -3,7 +3,7 @@ import { ClientRouter } from "astro:transitions";
 import { SITE } from "@/config";
 import Footer from "@/components/Footer.astro";
 import BackToTopButton from "@/components/BackToTopButton.astro";
-import { getLocaleFromPath, localeMeta, ui, type Locale } from "@/i18n";
+import { getLocaleFromPath, ui, type Locale } from "@/i18n";
 import "@/styles/global.css";
 
 type StructuredDataType = "BlogPosting" | "CollectionPage" | "WebPage";
@@ -21,13 +21,10 @@ type Props = {
   structuredDataType?: StructuredDataType;
   structuredData?: Record<string, unknown> | null;
   locale?: Locale;
-  /** hreflang 配对，仅传入确实存在对应译文的页面 */
-  alternates?: { hreflang: string; href: string }[];
 };
 
 const locale = Astro.props.locale ?? getLocaleFromPath(Astro.url.pathname);
 const copy = ui[locale];
-const meta = localeMeta[locale];
 
 const {
   title = SITE.title,
@@ -41,7 +38,6 @@ const {
   scrollSmooth = false,
   structuredDataType = pubDatetime ? "BlogPosting" : "WebPage",
   structuredData,
-  alternates = [],
 } = Astro.props;
 
 const socialImageURL = new URL(ogImage, Astro.url);
@@ -62,7 +58,7 @@ const baseStructuredData =
         description: `${description}`,
         image: `${socialImageURL}`,
         url: canonicalHref,
-        inLanguage: meta.htmlLang,
+        inLanguage: "zh-CN",
         datePublished: pubDatetime?.toISOString(),
         ...(modDatetime && { dateModified: modDatetime.toISOString() }),
         author: [person],
@@ -74,7 +70,7 @@ const baseStructuredData =
         description: `${description}`,
         url: canonicalHref,
         image: `${socialImageURL}`,
-        inLanguage: meta.htmlLang,
+        inLanguage: "zh-CN",
         isPartOf: {
           "@type": "WebSite",
           name: SITE.title,
@@ -91,7 +87,7 @@ const resolvedStructuredData = structuredData
 <!doctype html>
 <html
   dir={SITE.dir}
-  lang={meta.htmlLang}
+  lang="zh-CN"
   class={scrollSmooth ? "scroll-smooth" : undefined}
 >
   <head>
@@ -111,11 +107,6 @@ const resolvedStructuredData = structuredData
       src="https://cloud.umami.is/script.js"
       data-website-id="63f34637-df53-4bc9-9a3f-d0908d2931b3"></script>
     <link rel="canonical" href={canonicalURL} />
-    {
-      alternates.map(({ hreflang, href }) => (
-        <link rel="alternate" hreflang={hreflang} href={href} />
-      ))
-    }
     <meta name="generator" content={Astro.generator} />
 
     <!-- General Meta Tags -->
@@ -132,7 +123,6 @@ const resolvedStructuredData = structuredData
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalURL} />
-    <meta property="og:locale" content={meta.ogLocale} />
     <meta property="og:image" content={socialImageURL} />
 
     <!-- Article Published/Modified time -->
@@ -170,11 +160,8 @@ const resolvedStructuredData = structuredData
     <link
       rel="alternate"
       type="application/rss+xml"
-      title={locale === "en" ? `${SITE.title} (English)` : SITE.title}
-      href={new URL(
-        locale === "en" ? "en/rss.xml" : "rss.xml",
-        Astro.site
-      )}
+      title={SITE.title}
+      href={new URL("rss.xml", Astro.site)}
     />
 
     <meta name="theme-color" content="" />

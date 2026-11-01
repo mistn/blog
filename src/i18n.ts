@@ -1,16 +1,8 @@
-export const locales = ["zh", "en"] as const;
+export const locales = ["zh"] as const;
 
 export type Locale = (typeof locales)[number];
 
 export const defaultLocale: Locale = "zh";
-
-export const localeMeta: Record<
-  Locale,
-  { htmlLang: string; ogLocale: string; label: string }
-> = {
-  zh: { htmlLang: "zh-CN", ogLocale: "zh_CN", label: "中文" },
-  en: { htmlLang: "en", ogLocale: "en_US", label: "English" },
-};
 
 export const ui = {
   zh: {
@@ -138,134 +130,10 @@ export const ui = {
       "十二月",
     ],
   },
-  en: {
-    site: {
-      desc: "Notes on self-hosting, VPS operations, developer tooling and personal workflows.",
-    },
-    nav: {
-      home: "Home",
-      archives: "Archives",
-      anime: "Anime",
-      tools: "Tools",
-      friends: "Friends",
-      about: "About",
-      search: "Search",
-      skipToContent: "Skip to content",
-      theme: "Toggle light/dark mode",
-      themeToDark: "Dark",
-      themeToLight: "Light",
-      mail: "Email",
-      email: "Send email",
-      rss: "RSS feed",
-      login: "Log in",
-      menu: "Navigation menu",
-      openMenu: "Open menu",
-      closeMenu: "Close menu",
-    },
-    pages: {
-      postsTitle: "Posts",
-      homeFullTitle: "Notes & Blog",
-      loadMore: "Load more",
-      listStatus: "Showing {shown} of {total} posts",
-      homeDesc:
-        "miuarc's personal tech blog: notes and tutorials on VPS operations, self-hosted services, developer tooling and personal workflows.",
-      postsDesc:
-        "Every post published on this blog, covering VPS operations, self-hosting tutorials, developer tooling and workflow optimization.",
-      tagsTitle: "Tags",
-      tagsDesc: "Browse posts by tag.",
-      tagTitle: "Tag: ",
-      tagDescPrefix: "All posts tagged “",
-      tagDescSuffix: "”.",
-      archivesTitle: "Archives",
-      archivesEyebrow: "Archive",
-      archivesDesc: "Browse every published post by year and month.",
-      searchTitle: "Search",
-      searchDesc: "Search posts, notes and tutorials on this site.",
-      animeTitle: "Anime list",
-      animeFullTitle: "Anime list | miuarc",
-      animeDesc: "Anime completed on the AniList normal list, by year or all.",
-      animeEyebrow: "Anime Archive",
-      toolsTitle: "Tools",
-      toolsFullTitle: "Tools | miuarc",
-      toolsDesc: "Experimental projects and small toys.",
-      friendsTitle: "Friends",
-      friendsDesc:
-        "Friend links: a collection of personal blogs I follow. Feel free to get in touch if you would like to exchange links.",
-      friendsEyebrow: "Link Exchange",
-      aboutTitle: "About",
-      aboutEyebrow: "About",
-      aboutDesc:
-        "About miuarc: background, self-hosted services and contact details.",
-      notFoundTitle: "Page not found",
-      notFoundCta: "Back to home",
-      notFoundDesc:
-        "This page does not exist. It may have been removed or the link is wrong.",
-    },
-    actions: {
-      goBack: "Back",
-      backToTop: "Back to top",
-      editPage: "Edit page",
-      comments: "Comments",
-      previousPost: "Previous",
-      nextPost: "Next",
-      copy: "Copy",
-      copied: "Copied",
-      copyPostLink: "Copy post link",
-      postLinkCopied: "Link copied",
-      updated: "Updated: ",
-      previousPage: "Previous",
-      nextPage: "Next",
-      previousPageLabel: "Go to previous page",
-      nextPageLabel: "Go to next page",
-      tocTitle: "Table of contents",
-      tocToggle: "Open table of contents",
-      tocClose: "Close table of contents",
-      commentPlaceholder: "Write something...",
-      noComment: "Be the first to leave a comment.",
-      commentCount: "{count} comments",
-      licenseNote: "Licensed under",
-      licenseNoteSuffix: ". Please credit the source when reposting.",
-    },
-    anime: {
-      unknownYear: "Year unknown",
-      countUnit: "shows",
-      total: "Total",
-      dataFrom: "Data from",
-      updatedAt: "Updated",
-      viewMode: "View",
-      viewAll: "All",
-      viewByYear: "By year",
-      empty: "No anime data synced yet.",
-      emptyHelp:
-        "Run the sync script to fetch AniList data and keep completed shows from the normal list.",
-      itemListName: "Anime list",
-      coverAlt: "cover",
-      backToTop: "Back to top",
-    },
-    dev: {
-      searchWarning:
-        "Dev mode: build the project at least once to see search results in development.",
-    },
-    months: [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
-    ],
-  },
 } as const;
 
-export function getLocaleFromPath(pathname: string): Locale {
-  const path = normalizePath(pathname);
-  return path === "/en" || path.startsWith("/en/") ? "en" : defaultLocale;
+export function getLocaleFromPath(_pathname: string): Locale {
+  return defaultLocale;
 }
 
 export function normalizePath(pathname: string) {
@@ -274,22 +142,10 @@ export function normalizePath(pathname: string) {
     : pathname;
 }
 
-export function localizePath(pathname: string, locale: Locale = defaultLocale) {
-  const path = normalizePath(pathname);
-
-  if (locale === defaultLocale) return path;
-  if (path === "/") return `/${locale}`;
-  if (path === `/${locale}` || path.startsWith(`/${locale}/`)) return path;
-
-  return `/${locale}${path}`;
+export function localizePath(pathname: string, _locale?: Locale) {
+  return normalizePath(pathname);
 }
 
-export function getDateLocale(locale: Locale = defaultLocale) {
-  return localeMeta[locale].htmlLang;
-}
-
-/** 生成与 canonical 一致的绝对地址（静态输出带尾斜杠） */
-export function toAbsoluteUrl(pathname: string, base: URL) {
-  const path = normalizePath(pathname);
-  return new URL(path === "/" ? "/" : `${path}/`, base).href;
+export function getDateLocale(_locale?: Locale) {
+  return "zh-CN";
 }

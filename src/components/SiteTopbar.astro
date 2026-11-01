@@ -5,16 +5,13 @@ import IconRss from "@/assets/icons/IconRss.svg";
 import IconSearch from "@/assets/icons/IconSearch.svg";
 import IconSunHigh from "@/assets/icons/IconSunHigh.svg";
 import HomeTabs from "@/components/HomeTabs.astro";
-import LanguageLink from "@/components/LanguageLink.astro";
 import { getNavItems, SOCIALS } from "@/constants";
 import { SITE } from "@/config";
 import { getLocaleFromPath, localizePath, normalizePath, ui } from "@/i18n";
 
 const locale = getLocaleFromPath(Astro.url.pathname);
 const copy = ui[locale];
-// RSS 原来是全站唯一入口、且在底栏，要滚 3～4 屏才够得到；
-// 顶栏（桌面）和抽屉工具行（移动）各放一个，底栏那个保留不动。
-const feedHref = locale === "en" ? "/en/rss.xml" : "/rss.xml";
+// RSS 不占顶栏：桌面端底部有入口，移动端在抽屉工具行里。
 const emailLink = SOCIALS.find(social => social.href.startsWith("mailto:"));
 const emailAddress = emailLink?.href.replace("mailto:", "");
 // 文字只写「邮件」，地址留给 title / aria-label，读屏和长按预览还能拿到
@@ -25,7 +22,7 @@ const emailLabel = emailAddress
 const getHref = (path: string) => localizePath(path, locale);
 const currentPath = normalizePath(Astro.url.pathname);
 const isActive = (path: string) => currentPath === normalizePath(getHref(path));
-const navItems = getNavItems(locale);
+const navItems = getNavItems();
 ---
 
 <header id="site-topbar" class="site-topbar sticky top-0 z-30">
@@ -60,19 +57,15 @@ const navItems = getNavItems(locale);
       <div class="flex shrink-0 items-center gap-0.5 sm:gap-1">
         <!-- 桌面端图标 -->
         <div class="hidden items-center gap-1 lg:flex">
-          {
-            locale === "zh" && (
-              <a
-                href={localizePath("/search", locale)}
-                class="icon-btn"
-                aria-current={isActive("/search") ? "page" : undefined}
-                title={copy.nav.search}
-                aria-label={copy.nav.search}
-              >
-                <IconSearch class="size-5" />
-              </a>
-            )
-          }
+          <a
+            href={localizePath("/search", locale)}
+            class="icon-btn"
+            aria-current={isActive("/search") ? "page" : undefined}
+            title={copy.nav.search}
+            aria-label={copy.nav.search}
+          >
+            <IconSearch class="size-5" />
+          </a>
 
           {
             SITE.lightAndDarkMode && (
@@ -95,24 +88,18 @@ const navItems = getNavItems(locale);
               </button>
             )
           }
-
-          <LanguageLink />
         </div>
 
-        <!-- 移动端只留搜索和菜单：主题与语言都收进抽屉底部的工具行 -->
+        <!-- 移动端只留搜索和菜单：主题收进抽屉底部的工具行 -->
         <div class="flex items-center gap-0.5 lg:hidden">
-          {
-            locale === "zh" && (
-              <a
-                href={localizePath("/search", locale)}
-                class="icon-btn"
-                title={copy.nav.search}
-                aria-label={copy.nav.search}
-              >
-                <IconSearch class="size-5" />
-              </a>
-            )
-          }
+          <a
+            href={localizePath("/search", locale)}
+            class="icon-btn"
+            title={copy.nav.search}
+            aria-label={copy.nav.search}
+          >
+            <IconSearch class="size-5" />
+          </a>
 
           <button
             id="menu-toggle"
@@ -211,9 +198,8 @@ const navItems = getNavItems(locale);
               </button>
             )
           }
-          <LanguageLink variant="text" />
           <a
-            href={feedHref}
+            href="/rss.xml"
             class="sheet-util"
             title={copy.nav.rss}
             aria-label={copy.nav.rss}

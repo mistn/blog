@@ -1,11 +1,8 @@
 ---
 import IconRss from "@/assets/icons/IconRss.svg";
 import { SITE } from "@/config";
-import { getLocaleFromPath } from "@/i18n";
 
 const displayYear = new Date().getFullYear();
-const locale = getLocaleFromPath(Astro.url.pathname);
-const feedHref = locale === "en" ? "/en/rss.xml" : "/rss.xml";
 ---
 
 {
@@ -22,7 +19,7 @@ const feedHref = locale === "en" ? "/en/rss.xml" : "/rss.xml";
     <div class="flex items-center gap-x-5">
       <a
         class="inline-flex items-center gap-1.5 transition-colors hover:text-foreground/85"
-        href={feedHref}
+        href="/rss.xml"
         title="RSS"
       >
         <IconRss class="size-4" />
