@@ -396,11 +396,11 @@ const navItems = getNavItems();
   }
 
   .site-topbar.is-scrolled {
-    /* 72% 不透明度让 backdrop-filter 的毛玻璃效果可见（原来 88% 几乎不透明，
-       blur 被背景色完全盖住）。同时保证顶栏文字在大部分背景上仍有足够可读性。 */
-    background: color-mix(in srgb, var(--background) 72%, transparent);
-    backdrop-filter: blur(12px) saturate(140%);
-    -webkit-backdrop-filter: blur(12px) saturate(140%);
+    /* 80% 不透明度在「毛玻璃可见」和「背后文字不干扰」之间取平衡。
+       blur(16px) 把穿透过来的内容糊到认不出字，这样即使 20% 透明也能看。 */
+    background: color-mix(in srgb, var(--background) 80%, transparent);
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
     /* iOS Safari 对 position:sticky + backdrop-filter 有已知 bug，
        必须触发 GPU 层才会渲染毛玻璃。 */
     -webkit-transform: translateZ(0);
