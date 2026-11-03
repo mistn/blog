@@ -153,10 +153,16 @@ const navItems = getNavItems();
           );
         })
       }
+      {/* 两列网格下，奇数个导航项会空出右下角，补一个格子盖住分隔线底色 */}
+      {
+        navItems.length % 2 === 1 && (
+          <span class="sheet-filler" aria-hidden="true" />
+        )
+      }
     </nav>
 
     <!-- 底部工具行：搜索 / 主题 / 邮件，低频操作共用一行，不给导航列表加高 -->
-    <div class="sheet-utils border-t border-border">
+    <div class="sheet-utils">
       <a
         href={localizePath("/search", locale)}
         class="sheet-util"
@@ -278,6 +284,13 @@ const navItems = getNavItems();
 
     if (target.closest("[data-menu-link]")) {
       closeMenu(false);
+      return;
+    }
+
+    // 点击抽屉以外的区域也收起：菜单是浮层，点下面正文应该回到阅读。
+    // 抽屉内部（含主题按钮）不算外部，不会误关。
+    if (isMenuOpen() && !target.closest("#mobile-dropdown")) {
+      closeMenu(false);
     }
   });
 
@@ -355,13 +368,18 @@ const navItems = getNavItems();
     padding-bottom: 10px;
   }
 
-  /* 菜单展开时顶栏必须是不透明的：菜单紧贴在顶栏下方，
-     顶栏自己还半透明的话，页面内容会从顶栏那一条透出来（很乱）。
-     放在 .is-scrolled 之后 —— 两条规则的 specificity 一样，
-     后写的这条才能盖掉 is-scrolled 的半透明背景。 */
+  /* 菜单展开时顶栏不再强制不透明：保留毛玻璃，
+     和抽屉的柔和表面保持同一种质感；只把下边线压淡，
+     避免在玻璃和实心面板之间出现一条生硬的分界。 */
   .site-topbar.menu-open {
-    background: var(--background);
-    border-bottom-color: var(--border);
+    border-bottom-color: color-mix(in srgb, var(--border) 55%, transparent);
+  }
+
+  /* 滚动后展开菜单时，顶栏下方就是实心的抽屉面板。
+     顶栏仍保持毛玻璃，但把不透明度提到 92%：
+     既有玻璃的质感，又不会因为透出正文而和面板差出一个色阶（深色模式尤其明显）。 */
+  .site-topbar.is-scrolled.menu-open {
+    background: color-mix(in srgb, var(--background) 92%, transparent);
   }
 
   .icon-btn {
@@ -392,12 +410,11 @@ const navItems = getNavItems();
     color: var(--accent);
   }
 
-  /* 移动端菜单：和 AstroPaper 一样留在文档流里。
-     展开时把 hidden 去掉，header 被自然撑高，下方内容跟着下移；
-     收起时重新 hidden。没有绝对定位、没有遮罩、不锁页面滚动。 */
+  /* 移动端菜单：留在文档流里，展开时把 hidden 去掉，
+     header 被自然撑高，正文跟着下移；如果页面已经滚动，
+     浏览器会补偿滚动位置，表现为原地展开（见下方 is-scrolled 的说明）。
+     没有绝对定位、没有遮罩、不锁页面滚动。 */
   .mobile-sheet {
-    /* 只画上边线；下边线由 header 自己的 border-bottom 负责，避免叠成 2px */
-    border-top: 1px solid var(--border);
     background: var(--background);
     /* 顶栏是 sticky 的：横屏等超矮视口下，菜单不能高过视口，
        否则底部会被顶出屏幕且滚不回来。超出时让菜单自己滚。 */
@@ -411,18 +428,35 @@ const navItems = getNavItems();
     display: none;
   }
 
-  /* 单列菜单：每项之间一条细线，和参考图一致 */
-  .sheet-list {
-    padding: 0;
+  /* 页面已经滚动时展开：sticky 顶栏 + 浏览器的 scroll anchoring 会让正文
+     视觉上原地不动，菜单表现为「盖住」上方内容（关闭后滚动位置原样还原）。
+     这时补一层柔和投影，让下面的内容读成「被一层盖住」而不是「被裁掉」。 */
+  .site-topbar.is-scrolled .mobile-sheet {
+    border-bottom: 1px solid color-mix(in srgb, var(--border) 70%, transparent);
+    box-shadow: 0 16px 30px -20px rgb(0 0 0 / 0.5);
   }
 
-  .sheet-item {
+  /* 两列网格：6 项铺成 3 行，抽屉从 ~335px 降到 ~200px。
+     和顶栏的毛玻璃统一成「柔和表面」语言：不画满格硬线，
+     用留白 + 圆角 hover/active 区分条目，避免表格感。 */
+  .sheet-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    padding: 6px;
+    background: transparent;
+  }
+
+  .sheet-item,
+  .sheet-filler {
+    position: relative;
     display: flex;
     align-items: center;
     gap: 12px;
     min-width: 0;
-    padding: 13px 20px;
-    border-bottom: 1px solid var(--border);
+    padding: 12px 14px;
+    border-radius: 10px;
+    background: transparent;
     font-size: 15px;
     line-height: 1.4;
     color: color-mix(in srgb, var(--foreground) 70%, transparent);
@@ -431,9 +465,9 @@ const navItems = getNavItems();
       background-color 0.16s ease;
   }
 
-  /* 最后一项不画线：它的下边线会和工具行的 border-top 撞成两条 */
-  .sheet-item:last-child {
-    border-bottom: 0;
+  /* 导航项为奇数个时补一个空格子，避免右下角露出 border 底色 */
+  .sheet-filler {
+    pointer-events: none;
   }
 
   .sheet-item svg {
@@ -443,7 +477,8 @@ const navItems = getNavItems();
 
   @media (hover: hover) {
     .sheet-item:not([aria-current="page"]):hover {
-      background: var(--muted);
+      /* 比选中态轻一档：hover 只是“鼠标在这”，不该像第二个当前页 */
+      background: color-mix(in srgb, var(--muted) 65%, transparent);
       color: var(--foreground);
     }
 
@@ -457,8 +492,9 @@ const navItems = getNavItems();
     color: var(--foreground);
   }
 
-  /* 当前页：图标和文字都点亮，不加背景色块，保持扁平 */
+  /* 当前页：和 hover 同形状的淡色圆角块，左右两列都对齐 */
   .sheet-item[aria-current="page"] {
+    background: color-mix(in srgb, var(--accent) 10%, transparent);
     color: var(--accent);
   }
 
@@ -466,24 +502,27 @@ const navItems = getNavItems();
     opacity: 1;
   }
 
-  /* 抽屉底部工具行：主题 / 邮件，低频操作共用一行 */
+  /* 抽屉底部工具行：搜索 / 主题 / 邮件，低频操作共用一行 */
   .sheet-utils {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: 2px;
-    padding: 8px 12px;
+    padding: 8px 10px;
+    /* 只留一条很淡的分界，和网格的柔和表面保持一致 */
+    border-top: 1px solid color-mix(in srgb, var(--border) 55%, transparent);
   }
 
   .sheet-util {
     display: inline-flex;
     min-width: 0;
+    min-height: 40px;
     max-width: 100%;
     align-items: center;
     gap: 6px;
-    padding: 6px 8px;
+    padding: 8px 10px;
     border-radius: 8px;
-    font-size: 13px;
+    font-size: 13.5px;
     color: color-mix(in srgb, var(--foreground) 55%, transparent);
     transition:
       color 0.16s ease,
