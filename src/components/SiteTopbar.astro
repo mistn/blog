@@ -89,17 +89,8 @@ const navItems = getNavItems();
           }
         </div>
 
-        <!-- 移动端只留搜索和菜单：主题收进抽屉底部的工具行 -->
+        <!-- 移动端只留菜单：搜索和主题都收进抽屉底部的工具行 -->
         <div class="flex items-center gap-0.5 lg:hidden">
-          <a
-            href={localizePath("/search", locale)}
-            class="icon-btn"
-            title={copy.nav.search}
-            aria-label={copy.nav.search}
-          >
-            <IconSearch class="size-5" />
-          </a>
-
           <button
             id="menu-toggle"
             type="button"
@@ -140,98 +131,91 @@ const navItems = getNavItems();
       </div>
     </div>
   </div>
-  <!-- ===== 移动端顶部下拉菜单 ===== -->
-  <div
-    id="mobile-dropdown"
-    class="mobile-sheet lg:hidden"
-    aria-hidden="true"
-    inert
-  >
-    <div class="mx-auto w-full max-w-4xl px-5 pb-4 sm:px-6">
-      <div class="mobile-sheet-panel">
-        <nav class="grid grid-cols-2 gap-0.5 p-2" aria-label={copy.nav.menu}>
-          {
-            navItems.map(item => {
-              const Icon = item.icon;
-              return (
-                <a
-                  href={getHref(item.path)}
-                  class="sheet-item"
-                  aria-current={isActive(item.path) ? "page" : undefined}
-                  data-menu-link
-                >
-                  <Icon class="size-[18px] shrink-0" />
-                  <span class="truncate">{copy.nav[item.labelKey]}</span>
-                </a>
-              );
-            })
-          }
-        </nav>
+  <!-- ===== 移动端顶栏展开菜单 =====
+       参考 AstroPaper：菜单留在文档流里，展开时把 hidden 去掉（display 恢复），
+       header 随之变高，下方内容被自然顶下去；收起时重新 hidden。
+       不用 absolute、不盖内容、不加遮罩、不锁滚动。 -->
+  <div id="mobile-dropdown" class="mobile-sheet lg:hidden" hidden>
+    <nav class="sheet-list" aria-label={copy.nav.menu}>
+      {
+        navItems.map(item => {
+          const Icon = item.icon;
+          return (
+            <a
+              href={getHref(item.path)}
+              class="sheet-item"
+              aria-current={isActive(item.path) ? "page" : undefined}
+              data-menu-link
+            >
+              <Icon class="size-[18px] shrink-0" />
+              <span class="truncate">{copy.nav[item.labelKey]}</span>
+            </a>
+          );
+        })
+      }
+    </nav>
 
-        <div class="sheet-utils border-t border-border">
-          {
-            SITE.lightAndDarkMode && (
-              <button
-                id="theme-btn"
-                type="button"
-                class="sheet-util"
-                title={copy.nav.theme}
-                aria-label={copy.nav.theme}
-                aria-live="polite"
-              >
-                <span
-                  data-theme-icon-anchor
-                  class="pointer-events-none relative block size-4"
-                  aria-hidden="true"
-                >
-                  <IconMoon class="absolute inset-0 size-full scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
-                  <IconSunHigh class="absolute inset-0 size-full scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
-                </span>
-                <span
-                  data-theme-label
-                  data-target-dark={copy.nav.themeToDark}
-                  data-target-light={copy.nav.themeToLight}
-                >
-                  {copy.nav.themeToDark}
-                </span>
-              </button>
-            )
-          }
-          <a
-            href={emailAddress ? `mailto:${emailAddress}` : "mailto:"}
-            class="sheet-util sheet-util-mail"
-            title={emailLabel}
-            aria-label={emailLabel}
-            data-menu-link
+    <!-- 底部工具行：搜索 / 主题 / 邮件，低频操作共用一行，不给导航列表加高 -->
+    <div class="sheet-utils border-t border-border">
+      <a
+        href={localizePath("/search", locale)}
+        class="sheet-util"
+        title={copy.nav.search}
+        aria-label={copy.nav.search}
+        aria-current={isActive("/search") ? "page" : undefined}
+        data-menu-link
+      >
+        <IconSearch class="size-4 shrink-0" />
+        <span>{copy.nav.search}</span>
+      </a>
+      {
+        SITE.lightAndDarkMode && (
+          <button
+            id="theme-btn"
+            type="button"
+            class="sheet-util"
+            title={copy.nav.theme}
+            aria-label={copy.nav.theme}
+            aria-live="polite"
           >
-            <IconMail class="size-4 shrink-0" />
-            <span>{copy.nav.mail}</span>
-          </a>
-        </div>
-      </div>
+            <span
+              data-theme-icon-anchor
+              class="pointer-events-none relative block size-4"
+              aria-hidden="true"
+            >
+              <IconMoon class="absolute inset-0 size-full scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
+              <IconSunHigh class="absolute inset-0 size-full scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
+            </span>
+            <span
+              data-theme-label
+              data-target-dark={copy.nav.themeToDark}
+              data-target-light={copy.nav.themeToLight}
+            >
+              {copy.nav.themeToDark}
+            </span>
+          </button>
+        )
+      }
+      <a
+        href={emailAddress ? `mailto:${emailAddress}` : "mailto:"}
+        class="sheet-util sheet-util-mail"
+        title={emailLabel}
+        aria-label={emailLabel}
+        data-menu-link
+      >
+        <IconMail class="size-4 shrink-0" />
+        <span>{copy.nav.mail}</span>
+      </a>
     </div>
   </div>
 </header>
-
-<!-- ===== 下拉菜单遮罩 =====
-     放在 header 外面是必须的：header 滚动后会挂 backdrop-filter，而带 backdrop-filter
-     的元素会变成「backdrop root」，它里面的后代只能采样到 header 自己那一层背景，
-     遮罩的 blur 就整个失效（表现为「页面没滚动时能糊，一滚就变纯色」）。
-     挪成 header 的同级之后，遮罩采样的才是整页内容。 -->
-<div
-  id="mobile-overlay"
-  class="mobile-overlay lg:hidden"
-  aria-hidden="true"
-  inert
->
-</div>
 
 <script is:inline>
   function getSheet() {
     return document.getElementById("mobile-dropdown");
   }
-  function getOverlay() {
-    return document.getElementById("mobile-overlay");
+  function getTopbar() {
+    return document.getElementById("site-topbar");
   }
   function getToggle() {
     return document.getElementById("menu-toggle");
@@ -242,27 +226,6 @@ const navItems = getNavItems();
     return !!toggle && toggle.getAttribute("aria-expanded") === "true";
   }
 
-  function preventScroll(e) {
-    const target = e.target;
-    // 面板自身在屏幕很矮时可能需要滚动，放行面板内部的滚动手势。
-    if (target instanceof Element && target.closest(".mobile-sheet-panel")) {
-      return;
-    }
-    e.preventDefault();
-  }
-
-  // 不用 overflow:hidden 锁滚动：那会让顶栏的 position: sticky 失效，
-  // 菜单在页面滚动后打开时会跟着跑到视口外。改为拦截滚轮和触摸手势。
-  function lockScroll() {
-    document.addEventListener("wheel", preventScroll, { passive: false });
-    document.addEventListener("touchmove", preventScroll, { passive: false });
-  }
-
-  function unlockScroll() {
-    document.removeEventListener("wheel", preventScroll);
-    document.removeEventListener("touchmove", preventScroll);
-  }
-
   function setExpanded(open) {
     const toggle = getToggle();
     if (!toggle) return;
@@ -271,39 +234,25 @@ const navItems = getNavItems();
       "aria-label",
       open ? toggle.dataset.closeLabel : toggle.dataset.openLabel
     );
+    // 菜单展开时顶栏要变成不透明实色，否则页面内容会从顶栏那条透出来。
+    const bar = getTopbar();
+    if (bar) bar.classList.toggle("menu-open", open);
   }
 
   function openMenu() {
     const sheet = getSheet();
-    const overlay = getOverlay();
-    if (!sheet || !overlay) return;
+    if (!sheet) return;
 
-    lockScroll();
-
-    sheet.classList.add("is-open");
-    overlay.classList.add("is-open");
-    sheet.removeAttribute("inert");
-    overlay.removeAttribute("inert");
-    sheet.setAttribute("aria-hidden", "false");
-    overlay.setAttribute("aria-hidden", "false");
+    // 菜单在文档流里：显示出来 header 就被撑高，页面内容跟着下移。
+    sheet.hidden = false;
     setExpanded(true);
   }
 
   function closeMenu(returnFocus) {
     const sheet = getSheet();
-    const overlay = getOverlay();
-    if (!sheet || !overlay) return;
+    if (!sheet) return;
 
-    unlockScroll();
-    document.removeEventListener("touchmove", preventScroll);
-
-    // 收起动画由 CSS transition 负责，这里只切换状态。
-    sheet.classList.remove("is-open");
-    overlay.classList.remove("is-open");
-    sheet.setAttribute("inert", "");
-    overlay.setAttribute("inert", "");
-    sheet.setAttribute("aria-hidden", "true");
-    overlay.setAttribute("aria-hidden", "true");
+    sheet.hidden = true;
     setExpanded(false);
 
     if (returnFocus) {
@@ -313,7 +262,7 @@ const navItems = getNavItems();
   }
 
   function closeMenuSilent() {
-    // 换页时不做动画，直接收起并解锁滚动。
+    // 换页时不做动画，直接收起。
     closeMenu(false);
   }
 
@@ -329,10 +278,7 @@ const navItems = getNavItems();
 
     if (target.closest("[data-menu-link]")) {
       closeMenu(false);
-      return;
     }
-
-    if (target.closest("#mobile-overlay")) closeMenu(true);
   });
 
   document.addEventListener("keydown", function (e) {
@@ -342,7 +288,7 @@ const navItems = getNavItems();
 
   document.addEventListener("astro:before-swap", closeMenuSilent);
 
-  // 在菜单展开时把窗口拉宽到桌面断点，收起菜单并解除滚动锁定。
+  // 菜单展开时把窗口拉宽到桌面断点，直接收起菜单（桌面端没有抽屉）。
   window.addEventListener("resize", function () {
     if (isMenuOpen() && window.innerWidth >= 1024) closeMenu(false);
   });
@@ -409,6 +355,15 @@ const navItems = getNavItems();
     padding-bottom: 10px;
   }
 
+  /* 菜单展开时顶栏必须是不透明的：菜单紧贴在顶栏下方，
+     顶栏自己还半透明的话，页面内容会从顶栏那一条透出来（很乱）。
+     放在 .is-scrolled 之后 —— 两条规则的 specificity 一样，
+     后写的这条才能盖掉 is-scrolled 的半透明背景。 */
+  .site-topbar.menu-open {
+    background: var(--background);
+    border-bottom-color: var(--border);
+  }
+
   .icon-btn {
     display: inline-flex;
     align-items: center;
@@ -437,56 +392,52 @@ const navItems = getNavItems();
     color: var(--accent);
   }
 
-  /* 顶部下拉面板：从顶栏下方展开，内容宽度与页面主体对齐 */
+  /* 移动端菜单：和 AstroPaper 一样留在文档流里。
+     展开时把 hidden 去掉，header 被自然撑高，下方内容跟着下移；
+     收起时重新 hidden。没有绝对定位、没有遮罩、不锁页面滚动。 */
   .mobile-sheet {
-    position: absolute;
-    top: 100%;
-    right: 0;
-    left: 0;
-    z-index: 20;
-    opacity: 0;
-    transform: translateY(-8px);
-    pointer-events: none;
-    transition:
-      opacity 0.2s ease,
-      transform 0.2s ease;
-  }
-
-  .mobile-sheet.is-open {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
-  }
-
-  .mobile-sheet-panel {
-    max-height: calc(100dvh - 7rem);
+    /* 只画上边线；下边线由 header 自己的 border-bottom 负责，避免叠成 2px */
+    border-top: 1px solid var(--border);
+    background: var(--background);
+    /* 顶栏是 sticky 的：横屏等超矮视口下，菜单不能高过视口，
+       否则底部会被顶出屏幕且滚不回来。超出时让菜单自己滚。 */
+    max-height: calc(100vh - 5.5rem);
+    max-height: calc(100dvh - 5.5rem);
     overflow-y: auto;
     overscroll-behavior: contain;
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    background: var(--background);
-    box-shadow:
-      0 18px 40px -14px rgb(0 0 0 / 0.3),
-      0 2px 8px -3px rgb(0 0 0 / 0.12);
+  }
+
+  .mobile-sheet[hidden] {
+    display: none;
+  }
+
+  /* 单列菜单：每项之间一条细线，和参考图一致 */
+  .sheet-list {
+    padding: 0;
   }
 
   .sheet-item {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
     min-width: 0;
-    padding: 12px 12px;
-    border-radius: 10px;
+    padding: 13px 20px;
+    border-bottom: 1px solid var(--border);
     font-size: 15px;
     line-height: 1.4;
-    color: color-mix(in srgb, var(--foreground) 62%, transparent);
+    color: color-mix(in srgb, var(--foreground) 70%, transparent);
     transition:
-      background-color 0.16s ease,
-      color 0.16s ease;
+      color 0.16s ease,
+      background-color 0.16s ease;
+  }
+
+  /* 最后一项不画线：它的下边线会和工具行的 border-top 撞成两条 */
+  .sheet-item:last-child {
+    border-bottom: 0;
   }
 
   .sheet-item svg {
-    opacity: 0.55;
+    opacity: 0.6;
     transition: opacity 0.16s ease;
   }
 
@@ -506,13 +457,13 @@ const navItems = getNavItems();
     color: var(--foreground);
   }
 
+  /* 当前页：图标和文字都点亮，不加背景色块，保持扁平 */
   .sheet-item[aria-current="page"] {
-    background: var(--muted);
-    color: var(--foreground);
+    color: var(--accent);
   }
 
   .sheet-item[aria-current="page"] svg {
-    opacity: 0.9;
+    opacity: 1;
   }
 
   /* 抽屉底部工具行：主题 / 邮件，低频操作共用一行 */
@@ -521,7 +472,7 @@ const navItems = getNavItems();
     flex-wrap: wrap;
     align-items: center;
     gap: 2px;
-    padding: 6px 8px;
+    padding: 8px 12px;
   }
 
   .sheet-util {
@@ -539,9 +490,14 @@ const navItems = getNavItems();
       background-color 0.16s ease;
   }
 
-  /* 邮件靠右，和左边两个操作分开；窄屏换行后自然占满一行 */
+  /* 邮件靠右，和左边的搜索、主题分开；窄屏换行后自然占满一行 */
   .sheet-util-mail {
     margin-left: auto;
+  }
+
+  /* 当前在搜索页时点亮工具行里的搜索入口 */
+  .sheet-util[aria-current="page"] {
+    color: var(--accent);
   }
 
   @media (hover: hover) {
@@ -556,32 +512,6 @@ const navItems = getNavItems();
     color: var(--foreground);
   }
 
-  .mobile-overlay {
-    /* 固定在视口上、且是 header 的同级 —— 这两个条件缺一个，blur 就会被 header 的
-       backdrop-filter 吃掉（见模板里那段注释）。 */
-    position: fixed;
-    inset: 0;
-    z-index: 10;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.2s ease;
-    /* 旧内核不支持 color-mix() 时整条 background 会失效、遮罩变全透明，先给固定色兜底 */
-    background: rgba(15, 23, 42, 0.28);
-    background: color-mix(in srgb, var(--foreground) 26%, transparent);
-    /* 分开写标准属性和前缀属性，避免 CSS 压缩器把它们合并后丢掉其中一个 */
-  }
-
-  @supports (backdrop-filter: blur(1px)) {
-    .mobile-overlay {
-      backdrop-filter: blur(7px) saturate(120%);
-    }
-  }
-  @supports (-webkit-backdrop-filter: blur(1px)) {
-    .mobile-overlay {
-      -webkit-backdrop-filter: blur(7px) saturate(120%);
-    }
-  }
-
   @supports (backdrop-filter: blur(1px)) {
     .site-topbar.is-scrolled {
       backdrop-filter: blur(16px) saturate(140%);
@@ -593,20 +523,12 @@ const navItems = getNavItems();
     }
   }
 
-  .mobile-overlay.is-open {
-    opacity: 1;
-    pointer-events: auto;
-  }
-
-  /* 不支持 backdrop-filter 时没有磨砂，顶栏和遮罩都用更实的背景保证可读性 */
+  /* 不支持 backdrop-filter 时顶栏没有磨砂，用更实的背景保证可读性 */
   @supports not (
     (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))
   ) {
     .site-topbar.is-scrolled {
       background: color-mix(in srgb, var(--background) 92%, transparent);
-    }
-    .mobile-overlay {
-      background: rgba(15, 23, 42, 0.5);
     }
   }
 </style>

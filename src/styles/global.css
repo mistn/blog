@@ -104,11 +104,7 @@ html[data-theme="dark"] {
     background-image:
       linear-gradient(rgba(47, 98, 143, 0.035) 1px, transparent 1px),
       linear-gradient(90deg, rgba(47, 98, 143, 0.035) 1px, transparent 1px),
-      linear-gradient(
-        180deg,
-        rgba(255, 255, 255, 1),
-        rgba(255, 255, 255, 1)
-      );
+      linear-gradient(180deg, rgba(255, 255, 255, 1), rgba(255, 255, 255, 1));
   }
   html[data-theme="dark"] body {
     background-image:
@@ -147,8 +143,6 @@ html[data-theme="dark"] {
 .card-link-press:active {
   opacity: 0.82;
 }
-
-
 
 .post-continuation-link {
   @apply inline-flex items-center gap-2.5 text-[0.86rem] text-foreground/50 transition duration-200 hover:text-foreground/72;
@@ -285,5 +279,3 @@ html.is-restoring-scroll [data-post-memory-scope="list"] {
 #article img {
   cursor: zoom-in;
 }
-
-
