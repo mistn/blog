@@ -1,22 +1,14 @@
 ---
-import IconMail from "@/assets/icons/IconMail.svg";
 import IconMoon from "@/assets/icons/IconMoon.svg";
 import IconSearch from "@/assets/icons/IconSearch.svg";
 import IconSunHigh from "@/assets/icons/IconSunHigh.svg";
 import HomeTabs from "@/components/HomeTabs.astro";
-import { getNavItems, SOCIALS } from "@/constants";
+import { getNavItems } from "@/constants";
 import { SITE } from "@/config";
 import { getLocaleFromPath, localizePath, normalizePath, ui } from "@/i18n";
 
 const locale = getLocaleFromPath(Astro.url.pathname);
 const copy = ui[locale];
-// RSS 不占顶栏和抽屉，只在底栏保留。
-const emailLink = SOCIALS.find(social => social.href.startsWith("mailto:"));
-const emailAddress = emailLink?.href.replace("mailto:", "");
-// 文字只写「邮件」，地址留给 title / aria-label，读屏和长按预览还能拿到
-const emailLabel = emailAddress
-  ? `${copy.nav.email} ${emailAddress}`
-  : copy.nav.email;
 
 const getHref = (path: string) => localizePath(path, locale);
 const currentPath = normalizePath(Astro.url.pathname);
@@ -161,57 +153,40 @@ const navItems = getNavItems();
       }
     </nav>
 
-    <!-- 底部工具行：搜索 / 主题 / 邮件，低频操作共用一行，不给导航列表加高 -->
+    <!-- 底部工具行：搜索 / 主题，低频操作共用一行，不给导航列表加高 -->
     <div class="sheet-utils">
       <a
         href={localizePath("/search", locale)}
-        class="sheet-util"
+        class="sheet-util-search"
         title={copy.nav.search}
         aria-label={copy.nav.search}
         aria-current={isActive("/search") ? "page" : undefined}
         data-menu-link
       >
         <IconSearch class="size-4 shrink-0" />
-        <span>{copy.nav.search}</span>
+        <span class="truncate">{copy.nav.search}</span>
       </a>
       {
         SITE.lightAndDarkMode && (
           <button
             id="theme-btn"
             type="button"
-            class="sheet-util"
+            class="sheet-util-icon"
             title={copy.nav.theme}
             aria-label={copy.nav.theme}
             aria-live="polite"
           >
             <span
               data-theme-icon-anchor
-              class="pointer-events-none relative block size-4"
+              class="pointer-events-none relative block size-[18px]"
               aria-hidden="true"
             >
               <IconMoon class="absolute inset-0 size-full scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
               <IconSunHigh class="absolute inset-0 size-full scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
             </span>
-            <span
-              data-theme-label
-              data-target-dark={copy.nav.themeToDark}
-              data-target-light={copy.nav.themeToLight}
-            >
-              {copy.nav.themeToDark}
-            </span>
           </button>
         )
       }
-      <a
-        href={emailAddress ? `mailto:${emailAddress}` : "mailto:"}
-        class="sheet-util sheet-util-mail"
-        title={emailLabel}
-        aria-label={emailLabel}
-        data-menu-link
-      >
-        <IconMail class="size-4 shrink-0" />
-        <span>{copy.nav.mail}</span>
-      </a>
     </div>
   </div>
 </header>
@@ -502,53 +477,88 @@ const navItems = getNavItems();
     opacity: 1;
   }
 
-  /* 抽屉底部工具行：搜索 / 主题 / 邮件，低频操作共用一行 */
+  /* 抽屉底部工具行：搜索做成字段，主题做成和顶栏一致的圆形图标按钮 */
   .sheet-utils {
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
-    gap: 2px;
+    gap: 8px;
     padding: 8px 10px;
     /* 只留一条很淡的分界，和网格的柔和表面保持一致 */
     border-top: 1px solid color-mix(in srgb, var(--border) 55%, transparent);
   }
 
-  .sheet-util {
-    display: inline-flex;
+  .sheet-util-search {
+    display: flex;
+    flex: 1;
     min-width: 0;
-    min-height: 40px;
-    max-width: 100%;
     align-items: center;
-    gap: 6px;
-    padding: 8px 10px;
-    border-radius: 8px;
+    gap: 8px;
+    height: 38px;
+    /* 左内边距 10px：搜索图标和上面导航项的图标列对齐 */
+    padding: 0 12px 0 10px;
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--muted) 55%, transparent);
     font-size: 13.5px;
-    color: color-mix(in srgb, var(--foreground) 55%, transparent);
+    color: color-mix(in srgb, var(--foreground) 60%, transparent);
     transition:
       color 0.16s ease,
       background-color 0.16s ease;
   }
 
-  /* 邮件靠右，和左边的搜索、主题分开；窄屏换行后自然占满一行 */
-  .sheet-util-mail {
-    margin-left: auto;
-  }
-
-  /* 当前在搜索页时点亮工具行里的搜索入口 */
-  .sheet-util[aria-current="page"] {
-    color: var(--accent);
+  .sheet-util-search svg {
+    opacity: 0.7;
+    transition: opacity 0.16s ease;
   }
 
   @media (hover: hover) {
-    .sheet-util:hover {
+    .sheet-util-search:hover {
       background: var(--muted);
       color: var(--foreground);
     }
+
+    .sheet-util-search:hover svg {
+      opacity: 1;
+    }
   }
 
-  .sheet-util:active {
+  .sheet-util-search:active {
     background: var(--muted);
     color: var(--foreground);
+  }
+
+  /* 当前在搜索页时点亮搜索字段 */
+  .sheet-util-search[aria-current="page"] {
+    color: var(--accent);
+  }
+
+  .sheet-util-search[aria-current="page"] svg {
+    opacity: 1;
+  }
+
+  /* 主题：和顶栏 .icon-btn 同一套 40px 圆形按钮 */
+  .sheet-util-icon {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 9999px;
+    color: color-mix(in srgb, var(--foreground) 62%, transparent);
+    transition:
+      color 0.18s ease,
+      background-color 0.18s ease;
+  }
+
+  @media (hover: hover) {
+    .sheet-util-icon:hover {
+      color: var(--accent);
+      background: var(--muted);
+    }
+  }
+
+  .sheet-util-icon:active {
+    background: var(--muted);
   }
 
   @supports (backdrop-filter: blur(1px)) {
