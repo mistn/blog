@@ -439,15 +439,27 @@ const tags = getUniqueTags(posts);
       padding: 0 0.1em;
     }
 
+    /* Pagefind 给按钮写死了 height: calc(48px * scale)，再叠加我们的上下内边距后，
+       内容区只剩十几像素，行盒（21.6px）放不下，文字整体被压到框的下半部分。
+       这里改成 auto + min-height，并用 flex 居中，同时把它从浏览器默认字体
+       （系统 UI + 700 粗体）拉回站点自己的字体。 */
     .pagefind-ui__button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       width: 100%;
+      height: auto;
+      min-height: 2.75rem;
       margin-top: 1rem;
-      padding: 0.7rem 1rem;
+      padding: 0.55rem 1rem;
       border: 1px solid var(--border);
       border-radius: 6px;
       background: transparent;
       color: color-mix(in srgb, var(--foreground) 70%, transparent);
+      font-family: var(--font-app);
       font-size: 0.9rem;
+      font-weight: 500;
+      line-height: 1.4;
       cursor: pointer;
       transition:
         border-color 0.16s ease,
