@@ -52,7 +52,7 @@ export const ui = {
       searchDesc: "站内技术文章、笔记和教程，输入关键词即可快速定位。",
       animeTitle: "追番列表",
       animeFullTitle: "追番列表 | miuarc",
-      animeDesc: "可按年份或全部查看 AniList normal 列表中已看完的动画。",
+      animeDesc: "可按年份或全部查看 AniList 中已看完的动画。",
       animeEyebrow: "Anime Archive",
       toolsTitle: "工具",
       toolsFullTitle: "工具 | miuarc",
@@ -106,7 +106,7 @@ export const ui = {
       viewByYear: "按年份",
       empty: "这里还没有同步到追番数据。",
       emptyHelp:
-        "运行脚本会抓取 miuchanya 的 AniList 数据，并保留 normal 列表里状态为 COMPLETED 的动画。",
+        "运行脚本会抓取 miuchanya 的 AniList 数据，并保留状态为 COMPLETED 的动画。",
       itemListName: "追番列表",
       coverAlt: "封面",
       backToTop: "回到顶部",

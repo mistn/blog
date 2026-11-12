@@ -43,7 +43,18 @@ function groupItems(items: AnimeItem[]) {
   }
 
   return Array.from(groups.entries())
-    .sort((a, b) => Number(b[0] || 0) - Number(a[0] || 0))
+    .sort((a, b) => {
+      const yearA = Number(a[0]);
+      const yearB = Number(b[0]);
+      const hasYearA = Number.isInteger(yearA) && yearA > 0;
+      const hasYearB = Number.isInteger(yearB) && yearB > 0;
+
+      if (!hasYearA && !hasYearB) return 0;
+      if (!hasYearA) return 1;
+      if (!hasYearB) return -1;
+
+      return yearB - yearA;
+    })
     .map(([yearLabel, entries]) => ({
       yearLabel,
       entries,
@@ -83,7 +94,7 @@ const updatedLabel = data.updatedAt
       name: copy.anime.itemListName,
       numberOfItems: total,
     },
-    about: "AniList completed anime collection filtered by custom list normal.",
+    about: "AniList completed anime collection.",
   }}
 >
   <SiteTopbar />
@@ -151,7 +162,7 @@ const updatedLabel = data.updatedAt
         <div class="anime-view" data-anime-view="all">
           <div class="anime-archive anime-archive--all" data-anime-pane="all">
             <div class="grid min-h-[50vh] grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-4 lg:grid-cols-5">
-              {entries.map(entry => (
+              {entries.map((entry, index) => (
                 <a
                   href={entry.url}
                   target="_blank"
@@ -160,8 +171,20 @@ const updatedLabel = data.updatedAt
                 >
                   <img
                     src={entry.cover}
+                    srcset={
+                      entry.coverSmall
+                        ? `${entry.coverSmall} 230w, ${entry.cover} 460w`
+                        : undefined
+                    }
+                    sizes={
+                      entry.coverSmall
+                        ? "(min-width: 1024px) 160px, (min-width: 640px) 30vw, 45vw"
+                        : undefined
+                    }
                     alt={`${entry.title} ${copy.anime.coverAlt}`}
-                    loading="lazy"
+                    loading={index < 4 ? "eager" : "lazy"}
+                    fetchpriority={index < 2 ? "high" : undefined}
+                    decoding="async"
                     class="h-full w-full object-cover transition-transform duration-500 md:group-hover:scale-105"
                   />
                   <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/80 via-black/40 to-transparent px-2.5 pt-6 pb-2.5">
@@ -197,8 +220,19 @@ const updatedLabel = data.updatedAt
                     >
                       <img
                         src={entry.cover}
+                        srcset={
+                          entry.coverSmall
+                            ? `${entry.coverSmall} 230w, ${entry.cover} 460w`
+                            : undefined
+                        }
+                        sizes={
+                          entry.coverSmall
+                            ? "(min-width: 1024px) 160px, (min-width: 640px) 30vw, 45vw"
+                            : undefined
+                        }
                         alt={`${entry.title} ${copy.anime.coverAlt}`}
                         loading="lazy"
+                        decoding="async"
                         class="h-full w-full object-cover transition-transform duration-500 md:group-hover:scale-105"
                       />
                       <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/80 via-black/40 to-transparent px-2.5 pt-6 pb-2.5">

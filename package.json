@@ -6,6 +6,7 @@
     "dev": "astro dev",
     "build": "astro check && astro build && pagefind --site dist && node ./scripts/copy-pagefind.mjs",
     "anime:sync": "node ./scripts/sync-anime.mjs",
+    "test:anime": "node --test scripts/sync-anime.test.mjs",
     "preview": "astro preview",
     "sync": "astro sync",
     "astro": "astro",

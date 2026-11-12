@@ -1,6 +1,7 @@
 export interface AnimeItem {
   title: string;
   cover: string;
+  coverSmall?: string | null;
   year: number | null;
   url: string;
 }

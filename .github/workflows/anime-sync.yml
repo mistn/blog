@@ -22,26 +22,24 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10.11.1
+          fetch-depth: 1
 
       - name: Use Node.js 22
         uses: actions/setup-node@v4
         with:
           node-version: 22.12
-          cache: pnpm
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+      - name: Run sync unit tests
+        run: node --test scripts/sync-anime.test.mjs
 
       - name: Sync AniList data
         env:
           ANILIST_USER_NAME: ${{ secrets.ANILIST_USER_NAME }}
-        run: pnpm run anime:sync
+          ALLOW_EMPTY_SYNC: ${{ vars.ALLOW_EMPTY_SYNC }}
+          ALLOW_SHRINK_SYNC: ${{ vars.ALLOW_SHRINK_SYNC }}
+          ALLOW_MISSING_ARCHIVE_LIST: ${{ vars.ALLOW_MISSING_ARCHIVE_LIST }}
+          ALLOW_USER_CHANGE: ${{ vars.ALLOW_USER_CHANGE }}
+        run: node ./scripts/sync-anime.mjs
 
       - name: Detect changes
         id: changes
@@ -55,8 +53,10 @@ jobs:
 
       - name: Summarize data snapshot
         shell: bash
+        env:
+          CHANGED: ${{ steps.changes.outputs.changed }}
         run: |
-          node -e "const fs=require('node:fs'); const data=JSON.parse(fs.readFileSync('src/data/anime.generated.json','utf8')); const years=data.items.map(item=>item.year).filter(Boolean); const latest=years.length?Math.max(...years):'n/a'; const lines=['## Anime Sync Summary', '', '- Username: '+(data.username||'unknown'), '- Updated at: '+(data.updatedAt||'unknown'), '- Total titles: '+Number(data.items?.length||0), '- Latest season year: '+latest, '- Changed in this run: ${{ steps.changes.outputs.changed }}']; fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, lines.join('\n') + '\n');"
+          node -e "const fs=require('node:fs'); const data=JSON.parse(fs.readFileSync('src/data/anime.generated.json','utf8')); const items=Array.isArray(data.items)?data.items:[]; const years=items.map(item=>item.year).filter(Boolean); const latest=years.length?Math.max(...years):'n/a'; const lines=['## Anime Sync Summary', '', '- Username: '+(data.username||'unknown'), '- Updated at: '+(data.updatedAt||'unknown'), '- Total titles: '+Number(items.length), '- Latest season year: '+latest, '- Changed in this run: '+(process.env.CHANGED||'unknown')]; fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, lines.join('\n') + '\n');"
 
       - name: No changes detected
         if: steps.changes.outputs.changed != 'true'
@@ -72,4 +72,22 @@ jobs:
 
       - name: Push changes
         if: steps.changes.outputs.changed == 'true'
-        run: git push
+        shell: bash
+        run: |
+          set -euo pipefail
+          for attempt in 1 2 3; do
+            # Clear any half-finished rebase from the previous attempt.
+            git rebase --abort >/dev/null 2>&1 || true
+
+            if git pull --rebase --autostash origin "$GITHUB_REF_NAME" \
+              && git push origin "HEAD:$GITHUB_REF_NAME"; then
+              exit 0
+            fi
+
+            if [ "$attempt" -eq 3 ]; then
+              echo "::error::Failed to push anime data after 3 attempts."
+              exit 1
+            fi
+
+            sleep $((attempt * 5))
+          done
