@@ -1,6 +1,6 @@
 {
   "username": "miuchanya",
-  "updatedAt": "2026-11-12T11:18:12.051Z",
+  "updatedAt": "2026-11-13T10:06:46.105Z",
   "items": [
     {
       "title": "ヤニねこ",
@@ -1032,6 +1032,13 @@
       "url": "https://anilist.co/anime/750"
     },
     {
+      "title": "鬼公子炎魔",
+      "cover": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx1556-xprrS0YxrNno.png",
+      "coverSmall": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx1556-xprrS0YxrNno.png",
+      "year": 2006,
+      "url": "https://anilist.co/anime/1556"
+    },
+    {
       "title": "名探偵コナン 探偵たちの鎮魂歌(レクイエム)",
       "cover": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/b1506-EHhN6loLBaau.jpg",
       "coverSmall": null,
@@ -1102,6 +1109,13 @@
       "url": "https://anilist.co/anime/1364"
     },
     {
+      "title": "AMON デビルマン黙示録",
+      "cover": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx2356-yBQyOB52uhQb.jpg",
+      "coverSmall": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx2356-yBQyOB52uhQb.jpg",
+      "year": 2000,
+      "url": "https://anilist.co/anime/2356"
+    },
+    {
       "title": "真 学校の幽霊",
       "cover": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/b188040-AjvuuyiyRF3Y.jpg",
       "coverSmall": null,
@@ -1144,6 +1158,20 @@
       "url": "https://anilist.co/anime/2981"
     },
     {
+      "title": "デビルマン 妖鳥シレーヌ編",
+      "cover": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx2355-OiUU6AhqJ4jR.jpg",
+      "coverSmall": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx2355-OiUU6AhqJ4jR.jpg",
+      "year": 1990,
+      "url": "https://anilist.co/anime/2355"
+    },
+    {
+      "title": "バイオレンス ジャック 〜ヘルスウインド編〜",
+      "cover": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/1343.jpg",
+      "coverSmall": null,
+      "year": 1990,
+      "url": "https://anilist.co/anime/1343"
+    },
+    {
       "title": "魔女の宅急便",
       "cover": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx512-UwP8X4BR8YoM.png",
       "coverSmall": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx512-UwP8X4BR8YoM.png",
@@ -1156,6 +1184,27 @@
       "coverSmall": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx523-fErBvxOHP7IX.jpg",
       "year": 1988,
       "url": "https://anilist.co/anime/523"
+    },
+    {
+      "title": "バイオレンスジャック 地獄街",
+      "cover": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/1342.jpg",
+      "coverSmall": null,
+      "year": 1988,
+      "url": "https://anilist.co/anime/1342"
+    },
+    {
+      "title": "デビルマン 誕生編",
+      "cover": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx2354-f19GQZMwf235.png",
+      "coverSmall": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx2354-f19GQZMwf235.png",
+      "year": 1987,
+      "url": "https://anilist.co/anime/2354"
+    },
+    {
+      "title": "バイオレンスジャック ハーレムボンバー",
+      "cover": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/1341.jpg",
+      "coverSmall": null,
+      "year": 1986,
+      "url": "https://anilist.co/anime/1341"
     },
     {
       "title": "天空の城ラピュタ",
